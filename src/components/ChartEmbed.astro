@@ -1,0 +1,37 @@
+---
+// Component for embedding highcharter HTML widgets
+interface Props {
+  src: string;
+  height?: string;
+  title?: string;
+}
+
+const { src, height = "400px", title = "Interactive chart" } = Astro.props;
+---
+
+<div class="chart-embed" style={`height: ${height}`}>
+  <iframe
+    src={src}
+    title={title}
+    loading="lazy"
+    class="chart-iframe"
+  ></iframe>
+</div>
+
+<style>
+  .chart-embed {
+    width: 100%;
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    background-color: var(--color-surface);
+    box-shadow: var(--shadow-sm);
+    margin: var(--space-6) 0;
+  }
+
+  .chart-iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+    display: block;
+  }
+</style>

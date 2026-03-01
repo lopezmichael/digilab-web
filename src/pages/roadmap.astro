@@ -1,0 +1,235 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+
+// Placeholder data - will be replaced with parsed ROADMAP.md content
+const roadmapItems = {
+  inProgress: [
+    {
+      title: "Rating System Redesign",
+      description: "Single-pass chronological Elo calculation for more accurate player ratings.",
+      tags: ["ratings", "methodology"]
+    }
+  ],
+  planned: [
+    {
+      title: "Meta Insights App",
+      description: "Interactive explorer for cross-scene deck and meta analysis.",
+      tags: ["new-app", "analytics"]
+    },
+    {
+      title: "DigiLab Website",
+      description: "Landing page, blog, and public roadmap (you're looking at it!).",
+      tags: ["website", "content"]
+    }
+  ],
+  completed: [
+    {
+      title: "Deep Linking & Shareable URLs",
+      description: "Share links directly to players, decks, stores, and tournaments.",
+      date: "March 2026"
+    },
+    {
+      title: "Discord Integration",
+      description: "Webhook notifications for store requests, error reports, and bug reports.",
+      date: "February 2026"
+    },
+    {
+      title: "Multi-Region Support",
+      description: "Scene hierarchy enabling multiple regions and global views.",
+      date: "February 2026"
+    }
+  ]
+};
+---
+
+<BaseLayout title="Roadmap" description="See what we're working on and what's coming next for DigiLab.">
+  <Header />
+
+  <main class="roadmap-page">
+    <div class="container">
+      <header class="page-header">
+        <h1>Public Roadmap</h1>
+        <p>See what we're working on and what's coming next.</p>
+      </header>
+
+      <section class="roadmap-section">
+        <h2 class="section-header">
+          <span class="status-icon">🚧</span>
+          In Progress
+        </h2>
+        <div class="items-list">
+          {roadmapItems.inProgress.map((item) => (
+            <div class="roadmap-item card">
+              <h3>{item.title}</h3>
+              <p>{item.description}</p>
+              {item.tags && (
+                <div class="tags">
+                  {item.tags.map((tag) => (
+                    <span class="tag">#{tag}</span>
+                  ))}
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section class="roadmap-section">
+        <h2 class="section-header">
+          <span class="status-icon">📋</span>
+          Planned
+        </h2>
+        <div class="items-list">
+          {roadmapItems.planned.map((item) => (
+            <div class="roadmap-item card">
+              <h3>{item.title}</h3>
+              <p>{item.description}</p>
+              {item.tags && (
+                <div class="tags">
+                  {item.tags.map((tag) => (
+                    <span class="tag">#{tag}</span>
+                  ))}
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section class="roadmap-section">
+        <h2 class="section-header">
+          <span class="status-icon">✅</span>
+          Recently Completed
+        </h2>
+        <div class="items-list">
+          {roadmapItems.completed.map((item) => (
+            <div class="roadmap-item card completed">
+              <div class="item-header">
+                <h3>{item.title}</h3>
+                {item.date && <span class="date">{item.date}</span>}
+              </div>
+              <p>{item.description}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section class="roadmap-footer">
+        <p>
+          Have a feature request or feedback? Join our
+          <a href="https://discord.gg/digilab" target="_blank" rel="noopener">Discord</a>
+          or check out the full roadmap on
+          <a href="https://github.com/lopezmichael/digilab-app" target="_blank" rel="noopener">GitHub</a>.
+        </p>
+      </section>
+    </div>
+  </main>
+
+  <Footer />
+</BaseLayout>
+
+<style>
+  .roadmap-page {
+    padding: var(--space-12) 0;
+  }
+
+  .roadmap-page .container {
+    max-width: 900px;
+  }
+
+  .page-header {
+    text-align: center;
+    margin-bottom: var(--space-12);
+  }
+
+  .page-header h1 {
+    margin-bottom: var(--space-4);
+  }
+
+  .page-header p {
+    color: var(--color-text-muted);
+    font-size: var(--font-size-lg);
+  }
+
+  .roadmap-section {
+    margin-bottom: var(--space-10);
+  }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    margin-bottom: var(--space-6);
+    font-size: var(--font-size-xl);
+  }
+
+  .status-icon {
+    font-size: 1.5rem;
+  }
+
+  .items-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+  }
+
+  .roadmap-item {
+    padding: var(--space-5);
+  }
+
+  .roadmap-item h3 {
+    font-size: var(--font-size-lg);
+    margin-bottom: var(--space-2);
+  }
+
+  .roadmap-item p {
+    color: var(--color-text-muted);
+    margin: 0;
+  }
+
+  .roadmap-item.completed {
+    opacity: 0.8;
+    background-color: var(--color-background);
+  }
+
+  .item-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-4);
+    flex-wrap: wrap;
+  }
+
+  .date {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-muted);
+  }
+
+  .tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    margin-top: var(--space-3);
+  }
+
+  .tag {
+    font-size: var(--font-size-xs);
+    color: var(--color-primary);
+    background-color: rgba(10, 48, 85, 0.1);
+    padding: var(--space-1) var(--space-2);
+    border-radius: var(--radius-sm);
+  }
+
+  .roadmap-footer {
+    text-align: center;
+    padding-top: var(--space-8);
+    border-top: 1px solid var(--color-border);
+    color: var(--color-text-muted);
+  }
+
+  .roadmap-footer a {
+    color: var(--color-accent);
+  }
+</style>

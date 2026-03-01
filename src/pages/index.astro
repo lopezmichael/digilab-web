@@ -1,0 +1,235 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+---
+
+<BaseLayout title="Track Your Local Digimon TCG Scene">
+  <Header />
+
+  <main>
+    <!-- Hero Section -->
+    <section class="hero">
+      <div class="container hero-content">
+        <div class="hero-text">
+          <h1>Track Your Local Digimon TCG Scene</h1>
+          <p class="hero-subtitle">
+            Player ratings, deck meta, tournament history — all in one place.
+          </p>
+          <div class="hero-cta">
+            <a href="https://app.digilab.cards" class="btn btn-accent btn-lg">
+              Go to App
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M5 12h14"></path>
+                <path d="m12 5 7 7-7 7"></path>
+              </svg>
+            </a>
+            <a href="#features" class="btn btn-outline btn-lg">Learn More</a>
+          </div>
+        </div>
+        <div class="hero-mascot">
+          <img src="/brand/agumon.svg" alt="Agumon mascot" class="agumon" />
+        </div>
+      </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="features">
+      <div class="container">
+        <h2 class="section-title">Everything You Need</h2>
+        <div class="features-grid">
+          <div class="feature-card card">
+            <div class="feature-icon">📊</div>
+            <h3>Player Rankings</h3>
+            <p>Elo-based competitive ratings with leaderboards for your local scene.</p>
+          </div>
+          <div class="feature-card card">
+            <div class="feature-icon">🃏</div>
+            <h3>Deck Meta</h3>
+            <p>See what's winning in your area with detailed archetype breakdowns.</p>
+          </div>
+          <div class="feature-card card">
+            <div class="feature-icon">📍</div>
+            <h3>Store Directory</h3>
+            <p>Find local game stores running Digimon TCG events near you.</p>
+          </div>
+          <div class="feature-card card">
+            <div class="feature-icon">🏆</div>
+            <h3>Tournament History</h3>
+            <p>Full results archive for all tracked tournaments in your scene.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Blog Preview Section -->
+    <section class="blog-preview">
+      <div class="container">
+        <h2 class="section-title">Latest from the Blog</h2>
+        <p class="section-subtitle">Updates, analysis, and insights from the DigiLab team.</p>
+        <div class="blog-cta">
+          <a href="/blog" class="btn btn-primary">View All Posts</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Scenes Section -->
+    <section class="scenes">
+      <div class="container">
+        <h2 class="section-title">Active Scenes</h2>
+        <p class="section-subtitle">
+          Live in 5 regions across the US and growing. Join your local community.
+        </p>
+        <a href="https://app.digilab.cards" class="btn btn-accent">Find Your Scene</a>
+      </div>
+    </section>
+  </main>
+
+  <Footer />
+</BaseLayout>
+
+<style>
+  /* Hero Section */
+  .hero {
+    background: linear-gradient(135deg, var(--color-primary) 0%, #0d4a7a 100%);
+    color: white;
+    padding: var(--space-16) 0;
+    min-height: 80vh;
+    display: flex;
+    align-items: center;
+  }
+
+  .hero-content {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-8);
+    align-items: center;
+  }
+
+  @media (min-width: 768px) {
+    .hero-content {
+      grid-template-columns: 1fr auto;
+    }
+  }
+
+  .hero-text h1 {
+    font-size: var(--font-size-4xl);
+    margin-bottom: var(--space-4);
+    line-height: 1.1;
+  }
+
+  @media (min-width: 768px) {
+    .hero-text h1 {
+      font-size: var(--font-size-5xl);
+    }
+  }
+
+  .hero-subtitle {
+    font-size: var(--font-size-xl);
+    opacity: 0.9;
+    margin-bottom: var(--space-8);
+    max-width: 500px;
+  }
+
+  .hero-cta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-4);
+  }
+
+  .btn-lg {
+    padding: var(--space-4) var(--space-8);
+    font-size: var(--font-size-lg);
+  }
+
+  .hero .btn-outline {
+    border-color: white;
+    color: white;
+  }
+
+  .hero .btn-outline:hover {
+    background-color: white;
+    color: var(--color-primary);
+  }
+
+  .hero-mascot {
+    display: flex;
+    justify-content: center;
+  }
+
+  .agumon {
+    width: 200px;
+    height: 200px;
+    filter: brightness(0) invert(1);
+    opacity: 0.9;
+  }
+
+  @media (min-width: 768px) {
+    .agumon {
+      width: 280px;
+      height: 280px;
+    }
+  }
+
+  /* Section styles */
+  section {
+    padding: var(--space-16) 0;
+  }
+
+  .section-title {
+    text-align: center;
+    margin-bottom: var(--space-4);
+  }
+
+  .section-subtitle {
+    text-align: center;
+    color: var(--color-text-muted);
+    max-width: 600px;
+    margin: 0 auto var(--space-8);
+  }
+
+  /* Features Section */
+  .features {
+    background-color: var(--color-background);
+  }
+
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: var(--space-6);
+  }
+
+  .feature-card {
+    padding: var(--space-6);
+    text-align: center;
+  }
+
+  .feature-icon {
+    font-size: 3rem;
+    margin-bottom: var(--space-4);
+  }
+
+  .feature-card h3 {
+    margin-bottom: var(--space-2);
+  }
+
+  .feature-card p {
+    color: var(--color-text-muted);
+    margin: 0;
+  }
+
+  /* Blog Preview Section */
+  .blog-preview {
+    text-align: center;
+  }
+
+  .blog-cta {
+    margin-top: var(--space-6);
+  }
+
+  /* Scenes Section */
+  .scenes {
+    background-color: var(--color-background);
+    text-align: center;
+  }
+</style>

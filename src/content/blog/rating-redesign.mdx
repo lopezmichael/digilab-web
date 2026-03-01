@@ -1,0 +1,47 @@
+---
+title: "Rating System v2.0 - What Changed and Why"
+description: "We redesigned how DigiLab calculates player ratings. Here's the full breakdown of what changed and why it matters for the competitive scene."
+date: 2026-03-01
+category: announcement
+tags: [ratings, methodology, elo]
+author: Michael Lopez
+image: /images/blog/rating-redesign-cover.png
+draft: true
+---
+
+# Rating System v2.0
+
+We've redesigned how DigiLab calculates player ratings. This post explains what changed, why we made these changes, and what it means for you.
+
+## The Problem with the Old System
+
+The previous rating system had several issues:
+
+1. **5-pass iteration** — Recalculated everything when any tournament was added
+2. **Time-based decay** — Recent tournaments counted more, anchored to "today"
+3. **Ties as losses** — Tied placements were treated as 0 instead of 0.5
+
+This created a flat rating distribution that didn't accurately reflect skill differences.
+
+## What Changed
+
+The new algorithm:
+
+1. **Single-pass chronological** — Processes tournaments once in date order
+2. **No decay** — Standard Elo doesn't use time-based weighting
+3. **Proper tie handling** — Ties are 0.5 (draw)
+
+## How It Affects You
+
+- **Rankings matter more than raw numbers** — Positions are more stable than the numbers suggest
+- **The spread was artificial** — Decay made it look like there was more skill difference than existed
+- **New system is fairer** — Players aren't punished for taking breaks
+- **Everyone's numbers compressed** — It's not that anyone got worse, the scale is more accurate
+
+## The Data
+
+*Charts coming soon*
+
+---
+
+Questions? Join us on [Discord](https://discord.gg/digilab) or check out the [methodology docs](/about).
