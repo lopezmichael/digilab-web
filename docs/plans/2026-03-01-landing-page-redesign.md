@@ -234,15 +234,22 @@ interface WhatsNewItem {
 - Icon library: Bootstrap Icons (match digilab-app usage)
 - Current tokens: `src/styles/tokens.css`
 
-## Open Questions
+## Open Questions (Resolved)
 
-1. **Auto-scroll speed:** How slow should the carousel auto-drift be? Or skip it entirely?
-2. **Glitch frequency:** How often should glitch effects trigger? Every few seconds? Random?
-3. **Chart embed sizing:** What aspect ratio works best for embedded charts in cards?
+1. **Auto-scroll speed:** ~25px/sec for What's New, ~20px/sec for Recent Posts. Pauses on mouse interaction, resumes after 3 seconds.
+2. **Glitch frequency:** Every 2-3 seconds (0.02 per frame per circuit, screen glitch every 3 seconds with 30% chance).
+3. **Chart embed sizing:** 4:3 aspect ratio for embedded charts in cards.
 
 ---
 
 ## Approval
 
-- [ ] Design reviewed and approved
-- [ ] Ready for implementation planning
+- [x] Design reviewed and approved
+- [x] Ready for implementation planning
+
+## Implementation
+
+- **Status:** Complete
+- **Implementation Plan:** `docs/plans/2026-03-01-landing-page-implementation.md`
+- **Completed:** 2026-03-01
+- **Commits:** 18 commits total (12 feature + fixes)
