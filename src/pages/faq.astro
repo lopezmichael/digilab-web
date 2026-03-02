@@ -25,67 +25,83 @@ import DigiIcon from '../components/DigiIcon.astro';
       </div>
     </section>
 
-    <div class="container">
+    <div class="container faq-layout">
+      <!-- Sticky Sidebar -->
+      <aside class="faq-sidebar">
+        <nav class="faq-nav">
+          <h3>Topics</h3>
+          <ul>
+            <li><a href="#getting-started">Getting Started</a></li>
+            <li><a href="#ratings-scores">Ratings & Scores</a></li>
+            <li><a href="#scenes-regions">Scenes & Regions</a></li>
+            <li><a href="#data-coverage">Data & Coverage</a></li>
+            <li><a href="#general">General</a></li>
+          </ul>
+        </nav>
+      </aside>
+
+      <!-- Main Content -->
+      <div class="faq-content-area">
 
       <!-- Getting Started -->
-      <section class="faq-category">
+      <section class="faq-category" id="getting-started">
         <h2><i class="bi bi-compass"></i> Getting Started</h2>
 
         <details class="faq-item">
           <summary><i class="bi bi-info-circle"></i> What is DigiLab?</summary>
-          <div class="faq-content">
+          <div class="faq-content"><div class="faq-content-inner">
             <p>DigiLab is a <strong>community-built tournament tracker</strong> for the Digimon Trading Card Game. It's designed for regional communities, not as a global meta tool. The focus is on your local scene: the players you actually sit across from at locals, the stores you frequent, and the decks that define your metagame.</p>
             <p>Everything is organized by <strong>scenes</strong> (metro areas or communities), so the data you see is relevant to <em>your</em> competitive experience.</p>
-          </div>
+          </div></div>
         </details>
 
         <details class="faq-item">
           <summary><i class="bi bi-geo"></i> How do I find my scene?</summary>
-          <div class="faq-content">
+          <div class="faq-content"><div class="faq-content-inner">
             <p>Use the <strong>scene selector</strong> in the header bar at the top of the page. If location services are enabled, DigiLab will auto-detect your area. Otherwise, pick your scene manually from the dropdown.</p>
             <p>Scenes are organized as metro areas and communities. The <strong>"Online"</strong> scene covers webcam tournaments run through platforms like Limitless TCG.</p>
             <p>If your area isn't listed, check the <a href="/organizers">For Organizers page</a> to learn how to request a new scene.</p>
-          </div>
+          </div></div>
         </details>
 
         <details class="faq-item">
           <summary><i class="bi bi-geo-alt"></i> How do I find tournaments near me?</summary>
-          <div class="faq-content">
-            <p>Head to the <strong>Stores</strong> tab to see all active tournament locations. The map shows store locations, and clicking on a store reveals their tournament schedule and history.</p>
-            <p>You can also check the <strong>Tournaments</strong> tab for a chronological list of all recorded events. Filter by your scene to narrow down to your area.</p>
+          <div class="faq-content"><div class="faq-content-inner">
+            <p>Head to the <a href="https://app.digilab.cards/?tab=stores" target="_blank" rel="noopener"><strong>Stores</strong> tab</a> to see all active tournament locations. The map shows store locations, and clicking on a store reveals their tournament schedule and history.</p>
+            <p>You can also check the <a href="https://app.digilab.cards/?tab=tournaments" target="_blank" rel="noopener"><strong>Tournaments</strong> tab</a> for a chronological list of all recorded events. Filter by your scene to narrow down to your area.</p>
             <p>Online events appear in the <strong>Online</strong> scene and are synced automatically from Limitless TCG.</p>
-          </div>
+          </div></div>
         </details>
 
         <details class="faq-item">
           <summary><i class="bi bi-clock-history"></i> How do I see my tournament history?</summary>
-          <div class="faq-content">
-            <p>Go to the <strong>Players</strong> tab and search for your name. Click on your row to open your player profile, which shows:</p>
+          <div class="faq-content"><div class="faq-content-inner">
+            <p>Go to the <a href="https://app.digilab.cards/?tab=players" target="_blank" rel="noopener"><strong>Players</strong> tab</a> and search for your name. Click on your row to open your player profile, which shows:</p>
             <ul>
               <li>All your tournament results</li>
               <li>Your rating and achievement score</li>
               <li>Decks you've played</li>
               <li>Your performance trend over time</li>
             </ul>
-          </div>
+          </div></div>
         </details>
 
         <details class="faq-item">
           <summary><i class="bi bi-link-45deg"></i> What are community links?</summary>
-          <div class="faq-content">
+          <div class="faq-content"><div class="faq-content-inner">
             <p>Stores and organizers can share a <strong>filtered view</strong> of DigiLab for their community. If you arrive via a community link (a URL with <code>?community=slug</code>), all tabs automatically filter to that community's data.</p>
             <p>Look for the <strong>community badge</strong> in the header when viewing a community-filtered page. This makes it easy for organizers to share a link that shows only their store's players, tournaments, and meta.</p>
-          </div>
+          </div></div>
         </details>
       </section>
 
       <!-- Ratings & Scores -->
-      <section class="faq-category">
+      <section class="faq-category" id="ratings-scores">
         <h2><i class="bi bi-graph-up"></i> Ratings & Scores</h2>
 
         <details class="faq-item">
           <summary><i class="bi bi-calculator"></i> How is Competitive Rating calculated?</summary>
-          <div class="faq-content">
+          <div class="faq-content"><div class="faq-content-inner">
             <p>Your Competitive Rating uses an <strong>Elo-style system</strong> adapted for Swiss-style tournaments. Unlike traditional Elo that only considers wins/losses, our system uses <strong>implied results</strong> based on final placements.</p>
             <p>After each tournament, your rating adjusts based on:</p>
             <ul>
@@ -97,12 +113,12 @@ import DigiIcon from '../components/DigiIcon.astro';
             <p><strong>K-factor:</strong> New players (fewer than 10 tournaments) use K=32, which means ratings adjust faster while the system learns your skill level. Established players use K=16 for more stable ratings.</p>
             <p><strong>Starting rating:</strong> All players begin at 1500.</p>
             <p><strong>Why implied results?</strong> In Swiss tournaments, you don't play everyone. If you place 3rd and another player places 7th, we treat that as a "win" for you against them, even if you never actually played. This gives a more complete picture of tournament performance.</p>
-          </div>
+          </div></div>
         </details>
 
         <details class="faq-item">
           <summary><i class="bi bi-trophy"></i> What is Achievement Score?</summary>
-          <div class="faq-content">
+          <div class="faq-content"><div class="faq-content-inner">
             <p>Achievement Score is a <strong>cumulative points system</strong> that rewards both participation and strong finishes. Unlike Competitive Rating (which can go up or down), Achievement Score only grows over time.</p>
             <p><strong>Base points by placement:</strong></p>
             <table class="points-table">
@@ -120,12 +136,12 @@ import DigiIcon from '../components/DigiIcon.astro';
             </table>
             <p><strong>Tournament size bonus:</strong> Larger tournaments (16+ players) award 50% bonus points, reflecting the increased difficulty of placing well against more competition.</p>
             <p><strong>What it measures:</strong> Achievement Score reflects your overall engagement with the competitive scene. A player with a lower Competitive Rating but high Achievement Score is someone who shows up consistently and contributes to the community.</p>
-          </div>
+          </div></div>
         </details>
 
         <details class="faq-item">
           <summary><i class="bi bi-shop"></i> How does Store Rating work?</summary>
-          <div class="faq-content">
+          <div class="faq-content"><div class="faq-content-inner">
             <p>Store Rating measures the <strong>competitive strength</strong> of a store's player base. It helps answer the question: "How tough is the competition at this store?"</p>
             <p><strong>How it's calculated:</strong></p>
             <ul>
@@ -139,33 +155,33 @@ import DigiIcon from '../components/DigiIcon.astro';
               <li><strong>Lower Store Rating</strong> = More beginner-friendly, good for new players</li>
             </ul>
             <p>Store Rating isn't a quality judgment - some players prefer casual environments while others seek the most competitive fields. Use it to find stores that match your goals.</p>
-          </div>
+          </div></div>
         </details>
 
         <details class="faq-item">
           <summary><i class="bi bi-arrow-down-circle"></i> Why did my rating go down even though I won matches?</summary>
-          <div class="faq-content">
+          <div class="faq-content"><div class="faq-content-inner">
             <p>Rating changes are based on <em>placement</em>, not just wins. If you were expected to place higher based on your rating compared to other players in the tournament, your rating may decrease even with a positive record.</p>
             <p>For example, if you're the highest-rated player at a tournament and place 3rd, your rating will likely decrease because you underperformed relative to expectations.</p>
-          </div>
+          </div></div>
         </details>
 
         <details class="faq-item">
           <summary><i class="bi bi-globe"></i> Are online and in-person ratings the same?</summary>
-          <div class="faq-content">
+          <div class="faq-content"><div class="faq-content-inner">
             <p>Yes. <strong>All tournaments feed the same Elo rating pool</strong> regardless of whether they're in-person locals or online webcam events. This means your rating reflects your full competitive performance across all formats.</p>
             <p>Online tournaments synced from Limitless TCG and in-person results uploaded via the app are treated identically by the rating system.</p>
-          </div>
+          </div></div>
         </details>
       </section>
 
       <!-- Scenes & Regions -->
-      <section class="faq-category">
+      <section class="faq-category" id="scenes-regions">
         <h2><i class="bi bi-geo-alt"></i> Scenes & Regions</h2>
 
         <details class="faq-item">
           <summary><i class="bi bi-people"></i> What is a scene?</summary>
-          <div class="faq-content">
+          <div class="faq-content"><div class="faq-content-inner">
             <p>A scene is a <strong>community of players who regularly compete together</strong>, usually based on a metro area. DigiLab organizes data by scenes so your leaderboards and meta analysis reflect the players you actually face.</p>
             <p>Scenes follow a hierarchy:</p>
             <ul>
@@ -175,20 +191,20 @@ import DigiIcon from '../components/DigiIcon.astro';
               <li><strong>Metro</strong> — Your local metro area (e.g., DFW, Houston)</li>
             </ul>
             <p>Players don't "belong" to a single scene. You appear on any leaderboard where you've competed, so playing at multiple locations across scenes is fully supported.</p>
-          </div>
+          </div></div>
         </details>
 
         <details class="faq-item">
           <summary><i class="bi bi-list-ul"></i> What scenes are currently active?</summary>
-          <div class="faq-content">
+          <div class="faq-content"><div class="faq-content-inner">
             <p>Use the <strong>scene selector dropdown</strong> in the header to see all available scenes. Each scene has its own stores, players, and tournament data.</p>
             <p>New scenes are added as communities join DigiLab. If you don't see your area, you can request a new scene.</p>
-          </div>
+          </div></div>
         </details>
 
         <details class="faq-item">
           <summary><i class="bi bi-plus-circle"></i> How do I request a new scene?</summary>
-          <div class="faq-content">
+          <div class="faq-content"><div class="faq-content-inner">
             <p>Visit the <a href="/organizers">For Organizers page</a> for details on getting your community added. Generally, you'll need:</p>
             <ul>
               <li>2–3 active stores with regular tournament events</li>
@@ -196,39 +212,39 @@ import DigiIcon from '../components/DigiIcon.astro';
               <li>Players willing to upload results to get things started</li>
             </ul>
             <p>We're always excited to expand to new communities!</p>
-          </div>
+          </div></div>
         </details>
 
         <details class="faq-item">
           <summary><i class="bi bi-webcam"></i> What is the Online scene?</summary>
-          <div class="faq-content">
+          <div class="faq-content"><div class="faq-content-inner">
             <p>The <strong>Online</strong> scene covers webcam tournaments run through platforms like <strong>Limitless TCG</strong>. Online tournament data is synced automatically from Limitless on a weekly basis.</p>
-            <p>Online and in-person results feed the <strong>same rating system</strong>. Online organizers appear in the Stores tab as virtual locations, and their tournaments are tracked just like in-person events.</p>
-          </div>
+            <p>Online and in-person results feed the <strong>same rating system</strong>. Online organizers appear in the <a href="https://app.digilab.cards/?tab=stores" target="_blank" rel="noopener">Stores tab</a> as virtual locations, and their tournaments are tracked just like in-person events.</p>
+          </div></div>
         </details>
       </section>
 
       <!-- Data & Coverage -->
-      <section class="faq-category">
+      <section class="faq-category" id="data-coverage">
         <h2><i class="bi bi-database"></i> Data & Coverage</h2>
 
         <details class="faq-item">
           <summary><i class="bi bi-cloud-download"></i> Where does the data come from?</summary>
-          <div class="faq-content">
+          <div class="faq-content"><div class="faq-content-inner">
             <p>DigiLab pulls data from three sources:</p>
             <ul>
-              <li><strong>Community uploads</strong> — Anyone can submit results via the Upload Results tab using Bandai TCG+ screenshots.</li>
+              <li><strong>Community uploads</strong> — Anyone can submit results via the <a href="https://app.digilab.cards/?tab=upload" target="_blank" rel="noopener">Upload Results</a> tab using Bandai TCG+ screenshots.</li>
               <li><strong>Limitless TCG sync</strong> — Online webcam tournament results are synced automatically on a weekly basis.</li>
               <li><strong>Admin contributors</strong> — Community admins can enter results manually for events without screenshots.</li>
             </ul>
             <p>Card data and images come from the community-maintained <strong>DigimonCard.io</strong> API, synced monthly.</p>
-          </div>
+          </div></div>
         </details>
 
         <details class="faq-item">
           <summary><i class="bi bi-upload"></i> How do I upload tournament results?</summary>
-          <div class="faq-content">
-            <p>Go to the Upload Results tab in the app and follow these steps:</p>
+          <div class="faq-content"><div class="faq-content-inner">
+            <p>Go to the <a href="https://app.digilab.cards/?tab=upload" target="_blank" rel="noopener">Upload Results</a> tab in the app and follow these steps:</p>
             <ul>
               <li><strong>Take screenshots</strong> of final standings from the Bandai TCG+ app. Make sure placements, usernames, and member numbers are visible.</li>
               <li><strong>Fill in tournament details</strong> — store, date, event type, format, player count, and number of rounds.</li>
@@ -236,12 +252,12 @@ import DigiIcon from '../components/DigiIcon.astro';
               <li><strong>Review results</strong> — Fix any OCR errors and assign deck archetypes if known.</li>
               <li><strong>Submit</strong> — Results go live immediately.</li>
             </ul>
-          </div>
+          </div></div>
         </details>
 
         <details class="faq-item">
           <summary><i class="bi bi-arrow-repeat"></i> How often is data updated?</summary>
-          <div class="faq-content">
+          <div class="faq-content"><div class="faq-content-inner">
             <p>It depends on the source:</p>
             <ul>
               <li><strong>Community uploads</strong> go live <strong>immediately</strong></li>
@@ -249,49 +265,49 @@ import DigiIcon from '../components/DigiIcon.astro';
               <li><strong>Card data</strong> syncs <strong>monthly</strong> from DigimonCard.io</li>
             </ul>
             <p>Ratings and statistics recalculate automatically when new results are added.</p>
-          </div>
+          </div></div>
         </details>
 
         <details class="faq-item">
           <summary><i class="bi bi-question-circle"></i> Why isn't my tournament listed?</summary>
-          <div class="faq-content">
+          <div class="faq-content"><div class="faq-content-inner">
             <p>There are a few possible reasons:</p>
             <ul>
               <li>Nobody has uploaded the results yet</li>
               <li>The store isn't registered in our system</li>
               <li>The tournament was an unofficial or casual event</li>
             </ul>
-            <p>You can upload results yourself! Go to the Upload Results tab and upload screenshots from Bandai TCG+. See the <a href="/organizers">For Organizers page</a> for a step-by-step guide.</p>
-          </div>
+            <p>You can upload results yourself! Go to the <a href="https://app.digilab.cards/?tab=upload" target="_blank" rel="noopener">Upload Results</a> tab and upload screenshots from Bandai TCG+. See the <a href="/organizers">For Organizers page</a> for a step-by-step guide.</p>
+          </div></div>
         </details>
 
         <details class="faq-item">
           <summary><i class="bi bi-pencil-square"></i> Can I get my data corrected or removed?</summary>
-          <div class="faq-content">
+          <div class="faq-content"><div class="faq-content-inner">
             <p>Yes! If you spot an error in your results or want your data removed, please reach out. We want to ensure accuracy and respect player privacy.</p>
             <div class="contact-links">
               <a href="https://discord.gg/digilab" target="_blank" rel="noopener" class="contact-link">
                 <i class="bi bi-discord"></i> Contact Us on Discord
               </a>
             </div>
-          </div>
+          </div></div>
         </details>
       </section>
 
       <!-- General -->
-      <section class="faq-category">
+      <section class="faq-category" id="general">
         <h2><i class="bi bi-chat-dots"></i> General</h2>
 
         <details class="faq-item">
           <summary><i class="bi bi-patch-question"></i> Is this an official Bandai tool?</summary>
-          <div class="faq-content">
+          <div class="faq-content"><div class="faq-content-inner">
             <p><strong>No.</strong> DigiLab is a fan-made community project and is not affiliated with, endorsed by, or connected to Bandai Namco, Bandai Card Games, or any official Digimon TCG organization.</p>
-          </div>
+          </div></div>
         </details>
 
         <details class="faq-item">
           <summary><i class="bi bi-heart"></i> How can I support DigiLab?</summary>
-          <div class="faq-content">
+          <div class="faq-content"><div class="faq-content-inner">
             <p>There are several ways to support the project:</p>
             <ul>
               <li>Submit your tournament results to help grow the database</li>
@@ -308,18 +324,18 @@ import DigiIcon from '../components/DigiIcon.astro';
                 <i class="bi bi-cup-hot"></i> Support on Ko-fi
               </a>
             </div>
-          </div>
+          </div></div>
         </details>
 
         <details class="faq-item">
           <summary><i class="bi bi-table"></i> What do the columns in the tables mean?</summary>
-          <div class="faq-content">
+          <div class="faq-content"><div class="faq-content-inner">
             <p><strong>Rating</strong> — Your competitive rating (Elo-style score)</p>
             <p><strong>Score</strong> — Achievement score (points from placements)</p>
             <p><strong>Record</strong> — Your win-loss-tie record</p>
             <p><strong>Meta %</strong> — How often a deck appears in tournaments</p>
             <p><strong>Conv %</strong> — Conversion rate (top finishes / total appearances)</p>
-          </div>
+          </div></div>
         </details>
       </section>
 
@@ -333,11 +349,68 @@ import DigiIcon from '../components/DigiIcon.astro';
         </div>
       </section>
 
+      </div><!-- end faq-content-area -->
     </div>
   </main>
 
   <Footer />
 </BaseLayout>
+
+<script>
+  // Highlight active section in sidebar based on scroll position
+  const sections = document.querySelectorAll('.faq-category[id]');
+  const navLinks = document.querySelectorAll('.faq-nav a');
+
+  function updateActiveLink() {
+    const scrollPos = window.scrollY + 120; // offset for sticky header
+
+    sections.forEach((section) => {
+      const sectionTop = section.offsetTop;
+      const sectionHeight = section.offsetHeight;
+      const sectionId = section.getAttribute('id');
+
+      if (scrollPos >= sectionTop && scrollPos < sectionTop + sectionHeight) {
+        navLinks.forEach((link) => {
+          link.classList.remove('active');
+          if (link.getAttribute('href') === `#${sectionId}`) {
+            link.classList.add('active');
+          }
+        });
+      }
+    });
+  }
+
+  // Throttle scroll events for performance
+  let ticking = false;
+  window.addEventListener('scroll', () => {
+    if (!ticking) {
+      window.requestAnimationFrame(() => {
+        updateActiveLink();
+        ticking = false;
+      });
+      ticking = true;
+    }
+  });
+
+  // Set initial active state
+  updateActiveLink();
+
+  // Smooth scroll for anchor links
+  navLinks.forEach((link) => {
+    link.addEventListener('click', (e) => {
+      e.preventDefault();
+      const targetId = link.getAttribute('href')?.slice(1);
+      const targetSection = document.getElementById(targetId || '');
+      if (targetSection) {
+        const offsetTop = targetSection.offsetTop - 80; // account for sticky header
+        window.scrollTo({
+          top: offsetTop,
+          behavior: 'smooth'
+        });
+      }
+    });
+  });
+</script>
 
 <style>
   /* ===== Hero Section ===== */
@@ -418,11 +491,105 @@ import DigiIcon from '../components/DigiIcon.astro';
     }
   }
 
-  /* ===== Main Content ===== */
-  .faq-page .container:not(.hero-content) {
-    max-width: 800px;
+  /* ===== Layout ===== */
+  .faq-layout {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    gap: var(--space-8);
+    max-width: 1000px;
     padding-top: var(--space-8);
     padding-bottom: var(--space-12);
+    align-items: start;
+  }
+
+  /* ===== Sidebar ===== */
+  .faq-sidebar {
+    position: sticky;
+    top: calc(57px + var(--space-6)); /* header height + spacing */
+  }
+
+  .faq-nav h3 {
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-semibold);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--color-text-muted);
+    margin-bottom: var(--space-3);
+  }
+
+  .faq-nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .faq-nav li {
+    margin-bottom: var(--space-1);
+  }
+
+  .faq-nav a {
+    display: block;
+    padding: var(--space-2) var(--space-3);
+    color: var(--color-text-muted);
+    text-decoration: none;
+    font-size: var(--font-size-sm);
+    border-radius: var(--radius-md);
+    border-left: 2px solid transparent;
+    transition: all var(--transition-fast);
+  }
+
+  .faq-nav a:hover {
+    color: var(--color-text);
+    background: var(--color-surface);
+    border-left-color: var(--color-primary);
+  }
+
+  .faq-nav a.active {
+    color: var(--color-primary);
+    background: rgba(10, 48, 85, 0.08);
+    border-left-color: var(--color-primary);
+    font-weight: var(--font-weight-medium);
+  }
+
+  /* ===== Main Content Area ===== */
+  .faq-content-area {
+    min-width: 0; /* prevent grid blowout */
+  }
+
+  @media (max-width: 768px) {
+    .faq-layout {
+      grid-template-columns: 1fr;
+    }
+
+    .faq-sidebar {
+      position: relative;
+      top: 0;
+    }
+
+    .faq-nav ul {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-2);
+    }
+
+    .faq-nav li {
+      margin-bottom: 0;
+    }
+
+    .faq-nav a {
+      padding: var(--space-2) var(--space-3);
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-left: 1px solid var(--color-border);
+      border-radius: var(--radius-full);
+      white-space: nowrap;
+    }
+
+    .faq-nav a:hover,
+    .faq-nav a.active {
+      border-left: 1px solid var(--color-primary);
+      border-color: var(--color-primary);
+    }
   }
 
   /* ===== FAQ Categories ===== */
@@ -445,13 +612,12 @@ import DigiIcon from '../components/DigiIcon.astro';
     font-size: 1.2em;
   }
 
-  /* ===== FAQ Items (Accordion) ===== */
+  /* ===== FAQ Items (Accordion with smooth animation) ===== */
   .faq-item {
     background: var(--color-surface);
     border: 1px solid var(--color-border);
     border-radius: var(--radius-md);
     margin-bottom: var(--space-3);
-    overflow: hidden;
   }
 
   .faq-item summary {
@@ -470,16 +636,19 @@ import DigiIcon from '../components/DigiIcon.astro';
   }
 
   .faq-item summary::after {
-    content: '+';
+    content: '';
     margin-left: auto;
-    font-size: var(--font-size-lg);
-    font-weight: var(--font-weight-normal);
-    color: var(--color-text-muted);
-    transition: transform var(--transition-fast);
+    width: 20px;
+    height: 20px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: center;
+    transition: transform 0.3s ease;
+    flex-shrink: 0;
   }
 
   .faq-item[open] summary::after {
-    content: '−';
+    transform: rotate(180deg);
   }
 
   .faq-item summary:hover {
@@ -491,11 +660,28 @@ import DigiIcon from '../components/DigiIcon.astro';
     font-size: 1.1em;
   }
 
+  /* Smooth accordion animation using grid */
   .faq-content {
-    padding: 0 var(--space-4) var(--space-4);
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 0.3s ease;
+  }
+
+  .faq-item[open] .faq-content {
+    grid-template-rows: 1fr;
+  }
+
+  .faq-content-inner {
+    overflow: hidden;
+    padding: 0 var(--space-4);
     padding-left: calc(var(--space-4) + 1.1em + var(--space-3));
     color: var(--color-text-muted);
     line-height: var(--line-height-relaxed);
+  }
+
+  .faq-item[open] .faq-content-inner {
+    padding-top: var(--space-3);
+    padding-bottom: var(--space-4);
   }
 
   .faq-content p {
@@ -568,6 +754,7 @@ import DigiIcon from '../components/DigiIcon.astro';
     flex-wrap: wrap;
     gap: var(--space-3);
     margin-top: var(--space-4);
+    justify-content: center;
   }
 
   .contact-link {
@@ -621,8 +808,29 @@ import DigiIcon from '../components/DigiIcon.astro';
     background: rgba(0, 200, 255, 0.05);
   }
 
+  :global([data-theme="dark"]) .faq-item summary::after {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='%239ca3af' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  }
+
   :global([data-theme="dark"]) .formula-box,
-  :global([data-theme="dark"]) .faq-content code {
+  :global([data-theme="dark"]) .faq-content-inner code {
     background: rgba(0, 200, 255, 0.1);
+  }
+
+  :global([data-theme="dark"]) .faq-nav a:hover {
+    border-left-color: var(--color-digital);
+  }
+
+  :global([data-theme="dark"]) .faq-nav a.active {
+    color: var(--color-digital);
+    background: rgba(0, 200, 255, 0.08);
+    border-left-color: var(--color-digital);
+  }
+
+  @media (max-width: 768px) {
+    :global([data-theme="dark"]) .faq-nav a:hover,
+    :global([data-theme="dark"]) .faq-nav a.active {
+      border-color: var(--color-digital);
+    }
   }
 </style>
