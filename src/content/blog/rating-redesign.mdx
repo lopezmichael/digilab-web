@@ -5,9 +5,11 @@ date: 2026-03-01
 category: announcement
 tags: [ratings, methodology, elo]
 author: Michael Lopez
-image: /images/blog/rating-redesign-cover.png
 draft: false
+chartEmbed: /charts/rating-distribution.html
 ---
+
+import ChartEmbed from '../../components/ChartEmbed.astro';
 
 We've completely redesigned how DigiLab calculates player ratings. If you've noticed your number changed — this is why. More importantly, here's what it means for you and the competitive scene.
 
@@ -53,6 +55,8 @@ Here's how the distribution changed:
 | Rating Range | 1245 - 1760 (515 spread) | 1364 - 1645 (281 spread) |
 | Mean Rating | 1497.9 | 1499.2 |
 | Distribution Shape | Flat/Uniform | Bell Curve |
+
+<ChartEmbed src="/charts/rating-distribution.html" height="450px" title="Rating Distribution Comparison" />
 
 The narrower spread isn't a bug — it's the fix. The old system was artificially inflating the gap between players.
 
