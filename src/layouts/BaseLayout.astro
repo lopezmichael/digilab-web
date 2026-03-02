@@ -2,7 +2,7 @@
 import '../styles/tokens.css';
 import '../styles/global.css';
 import CircuitBackground from '../components/CircuitBackground.astro';
-import PixelAgumon from '../components/PixelAgumon.astro';
+import AgumonGuide from '../components/AgumonGuide.astro';
 
 interface Props {
   title: string;
@@ -17,7 +17,7 @@ const {
   description = "Track local Digimon TCG tournament results, player standings, and deck meta.",
   image = "/images/og-image.png",
   showCircuits = true,
-  showAgumon = true,
+  showAgumon = false,
 } = Astro.props;
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
@@ -75,6 +75,32 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 <body>
   {showCircuits && <CircuitBackground />}
   <slot />
-  {showAgumon && <PixelAgumon />}
+  {showAgumon && (
+    <div class="floating-agumon">
+      <AgumonGuide pose="sleeping" size="48px" />
+    </div>
+  )}
 </body>
 </html>
+
+<style is:global>
+  .floating-agumon {
+    position: fixed;
+    bottom: var(--space-4, 16px);
+    right: var(--space-4, 16px);
+    z-index: 50;
+    opacity: 0.7;
+    transition: opacity 0.3s ease;
+  }
+
+  .floating-agumon:hover {
+    opacity: 1;
+  }
+
+  @media (max-width: 768px) {
+    .floating-agumon {
+      bottom: var(--space-3, 12px);
+      right: var(--space-3, 12px);
+    }
+  }
+</style>
