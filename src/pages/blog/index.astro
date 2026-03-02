@@ -3,10 +3,19 @@ import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Header from '../../components/Header.astro';
 import Footer from '../../components/Footer.astro';
+import AgumonGuide from '../../components/AgumonGuide.astro';
+import DigiIcon from '../../components/DigiIcon.astro';
 
 const posts = (await getCollection('blog'))
   .filter(post => !post.data.draft)
   .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+
+// Separate featured (latest) post from the rest
+const featuredPost = posts[0];
+const otherPosts = posts.slice(1);
+
+// All available categories (show all, not just ones with posts)
+const allCategories = ['announcement', 'technical', 'analysis', 'spotlight', 'devlog'];
 
 const categoryLabels: Record<string, string> = {
   announcement: 'Announcements',
@@ -15,50 +24,132 @@ const categoryLabels: Record<string, string> = {
   spotlight: 'Spotlight',
   devlog: 'Dev Log',
 };
+
+const categoryIcons: Record<string, string> = {
+  announcement: 'megaphone',
+  technical: 'code-slash',
+  analysis: 'graph-up',
+  spotlight: 'star',
+  devlog: 'journal-code',
+};
 ---
 
 <BaseLayout title="Blog" description="Updates, analysis, and insights from the DigiLab team.">
   <Header />
 
   <main class="blog-page">
+    <!-- Hero Section -->
+    <section class="blog-hero">
+      <div class="hero-bg"></div>
+      <div class="hero-fade"></div>
+      <div class="container hero-content">
+        <div class="hero-text">
+          <h1>Blog</h1>
+          <p>Updates, analysis, and insights from the DigiLab team.</p>
+        </div>
+        <div class="hero-mascot">
+          <div class="digivice-glow">
+            <img src="/brand/digivice.svg" alt="" class="digivice-icon" />
+          </div>
+        </div>
+      </div>
+    </section>
+
     <div class="container">
-      <header class="page-header">
-        <h1>Blog</h1>
-        <p>Updates, analysis, and insights from the DigiLab team.</p>
-      </header>
+
+      <!-- Category Filters -->
+      <div class="category-filters">
+        <button class="filter-pill active" data-category="all">
+          All Posts
+        </button>
+        {allCategories.map((cat) => (
+          <button class="filter-pill" data-category={cat}>
+            <i class={`bi bi-${categoryIcons[cat]}`}></i>
+            {categoryLabels[cat]}
+          </button>
+        ))}
+      </div>
 
       {posts.length === 0 ? (
         <div class="empty-state">
+          <AgumonGuide pose="sleeping" size="64px" />
           <p>No posts yet. Check back soon!</p>
         </div>
       ) : (
-        <div class="posts-grid">
-          {posts.map((post) => (
-            <article class="post-card card">
-              {post.data.image && (
-                <img src={post.data.image} alt="" class="post-image" />
+        <>
+          <!-- Featured Post -->
+          {featuredPost && (
+            <a href={`/blog/${featuredPost.slug}`} class="featured-post card" data-category={featuredPost.data.category}>
+              <div class="featured-badge">
+                <DigiIcon name="lightning-charge" size="14px" />
+                Latest
+              </div>
+              {featuredPost.data.image && (
+                <img src={featuredPost.data.image} alt="" class="featured-image" />
               )}
-              <div class="post-content">
+              <div class="featured-content">
                 <div class="post-meta">
-                  <span class={`category category-${post.data.category}`}>
-                    {categoryLabels[post.data.category]}
+                  <span class={`category category-${featuredPost.data.category}`}>
+                    {categoryLabels[featuredPost.data.category]}
                   </span>
-                  <time datetime={post.data.date.toISOString()}>
-                    {post.data.date.toLocaleDateString('en-US', {
+                  <time datetime={featuredPost.data.date.toISOString()}>
+                    {featuredPost.data.date.toLocaleDateString('en-US', {
                       year: 'numeric',
                       month: 'long',
                       day: 'numeric'
                     })}
                   </time>
                 </div>
-                <h2 class="post-title">
-                  <a href={`/blog/${post.slug}`}>{post.data.title}</a>
-                </h2>
-                <p class="post-description">{post.data.description}</p>
+                <h2 class="featured-title">{featuredPost.data.title}</h2>
+                <p class="featured-description">{featuredPost.data.description}</p>
+                <span class="read-more">
+                  Read article
+                  <i class="bi bi-arrow-right"></i>
+                </span>
               </div>
-            </article>
-          ))}
-        </div>
+            </a>
+          )}
+
+          <!-- Other Posts Grid -->
+          {otherPosts.length > 0 && (
+            <div class="posts-grid">
+              {otherPosts.map((post) => (
+                <a href={`/blog/${post.slug}`} class="post-card card" data-category={post.data.category}>
+                  {post.data.image && (
+                    <img src={post.data.image} alt="" class="post-image" />
+                  )}
+                  <div class="post-content">
+                    <div class="post-meta">
+                      <span class={`category category-${post.data.category}`}>
+                        {categoryLabels[post.data.category]}
+                      </span>
+                      <time datetime={post.data.date.toISOString()}>
+                        {post.data.date.toLocaleDateString('en-US', {
+                          year: 'numeric',
+                          month: 'long',
+                          day: 'numeric'
+                        })}
+                      </time>
+                    </div>
+                    <h2 class="post-title">{post.data.title}</h2>
+                    <p class="post-description">{post.data.description}</p>
+                    <span class="read-more">
+                      Read more
+                      <i class="bi bi-chevron-right"></i>
+                    </span>
+                  </div>
+                </a>
+              ))}
+            </div>
+          )}
+
+          <!-- Filter Empty State (shown via JS when no posts match filter) -->
+          <div class="filter-empty-state" style="display: none;">
+            <AgumonGuide pose="sleeping" size="64px" />
+            <p>No posts in this category yet.</p>
+            <button class="btn-reset-filter">Show all posts</button>
+          </div>
+        </>
       )}
     </div>
   </main>
@@ -67,30 +158,253 @@ const categoryLabels: Record<string, string> = {
 </BaseLayout>
 
 <style>
-  .blog-page {
-    padding: var(--space-12) 0;
+  /* ===== Hero Section ===== */
+  .blog-hero {
+    position: relative;
+    padding: var(--space-12) 0 var(--space-16);
   }
 
-  .page-header {
-    text-align: center;
-    margin-bottom: var(--space-12);
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, var(--color-primary-dark, #061a2e) 0%, var(--color-primary) 100%);
+    z-index: -2;
   }
 
-  .page-header h1 {
-    margin-bottom: var(--space-4);
+  .hero-fade {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 60px;
+    background: linear-gradient(to bottom, transparent 0%, var(--color-background) 100%);
+    z-index: -1;
   }
 
-  .page-header p {
-    color: var(--color-text-muted);
+  .hero-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-6);
+  }
+
+  .hero-text h1 {
+    color: #ffffff;
+    margin-bottom: var(--space-2);
+  }
+
+  .hero-text p {
+    color: rgba(255, 255, 255, 0.8);
     font-size: var(--font-size-lg);
+    margin: 0;
   }
 
-  .empty-state {
+  .hero-mascot {
+    flex-shrink: 0;
+  }
+
+  .digivice-glow {
+    position: relative;
+    width: 72px;
+    height: 72px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .digivice-glow::before {
+    content: '';
+    position: absolute;
+    inset: -8px;
+    background: radial-gradient(circle, rgba(0, 200, 255, 0.4) 0%, rgba(0, 200, 255, 0) 70%);
+    border-radius: 50%;
+    animation: digivice-pulse 3s ease-in-out infinite;
+  }
+
+  .digivice-icon {
+    width: 56px;
+    height: 56px;
+    filter: brightness(0) invert(1);
+    position: relative;
+    z-index: 1;
+  }
+
+  @keyframes digivice-pulse {
+    0%, 100% { opacity: 0.6; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.1); }
+  }
+
+  @media (max-width: 640px) {
+    .hero-content {
+      flex-direction: column;
+      text-align: center;
+    }
+
+    .hero-mascot {
+      order: -1;
+    }
+  }
+
+  /* ===== Main Content ===== */
+  .blog-page .container {
+    padding-top: var(--space-8);
+    padding-bottom: var(--space-12);
+  }
+
+  /* ===== Category Filters ===== */
+  .category-filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    margin-bottom: var(--space-8);
+  }
+
+  .filter-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: var(--space-2) var(--space-4);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-full);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
+    color: var(--color-text-muted);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+  }
+
+  .filter-pill:hover {
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+  }
+
+  .filter-pill.active {
+    background: var(--color-primary);
+    border-color: var(--color-primary);
+    color: #ffffff;
+  }
+
+  /* ===== Empty State ===== */
+  .empty-state,
+  .filter-empty-state {
     text-align: center;
     padding: var(--space-16) 0;
     color: var(--color-text-muted);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-4);
   }
 
+  .empty-state :global(.agumon-guide),
+  .filter-empty-state :global(.agumon-guide) {
+    width: 64px;
+    height: 64px;
+  }
+
+  .btn-reset-filter {
+    padding: var(--space-2) var(--space-4);
+    background: var(--color-primary);
+    color: #ffffff;
+    border: none;
+    border-radius: var(--radius-md);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+  }
+
+  .btn-reset-filter:hover {
+    background: var(--color-accent);
+  }
+
+  /* ===== Featured Post ===== */
+  .featured-post {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    overflow: hidden;
+    margin-bottom: var(--space-8);
+    text-decoration: none;
+    color: inherit;
+    position: relative;
+    transition: all var(--transition-fast);
+  }
+
+  .featured-post:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg);
+  }
+
+  .featured-badge {
+    position: absolute;
+    top: var(--space-4);
+    left: var(--space-4);
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-1);
+    padding: var(--space-1) var(--space-3);
+    background: var(--color-accent);
+    color: #ffffff;
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-semibold);
+    border-radius: var(--radius-sm);
+    z-index: 1;
+  }
+
+  .featured-image {
+    width: 100%;
+    height: 100%;
+    min-height: 280px;
+    object-fit: cover;
+  }
+
+  .featured-content {
+    padding: var(--space-8);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .featured-title {
+    font-size: var(--font-size-2xl);
+    margin-bottom: var(--space-3);
+    color: var(--color-text);
+  }
+
+  .featured-description {
+    color: var(--color-text-muted);
+    margin-bottom: var(--space-4);
+    line-height: var(--line-height-relaxed);
+  }
+
+  .read-more {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    color: var(--color-primary);
+    font-weight: var(--font-weight-medium);
+    font-size: var(--font-size-sm);
+    transition: all var(--transition-fast);
+  }
+
+  .featured-post:hover .read-more,
+  .post-card:hover .read-more {
+    color: var(--color-accent);
+    gap: var(--space-3);
+  }
+
+  @media (max-width: 768px) {
+    .featured-post {
+      grid-template-columns: 1fr;
+    }
+
+    .featured-image {
+      min-height: 200px;
+    }
+  }
+
+  /* ===== Posts Grid ===== */
   .posts-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
@@ -101,6 +415,18 @@ const categoryLabels: Record<string, string> = {
     display: flex;
     flex-direction: column;
     overflow: hidden;
+    text-decoration: none;
+    color: inherit;
+    transition: all var(--transition-fast);
+  }
+
+  .post-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-md);
+  }
+
+  .post-card:hover .post-title {
+    color: var(--color-accent);
   }
 
   .post-image {
@@ -110,7 +436,7 @@ const categoryLabels: Record<string, string> = {
   }
 
   .post-content {
-    padding: var(--space-6);
+    padding: var(--space-5);
     flex: 1;
     display: flex;
     flex-direction: column;
@@ -163,22 +489,116 @@ const categoryLabels: Record<string, string> = {
   }
 
   .post-title {
-    font-size: var(--font-size-xl);
+    font-size: var(--font-size-lg);
     margin-bottom: var(--space-2);
-  }
-
-  .post-title a {
     color: var(--color-text);
-    text-decoration: none;
-  }
-
-  .post-title a:hover {
-    color: var(--color-accent);
+    transition: color var(--transition-fast);
   }
 
   .post-description {
     color: var(--color-text-muted);
-    margin: 0;
+    margin: 0 0 var(--space-4);
     flex: 1;
+    font-size: var(--font-size-sm);
+    line-height: var(--line-height-relaxed);
+  }
+
+  /* ===== Dark Mode ===== */
+  :global([data-theme="dark"]) .hero-fade {
+    background: linear-gradient(to bottom, transparent 0%, var(--color-background-dark, #0a0a0a) 100%);
+  }
+
+  :global([data-theme="dark"]) .filter-pill {
+    background: var(--color-surface-dark);
+    border-color: var(--color-border-dark);
+  }
+
+  :global([data-theme="dark"]) .filter-pill.active {
+    background: var(--color-primary);
+  }
+
+  :global([data-theme="dark"]) .category-announcement {
+    background-color: rgba(21, 101, 192, 0.2);
+  }
+
+  :global([data-theme="dark"]) .category-technical {
+    background-color: rgba(123, 31, 162, 0.2);
+  }
+
+  :global([data-theme="dark"]) .category-analysis {
+    background-color: rgba(46, 125, 50, 0.2);
+  }
+
+  :global([data-theme="dark"]) .category-spotlight {
+    background-color: rgba(239, 108, 0, 0.2);
+  }
+
+  :global([data-theme="dark"]) .category-devlog {
+    background-color: rgba(194, 24, 91, 0.2);
   }
 </style>
+
+<script>
+  // Category filter functionality
+  document.addEventListener('DOMContentLoaded', () => {
+    const filterPills = document.querySelectorAll('.filter-pill');
+    const featuredPost = document.querySelector('.featured-post');
+    const postCards = document.querySelectorAll('.post-card');
+    const filterEmptyState = document.querySelector('.filter-empty-state');
+    const resetButton = document.querySelector('.btn-reset-filter');
+    const allPostsButton = document.querySelector('.filter-pill[data-category="all"]');
+
+    function filterPosts(category: string) {
+      let visibleCount = 0;
+
+      // Update active state
+      filterPills.forEach(p => p.classList.remove('active'));
+      const activePill = document.querySelector(`.filter-pill[data-category="${category}"]`);
+      if (activePill) activePill.classList.add('active');
+
+      // Filter featured post
+      if (featuredPost) {
+        const featuredCategory = featuredPost.getAttribute('data-category');
+        if (category === 'all' || featuredCategory === category) {
+          (featuredPost as HTMLElement).style.display = '';
+          visibleCount++;
+        } else {
+          (featuredPost as HTMLElement).style.display = 'none';
+        }
+      }
+
+      // Filter post cards
+      postCards.forEach(post => {
+        if (category === 'all' || post.getAttribute('data-category') === category) {
+          (post as HTMLElement).style.display = '';
+          visibleCount++;
+        } else {
+          (post as HTMLElement).style.display = 'none';
+        }
+      });
+
+      // Show/hide empty state
+      if (filterEmptyState) {
+        if (visibleCount === 0 && category !== 'all') {
+          (filterEmptyState as HTMLElement).style.display = 'flex';
+        } else {
+          (filterEmptyState as HTMLElement).style.display = 'none';
+        }
+      }
+    }
+
+    filterPills.forEach(pill => {
+      pill.addEventListener('click', () => {
+        const category = pill.getAttribute('data-category') || 'all';
+        filterPosts(category);
+      });
+    });
+
+    // Reset button in empty state
+    if (resetButton) {
+      resetButton.addEventListener('click', () => {
+        filterPosts('all');
+      });
+    }
+  });
+</script>
