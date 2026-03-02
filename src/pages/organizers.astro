@@ -1,0 +1,695 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+---
+
+<BaseLayout title="For Organizers" description="Guide for tournament organizers - learn how to upload results, add your store, and grow your Digimon TCG community.">
+  <Header />
+
+  <main class="organizers-page">
+    <!-- Hero Section -->
+    <section class="organizers-hero">
+      <div class="hero-bg"></div>
+      <div class="container hero-content">
+        <div class="hero-text">
+          <h1>For Organizers</h1>
+          <p>Help grow your Digimon TCG community.</p>
+        </div>
+        <div class="hero-mascot">
+          <div class="digivice-glow">
+            <img src="/brand/digivice.svg" alt="" class="digivice-icon" />
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="container">
+
+      <p class="intro-text">
+        Tournament organizers and community builders are the backbone of the Digimon TCG scene. DigiLab helps you showcase your events, track your community's growth, and connect with players.
+      </p>
+
+      <!-- Upload Tournament Results -->
+      <section class="content-category">
+        <h2><i class="bi bi-cloud-upload"></i> Upload Tournament Results</h2>
+
+        <details class="content-item" open>
+          <summary><i class="bi bi-list-check"></i> How to upload results</summary>
+          <div class="content-body">
+            <p>Anyone can upload tournament results directly through the app. Our OCR system reads your Bandai TCG+ screenshots and extracts the data automatically.</p>
+            <ol class="steps-list">
+              <li>
+                <strong>Go to the Upload Results tab</strong>
+                <p>Open the Upload Results page from the sidebar in the app.</p>
+              </li>
+              <li>
+                <strong>Fill in tournament details</strong>
+                <p>Select the store, date, event type, format, total players, and number of rounds.</p>
+              </li>
+              <li>
+                <strong>Upload your screenshots</strong>
+                <p>Take screenshots of the final standings from the Bandai TCG+ app. Make sure placements, usernames, and member numbers are visible. You can upload multiple screenshots if standings span more than one screen.</p>
+              </li>
+              <li>
+                <strong>Review the extracted data</strong>
+                <p>Our OCR system reads the screenshots and extracts player info automatically. Review the results, fix any OCR errors, and assign deck archetypes if known.</p>
+              </li>
+              <li>
+                <strong>Confirm and submit</strong>
+                <p>Results go live immediately after submission. Ratings and statistics update automatically.</p>
+              </li>
+            </ol>
+            <div class="cta-box">
+              <a href="https://app.digilab.cards" class="btn btn-primary" target="_blank" rel="noopener">
+                <i class="bi bi-cloud-upload"></i> Go to Upload Results
+              </a>
+            </div>
+          </div>
+        </details>
+
+        <details class="content-item">
+          <summary><i class="bi bi-info-circle"></i> What you'll need</summary>
+          <div class="content-body">
+            <p><strong>Have ready before uploading:</strong></p>
+            <ul>
+              <li>Screenshots of final standings from Bandai TCG+ (PNG, JPEG, or WebP)</li>
+              <li>The store where the tournament was held</li>
+              <li>Tournament date</li>
+              <li>Total number of players and rounds</li>
+            </ul>
+            <p><strong>Optional:</strong></p>
+            <ul>
+              <li>Deck archetypes played (can be assigned during review or added later)</li>
+              <li>Match history screenshots (for round-by-round records)</li>
+            </ul>
+            <div class="info-note">
+              <i class="bi bi-info-circle"></i>
+              Don't worry if you don't know every deck! Decks default to UNKNOWN and can be updated later by anyone in the community. You can also request new deck archetypes if one is missing from the dropdown.
+            </div>
+          </div>
+        </details>
+      </section>
+
+      <!-- Limitless Integration -->
+      <section class="content-category">
+        <h2><i class="bi bi-cloud-arrow-down"></i> Limitless Integration</h2>
+
+        <details class="content-item">
+          <summary><i class="bi bi-arrow-repeat"></i> How Limitless sync works</summary>
+          <div class="content-body">
+            <p>Online tournaments from Limitless TCG are synced automatically into DigiLab. Results, placements, and deck archetypes are imported weekly. Online tournaments appear in the "Online" scene and feed the same rating system as in-person events.</p>
+          </div>
+        </details>
+
+        <details class="content-item">
+          <summary><i class="bi bi-people"></i> Currently synced organizers</summary>
+          <div class="content-body">
+            <p>The following Tier 1 organizers are currently synced:</p>
+            <ul>
+              <li><strong>Eagle's Nest</strong></li>
+              <li><strong>PHOENIX REBORN</strong></li>
+              <li><strong>DMV Drakes</strong></li>
+              <li><strong>MasterRukasu</strong></li>
+            </ul>
+            <p>These organizers run regular online events that are automatically imported.</p>
+          </div>
+        </details>
+
+        <details class="content-item">
+          <summary><i class="bi bi-plus-circle"></i> Get your organizer page added</summary>
+          <div class="content-body">
+            <p>If you run online tournaments on Limitless TCG, contact us to add your organizer page to the sync.</p>
+            <p><strong>Provide:</strong></p>
+            <ul>
+              <li>Your Limitless organizer name and page URL</li>
+              <li>Approximate event frequency</li>
+            </ul>
+            <div class="cta-box">
+              <a href="https://discord.gg/digilab" class="btn btn-outline" target="_blank" rel="noopener">
+                <i class="bi bi-discord"></i> Ask on Discord
+              </a>
+            </div>
+          </div>
+        </details>
+      </section>
+
+      <!-- Community Links -->
+      <section class="content-category">
+        <h2><i class="bi bi-link-45deg"></i> Community Links</h2>
+
+        <details class="content-item">
+          <summary><i class="bi bi-link"></i> What are community links?</summary>
+          <div class="content-body">
+            <p>Every store and organizer on DigiLab has a unique community link. When shared, it filters the entire app to show only that community's data — tournaments, players, meta, everything.</p>
+            <p>URL format: <code>app.digilab.cards/?community=your-store-slug</code></p>
+          </div>
+        </details>
+
+        <details class="content-item">
+          <summary><i class="bi bi-search"></i> How to find your community link</summary>
+          <div class="content-body">
+            <p>To get your store's community link:</p>
+            <ol class="steps-list">
+              <li>Go to the <strong>Stores</strong> tab</li>
+              <li>Find your store and click it to open the modal</li>
+              <li>Look for the <strong>"Share Community View"</strong> button in the modal</li>
+              <li>Copy the link and share it!</li>
+            </ol>
+          </div>
+        </details>
+
+        <details class="content-item">
+          <summary><i class="bi bi-lightbulb"></i> Use cases</summary>
+          <div class="content-body">
+            <p><strong>Discord server:</strong> Post the link so players can check standings anytime.</p>
+            <p><strong>Social media:</strong> Share after events so players can see updated results.</p>
+            <p><strong>Store website:</strong> Link to your community's DigiLab page for tournament info.</p>
+          </div>
+        </details>
+      </section>
+
+      <!-- Add Your Store -->
+      <section class="content-category">
+        <h2><i class="bi bi-shop-window"></i> Add Your Store</h2>
+
+        <details class="content-item">
+          <summary><i class="bi bi-shop"></i> Physical stores</summary>
+          <div class="content-body">
+            <p>We want to include every store that runs Digimon TCG events! Request a store directly from DigiLab:</p>
+            <ol class="steps-list">
+              <li>
+                <strong>Select your scene</strong>
+                <p>Choose your local scene from the dropdown.</p>
+              </li>
+              <li>
+                <strong>Fill in your store details</strong>
+                <p>Store name and city/state.</p>
+              </li>
+              <li>
+                <strong>Submit</strong>
+                <p>Your request goes directly to your scene admin for review.</p>
+              </li>
+            </ol>
+            <p class="text-muted">You can also find this on the <strong>Stores</strong> tab in the app.</p>
+          </div>
+        </details>
+
+        <details class="content-item">
+          <summary><i class="bi bi-camera-video"></i> Online organizers</summary>
+          <div class="content-body">
+            <p>Already running webcam events? Online organizers are supported on DigiLab! To get listed:</p>
+            <p><strong>Provide:</strong></p>
+            <ul>
+              <li>Platform name (e.g., your Discord server or community name)</li>
+              <li>Limitless organizer page URL</li>
+              <li>Discord server invite link</li>
+            </ul>
+            <p>Events sync automatically via Limitless integration once your organizer page is added.</p>
+            <div class="cta-box">
+              <a href="https://discord.gg/digilab" class="btn btn-outline" target="_blank" rel="noopener">
+                <i class="bi bi-discord"></i> Ask on Discord
+              </a>
+            </div>
+          </div>
+        </details>
+
+        <details class="content-item">
+          <summary><i class="bi bi-check-circle"></i> Store requirements</summary>
+          <div class="content-body">
+            <p><strong>Physical stores</strong> should meet the following:</p>
+            <ul>
+              <li>Run regular Digimon TCG events (at least monthly)</li>
+              <li>Use Bandai TCG+ or Limitless for tournament management</li>
+              <li>Be open to the public (not private play groups)</li>
+            </ul>
+            <p><strong>Online organizers</strong> should meet the following:</p>
+            <ul>
+              <li>Run regular scheduled events</li>
+              <li>Have public registration open to all players</li>
+            </ul>
+          </div>
+        </details>
+      </section>
+
+      <!-- Request a New Scene -->
+      <section class="content-category">
+        <h2><i class="bi bi-globe"></i> Request a New Scene</h2>
+
+        <details class="content-item">
+          <summary><i class="bi bi-geo-alt"></i> How to get your scene added</summary>
+          <div class="content-body">
+            <p>Want to bring DigiLab to your community? Here's how to get a new scene set up:</p>
+            <ol class="steps-list">
+              <li>
+                <strong>Check prerequisites</strong>
+                <p>Your scene should have at least 2-3 active stores or organizers running regular Digimon events.</p>
+              </li>
+              <li>
+                <strong>Identify a community contact</strong>
+                <p>We need someone local who can help gather initial tournament data and stay in touch as the community grows.</p>
+              </li>
+              <li>
+                <strong>Submit your request</strong>
+                <p>Use the "Request a Scene" option in the Stores tab, or reach out on Discord.</p>
+              </li>
+            </ol>
+            <div class="cta-box">
+              <a href="https://discord.gg/digilab" class="btn btn-outline" target="_blank" rel="noopener">
+                <i class="bi bi-discord"></i> Ask on Discord
+              </a>
+            </div>
+          </div>
+        </details>
+
+        <details class="content-item">
+          <summary><i class="bi bi-map"></i> What makes a scene?</summary>
+          <div class="content-body">
+            <p>A "scene" in DigiLab is a community of players who regularly compete against each other. This is usually defined by:</p>
+            <ul>
+              <li><strong>Geography</strong> — A metro area, state, or collection of nearby cities</li>
+              <li><strong>Community</strong> — Players who know each other and attend the same events</li>
+              <li><strong>Activity</strong> — At least 2-3 stores or organizers with regular events</li>
+            </ul>
+            <p>Examples: a metro area like "Houston TCG", a state-level scene like "Florida Digimon", or a regional community like "Southeast Tamers"</p>
+          </div>
+        </details>
+      </section>
+
+      <!-- Become a Contributor -->
+      <section class="content-category">
+        <h2><i class="bi bi-person-badge"></i> Become a Contributor</h2>
+
+        <details class="content-item">
+          <summary><i class="bi bi-star"></i> What is a contributor?</summary>
+          <div class="content-body">
+            <p>Most users won't need contributor access — anyone can upload tournament results via screenshots. Contributors are trusted community members with additional admin capabilities.</p>
+            <p><strong>Admin contributors</strong> can:</p>
+            <ul>
+              <li>Enter tournament results manually (without screenshots)</li>
+              <li>Edit existing tournaments and results</li>
+              <li>Manage player records and deck archetypes</li>
+              <li>Approve or reject deck archetype requests from the community</li>
+            </ul>
+            <p><strong>Super Admin contributors</strong> additionally manage stores and format settings.</p>
+          </div>
+        </details>
+
+        <details class="content-item">
+          <summary><i class="bi bi-person-plus"></i> How do I become a contributor?</summary>
+          <div class="content-body">
+            <p>We're looking for active tournament organizers and community members who regularly attend events. To become a contributor:</p>
+            <ol class="steps-list">
+              <li>
+                <strong>Build a track record</strong>
+                <p>Upload a few tournaments via the Upload Results page so we can verify data quality.</p>
+              </li>
+              <li>
+                <strong>Express interest</strong>
+                <p>Let us know you'd like contributor access when uploading results.</p>
+              </li>
+              <li>
+                <strong>Get set up</strong>
+                <p>We'll provide you with admin credentials and a quick orientation on the admin tools.</p>
+              </li>
+            </ol>
+            <div class="cta-box">
+              <a href="https://discord.gg/digilab" class="btn btn-outline" target="_blank" rel="noopener">
+                <i class="bi bi-discord"></i> Ask on Discord
+              </a>
+            </div>
+          </div>
+        </details>
+      </section>
+
+      <!-- Report an Error -->
+      <section class="content-category">
+        <h2><i class="bi bi-exclamation-triangle"></i> Report an Error</h2>
+
+        <details class="content-item">
+          <summary><i class="bi bi-flag"></i> How to report data errors</summary>
+          <div class="content-body">
+            <p>Spotted something wrong with a tournament result, player record, or deck assignment? You can report errors directly from the item itself:</p>
+            <ul>
+              <li>Open the player, tournament, or deck modal</li>
+              <li>Click the <strong>Report Error</strong> button in the modal footer</li>
+              <li>Describe what's wrong and submit — it goes straight to the scene admin</li>
+            </ul>
+            <div class="info-note">
+              <i class="bi bi-info-circle"></i>
+              Reports are routed to your scene's coordination channel on Discord for fast resolution.
+            </div>
+          </div>
+        </details>
+
+        <details class="content-item">
+          <summary><i class="bi bi-bug"></i> How to report a bug</summary>
+          <div class="content-body">
+            <p>Found a bug or something not working right? Let us know:</p>
+            <ul>
+              <li>What you were trying to do</li>
+              <li>What you expected to happen</li>
+              <li>What actually happened</li>
+              <li>Screenshots if possible</li>
+            </ul>
+            <div class="cta-box">
+              <a href="https://discord.gg/digilab" class="btn btn-outline" target="_blank" rel="noopener">
+                <i class="bi bi-bug"></i> Report a Bug on Discord
+              </a>
+            </div>
+          </div>
+        </details>
+      </section>
+
+      <!-- Contact CTA -->
+      <section class="contact-cta">
+        <h2><i class="bi bi-chat-square-text"></i> Questions?</h2>
+        <p>If you have questions about submitting results or getting involved, don't hesitate to reach out.</p>
+        <div class="cta-buttons">
+          <a href="https://discord.gg/digilab" class="btn btn-primary" target="_blank" rel="noopener">
+            <i class="bi bi-discord"></i> Discord
+          </a>
+          <a href="https://github.com/lopezmichael/digilab-app" class="btn btn-outline" target="_blank" rel="noopener">
+            <i class="bi bi-github"></i> GitHub
+          </a>
+          <a href="https://ko-fi.com/digilab" class="btn btn-outline" target="_blank" rel="noopener">
+            <i class="bi bi-cup-hot"></i> Ko-fi
+          </a>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <Footer />
+</BaseLayout>
+
+<style>
+  /* ===== Hero Section ===== */
+  .organizers-hero {
+    position: relative;
+    padding: var(--space-12) 0 var(--space-16);
+  }
+
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, var(--color-primary-dark, #061a2e) 0%, var(--color-primary) 100%);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    z-index: -2;
+  }
+
+  .hero-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-6);
+  }
+
+  .hero-text h1 {
+    color: #ffffff;
+    margin-bottom: var(--space-2);
+  }
+
+  .hero-text p {
+    color: rgba(255, 255, 255, 0.8);
+    font-size: var(--font-size-lg);
+    margin: 0;
+  }
+
+  .hero-mascot {
+    flex-shrink: 0;
+  }
+
+  .digivice-glow {
+    position: relative;
+    width: 72px;
+    height: 72px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .digivice-glow::before {
+    content: '';
+    position: absolute;
+    inset: -8px;
+    background: radial-gradient(circle, rgba(0, 200, 255, 0.4) 0%, rgba(0, 200, 255, 0) 70%);
+    border-radius: 50%;
+    animation: digivice-pulse 3s ease-in-out infinite;
+  }
+
+  .digivice-icon {
+    width: 56px;
+    height: 56px;
+    filter: brightness(0) invert(1);
+    position: relative;
+    z-index: 1;
+  }
+
+  @keyframes digivice-pulse {
+    0%, 100% { opacity: 0.6; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.1); }
+  }
+
+  @media (max-width: 640px) {
+    .hero-content {
+      flex-direction: column;
+      text-align: center;
+    }
+
+    .hero-mascot {
+      order: -1;
+    }
+  }
+
+  /* ===== Main Content ===== */
+  .organizers-page .container:not(.hero-content) {
+    max-width: 800px;
+    padding-top: var(--space-8);
+    padding-bottom: var(--space-12);
+  }
+
+  .intro-text {
+    font-size: var(--font-size-lg);
+    color: var(--color-text-muted);
+    line-height: var(--line-height-relaxed);
+    margin-bottom: var(--space-10);
+  }
+
+  /* ===== Content Categories ===== */
+  .content-category {
+    margin-bottom: var(--space-10);
+  }
+
+  .content-category h2 {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    font-size: var(--font-size-xl);
+    color: var(--color-primary);
+    margin-bottom: var(--space-4);
+    padding-bottom: var(--space-2);
+    border-bottom: 2px solid var(--color-border);
+  }
+
+  .content-category h2 i {
+    font-size: 1.2em;
+  }
+
+  /* ===== Content Items (Accordion) ===== */
+  .content-item {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    margin-bottom: var(--space-3);
+    overflow: hidden;
+  }
+
+  .content-item summary {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    padding: var(--space-4);
+    font-weight: var(--font-weight-medium);
+    cursor: pointer;
+    list-style: none;
+    transition: background-color var(--transition-fast);
+  }
+
+  .content-item summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .content-item summary::after {
+    content: '+';
+    margin-left: auto;
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-normal);
+    color: var(--color-text-muted);
+    transition: transform var(--transition-fast);
+  }
+
+  .content-item[open] summary::after {
+    content: '−';
+  }
+
+  .content-item summary:hover {
+    background: rgba(10, 48, 85, 0.05);
+  }
+
+  .content-item summary i {
+    color: var(--color-primary);
+    font-size: 1.1em;
+  }
+
+  .content-body {
+    padding: 0 var(--space-4) var(--space-4);
+    padding-left: calc(var(--space-4) + 1.1em + var(--space-3));
+    color: var(--color-text-muted);
+    line-height: var(--line-height-relaxed);
+  }
+
+  .content-body p {
+    margin-bottom: var(--space-3);
+  }
+
+  .content-body ul,
+  .content-body ol {
+    margin: var(--space-3) 0;
+    padding-left: var(--space-5);
+  }
+
+  .content-body li {
+    margin-bottom: var(--space-2);
+  }
+
+  .content-body code {
+    background: rgba(10, 48, 85, 0.1);
+    padding: 0.1em 0.4em;
+    border-radius: var(--radius-sm);
+    font-size: 0.9em;
+  }
+
+  /* ===== Steps List ===== */
+  .steps-list {
+    list-style: none;
+    padding: 0;
+    counter-reset: step;
+  }
+
+  .steps-list > li {
+    position: relative;
+    padding-left: var(--space-8);
+    margin-bottom: var(--space-4);
+    counter-increment: step;
+  }
+
+  .steps-list > li::before {
+    content: counter(step);
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 24px;
+    height: 24px;
+    background: var(--color-primary);
+    color: #ffffff;
+    border-radius: 50%;
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-semibold);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .steps-list > li > strong {
+    display: block;
+    color: var(--color-text);
+    margin-bottom: var(--space-1);
+  }
+
+  .steps-list > li > p {
+    margin: 0;
+  }
+
+  /* ===== Info Note ===== */
+  .info-note {
+    display: flex;
+    gap: var(--space-3);
+    padding: var(--space-3) var(--space-4);
+    background: rgba(10, 48, 85, 0.1);
+    border-radius: var(--radius-md);
+    font-size: var(--font-size-sm);
+    margin-top: var(--space-4);
+  }
+
+  .info-note i {
+    color: var(--color-primary);
+    flex-shrink: 0;
+  }
+
+  /* ===== CTA Box ===== */
+  .cta-box {
+    margin-top: var(--space-4);
+  }
+
+  .text-muted {
+    color: var(--color-text-muted);
+    font-size: var(--font-size-sm);
+  }
+
+  /* ===== Contact CTA ===== */
+  .contact-cta {
+    text-align: center;
+    padding: var(--space-8);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    margin-top: var(--space-8);
+  }
+
+  .contact-cta h2 {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2);
+    color: var(--color-primary);
+    margin-bottom: var(--space-3);
+  }
+
+  .contact-cta p {
+    color: var(--color-text-muted);
+    margin-bottom: var(--space-4);
+  }
+
+  .cta-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--space-3);
+  }
+
+  /* ===== Dark Mode ===== */
+  :global([data-theme="dark"]) .content-category h2,
+  :global([data-theme="dark"]) .contact-cta h2 {
+    color: var(--color-digital);
+  }
+
+  :global([data-theme="dark"]) .content-item summary i,
+  :global([data-theme="dark"]) .info-note i {
+    color: var(--color-digital);
+  }
+
+  :global([data-theme="dark"]) .content-item summary:hover {
+    background: rgba(0, 200, 255, 0.05);
+  }
+
+  :global([data-theme="dark"]) .info-note,
+  :global([data-theme="dark"]) .content-body code {
+    background: rgba(0, 200, 255, 0.1);
+  }
+
+  :global([data-theme="dark"]) .steps-list > li::before {
+    background: var(--color-digital);
+  }
+</style>

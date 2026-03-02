@@ -8,52 +8,5 @@
       "has": [{ "type": "host", "value": "app.digilab.cards" }],
       "destination": "/app"
     }
-  ],
-  "redirects": [
-    {
-      "source": "/",
-      "has": [
-        { "type": "host", "value": "digilab.cards" },
-        { "type": "query", "key": "player" }
-      ],
-      "destination": "https://app.digilab.cards/?player=:player",
-      "permanent": false
-    },
-    {
-      "source": "/",
-      "has": [
-        { "type": "host", "value": "digilab.cards" },
-        { "type": "query", "key": "deck" }
-      ],
-      "destination": "https://app.digilab.cards/?deck=:deck",
-      "permanent": false
-    },
-    {
-      "source": "/",
-      "has": [
-        { "type": "host", "value": "digilab.cards" },
-        { "type": "query", "key": "store" }
-      ],
-      "destination": "https://app.digilab.cards/?store=:store",
-      "permanent": false
-    },
-    {
-      "source": "/",
-      "has": [
-        { "type": "host", "value": "digilab.cards" },
-        { "type": "query", "key": "tournament" }
-      ],
-      "destination": "https://app.digilab.cards/?tournament=:tournament",
-      "permanent": false
-    },
-    {
-      "source": "/",
-      "has": [
-        { "type": "host", "value": "digilab.cards" },
-        { "type": "query", "key": "community" }
-      ],
-      "destination": "https://app.digilab.cards/?community=:community",
-      "permanent": false
-    }
   ]
 }

@@ -1,140 +1,149 @@
 ---
-import BaseLayout from '../layouts/BaseLayout.astro';
-import Header from '../components/Header.astro';
-import Footer from '../components/Footer.astro';
+// Minimal full-screen iframe wrapper for the Shiny app
+// Served at app.digilab.cards
 
-// Posit Connect Cloud URL for the Shiny app
 const IFRAME_SRC = 'https://019bfe6c-c032-7134-a060-84ceec5e089d.share.connect.posit.cloud/';
 const IFRAME_ORIGIN = 'https://019bfe6c-c032-7134-a060-84ceec5e089d.share.connect.posit.cloud';
 ---
 
-<BaseLayout title="DigiLab App" description="Track local Digimon TCG tournament results, player standings, and deck meta." showCircuits={false}>
-  <Header />
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DigiLab - Digimon TCG Locals Tracker</title>
+  <meta name="description" content="Track local Digimon TCG tournament results, player standings, and deck meta.">
 
-  <main class="app-page">
-    <div class="iframe-container">
-      <iframe
-        id="digilab-iframe"
-        src={IFRAME_SRC}
-        title="DigiLab - Digimon TCG Locals Tracker"
-        allow="fullscreen; clipboard-write; geolocation"
-        loading="eager"
-      ></iframe>
+  <!-- Open Graph / Social Media -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://app.digilab.cards/">
+  <meta property="og:title" content="DigiLab - Digimon TCG Locals Tracker">
+  <meta property="og:description" content="Track local Digimon TCG tournament results, player standings, and deck meta.">
+  <meta property="og:image" content="https://digilab.cards/images/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="DigiLab - Digimon TCG Locals Tracker">
+  <meta name="twitter:description" content="Track local Digimon TCG tournament results, player standings, and deck meta.">
+  <meta name="twitter:image" content="https://digilab.cards/images/og-image.png">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-NJ3SMG8HGG"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-NJ3SMG8HGG', {
+      cookie_domain: '.digilab.cards',
+      linker: {
+        domains: ['digilab.cards', 'app.digilab.cards']
+      }
+    });
+  </script>
+
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body {
+      height: 100%;
+      width: 100%;
+      overflow: hidden;
+      background: #0A3055;
+    }
+    iframe {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border: none;
+      display: block;
+    }
+    .fallback {
+      display: none;
+      text-align: center;
+      padding: 50px 20px;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    }
+    .fallback a {
+      color: #0A3055;
+      font-size: 1.2em;
+    }
+  </style>
+</head>
+<body>
+  <iframe
+    id="digilab-iframe"
+    src={IFRAME_SRC}
+    title="DigiLab - Digimon TCG Locals Tracker"
+    allow="fullscreen; clipboard-write; geolocation"
+    loading="eager"
+  ></iframe>
+
+  <noscript>
+    <div class="fallback" style="display: block;">
+      <p>Please enable JavaScript or visit the app directly:</p>
+      <a href={IFRAME_SRC}>Open DigiLab</a>
     </div>
+  </noscript>
 
-    <noscript>
-      <div class="fallback">
-        <p>Please enable JavaScript or visit the app directly:</p>
-        <a href={IFRAME_SRC}>Open DigiLab</a>
-      </div>
-    </noscript>
-  </main>
+  <script define:vars={{ IFRAME_ORIGIN }}>
+    (function() {
+      'use strict';
 
-  <Footer />
-</BaseLayout>
+      var iframe = document.getElementById('digilab-iframe');
+      var iframeReady = false;
 
-<style is:global>
-  /* Make body flex column so iframe can fill available space */
-  body:has(.app-page) {
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-  }
-</style>
+      // Listen for messages from iframe
+      window.addEventListener('message', function(event) {
+        if (event.origin !== IFRAME_ORIGIN) return;
+        if (!event.data || !event.data.type) return;
 
-<style>
-  .app-page {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    min-height: 0;
-  }
-
-  .iframe-container {
-    flex: 1;
-    display: flex;
-    min-height: 0;
-  }
-
-  iframe {
-    width: 100%;
-    height: 100%;
-    min-height: 60vh; /* Fallback minimum */
-    border: none;
-    display: block;
-  }
-
-  .fallback {
-    display: none;
-    text-align: center;
-    padding: 50px 20px;
-  }
-
-  .fallback a {
-    color: var(--color-primary);
-    font-size: 1.2em;
-  }
-
-  noscript .fallback {
-    display: block;
-  }
-</style>
-
-<script define:vars={{ IFRAME_ORIGIN }}>
-  (function() {
-    'use strict';
-
-    var iframe = document.getElementById('digilab-iframe');
-    var iframeReady = false;
-
-    // Listen for messages from iframe
-    window.addEventListener('message', function(event) {
-      if (event.origin !== IFRAME_ORIGIN) return;
-      if (!event.data || !event.data.type) return;
-
-      switch (event.data.type) {
-        case 'digilab-iframe-ready':
-          // Iframe is ready, send initial URL if we have params
-          iframeReady = true;
-          var initialSearch = window.location.search;
-          if (initialSearch) {
-            iframe.contentWindow.postMessage({
-              type: 'digilab-initial-url',
-              search: initialSearch
-            }, IFRAME_ORIGIN);
-          }
-          break;
-
-        case 'digilab-url-update':
-          // Iframe is updating the URL
-          var url = event.data.url || '';
-          var replace = event.data.replace || false;
-
-          // Build full URL (keep on current path)
-          var newUrl = url || window.location.pathname;
-
-          if (replace) {
-            history.replaceState({ search: url }, '', newUrl);
-          } else {
-            // Only push if different
-            if (window.location.search !== url) {
-              history.pushState({ search: url }, '', newUrl);
+        switch (event.data.type) {
+          case 'digilab-iframe-ready':
+            // Iframe is ready, send initial URL if we have params
+            iframeReady = true;
+            var initialSearch = window.location.search;
+            if (initialSearch) {
+              iframe.contentWindow.postMessage({
+                type: 'digilab-initial-url',
+                search: initialSearch
+              }, IFRAME_ORIGIN);
             }
-          }
-          break;
-      }
-    });
+            break;
 
-    // Handle browser back/forward in parent
-    window.addEventListener('popstate', function(event) {
-      var search = window.location.search;
-      // Tell iframe to navigate
-      if (iframeReady) {
-        iframe.contentWindow.postMessage({
-          type: 'digilab-url-navigate',
-          search: search
-        }, IFRAME_ORIGIN);
-      }
-    });
-  })();
-</script>
+          case 'digilab-url-update':
+            // Iframe is updating the URL
+            var url = event.data.url || '';
+            var replace = event.data.replace || false;
+            var newUrl = url || window.location.pathname;
+
+            if (replace) {
+              history.replaceState({ search: url }, '', newUrl);
+            } else {
+              if (window.location.search !== url) {
+                history.pushState({ search: url }, '', newUrl);
+              }
+            }
+            break;
+        }
+      });
+
+      // Handle browser back/forward
+      window.addEventListener('popstate', function(event) {
+        var search = window.location.search;
+        if (iframeReady) {
+          iframe.contentWindow.postMessage({
+            type: 'digilab-url-navigate',
+            search: search
+          }, IFRAME_ORIGIN);
+        }
+      });
+    })();
+  </script>
+</body>
+</html>

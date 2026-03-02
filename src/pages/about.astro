@@ -29,13 +29,26 @@ import Footer from '../components/Footer.astro';
       <section class="content-section">
         <h2>What is DigiLab?</h2>
         <p>
-          DigiLab is a free tournament tracking platform for the Digimon Trading Card Game community.
-          We help local scenes track player standings, analyze deck meta, and celebrate competitive play.
+          DigiLab brings tournament data to your Digimon TCG community. Unlike global meta trackers,
+          DigiLab is scene-based — it helps you understand how you stack up against the players
+          you actually compete with, whether that's at your local game store or in online webcam tournaments.
         </p>
-        <p>
-          Built by a data scientist who loves Digimon, DigiLab combines proper rating methodologies
-          with a passion for the game to create something useful for the community.
-        </p>
+        <ul>
+          <li>Track your tournament history and rating progression</li>
+          <li>See what decks are performing in your scene's meta</li>
+          <li>Compare performance across stores and online events</li>
+          <li>Discover active tournament locations and communities</li>
+        </ul>
+      </section>
+
+      <section class="content-section">
+        <h2>Who is it For?</h2>
+        <div class="audience-list">
+          <p><strong>Players</strong> — Track your results, see your rating, and follow your local meta</p>
+          <p><strong>Tournament Organizers</strong> — Upload results via Bandai TCG+ screenshots or get contributor access</p>
+          <p><strong>Online Competitors</strong> — Limitless and webcam tournament data syncs automatically</p>
+          <p><strong>Community Builders</strong> — Share community links, build store pages, and grow your scene</p>
+        </div>
       </section>
 
       <section class="content-section">
@@ -52,9 +65,28 @@ import Footer from '../components/Footer.astro';
       <section class="content-section">
         <h2>Active Scenes</h2>
         <p>
-          DigiLab is currently tracking tournaments in multiple regions across the US,
-          with support for both local and online events.
+          DigiLab tracks Digimon TCG communities across multiple scenes. Each scene has its own
+          stores, players, and meta data. Want your area added? Check out the
+          <a href="/organizers">For Organizers</a> page.
         </p>
+        <div class="stats-grid">
+          <div class="stat-item">
+            <div class="stat-value">8+</div>
+            <div class="stat-label">Active Scenes</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-value">30+</div>
+            <div class="stat-label">Active Stores</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-value">1,500+</div>
+            <div class="stat-label">Players Tracked</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-value">400+</div>
+            <div class="stat-label">Tournaments</div>
+          </div>
+        </div>
         <a href="https://app.digilab.cards" class="btn btn-primary">Explore the App</a>
       </section>
 
@@ -75,6 +107,15 @@ import Footer from '../components/Footer.astro';
             Support on Ko-fi
           </a>
         </div>
+      </section>
+
+      <section class="content-section disclaimer">
+        <h2>Disclaimer</h2>
+        <p>
+          DigiLab is a fan-made community tool and is not affiliated with, endorsed by, or
+          connected to Bandai Namco, Bandai Card Games, or any official Digimon TCG organization.
+          All Digimon-related trademarks and copyrights belong to their respective owners.
+        </p>
       </section>
     </div>
   </main>
@@ -203,8 +244,88 @@ import Footer from '../components/Footer.astro';
     margin-top: var(--space-4);
   }
 
+  /* ===== Audience List ===== */
+  .audience-list p {
+    margin-bottom: var(--space-2);
+  }
+
+  .audience-list p:last-child {
+    margin-bottom: 0;
+  }
+
+  /* ===== Stats Grid ===== */
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--space-4);
+    margin: var(--space-6) 0;
+  }
+
+  .stat-item {
+    text-align: center;
+    padding: var(--space-4);
+    background: var(--color-surface);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--color-border);
+  }
+
+  .stat-value {
+    font-size: var(--font-size-2xl);
+    font-weight: 700;
+    color: var(--color-primary);
+    line-height: 1.2;
+  }
+
+  .stat-label {
+    font-size: var(--font-size-sm);
+    color: var(--color-muted);
+    margin-top: var(--space-1);
+  }
+
+  @media (max-width: 768px) {
+    .stats-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 480px) {
+    .stats-grid {
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-3);
+    }
+
+    .stat-item {
+      padding: var(--space-3);
+    }
+
+    .stat-value {
+      font-size: var(--font-size-xl);
+    }
+  }
+
+  /* ===== Disclaimer ===== */
+  .disclaimer {
+    border-top: 1px solid var(--color-border);
+    padding-top: var(--space-8);
+    margin-top: var(--space-8);
+  }
+
+  .disclaimer p {
+    color: var(--color-muted);
+    font-size: var(--font-size-sm);
+  }
+
   /* ===== Dark Mode ===== */
   :global([data-theme="dark"]) .content-section h2 {
     color: var(--color-digital);
+  }
+
+  :global([data-theme="dark"]) .stat-value {
+    color: var(--color-digital);
+  }
+
+  :global([data-theme="dark"]) .stat-item {
+    background: var(--color-surface);
+    border-color: var(--color-border);
   }
 </style>
