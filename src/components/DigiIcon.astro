@@ -1,0 +1,49 @@
+---
+// DigiIcon.astro
+// Unified icon component - Bootstrap Icons + custom Digimon icons
+
+interface Props {
+  name: string;
+  size?: string;
+  class?: string;
+}
+
+const { name, size = '1em', class: className } = Astro.props;
+
+// Custom Digimon icons that aren't in Bootstrap
+const customIcons: Record<string, string> = {
+  digivice: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2"/><circle cx="12" cy="9" r="4"/><rect x="9" y="16" width="6" height="2" rx="1"/><circle cx="8" cy="5" r="0.5" fill="currentColor"/><circle cx="16" cy="5" r="0.5" fill="currentColor"/></svg>`,
+  'card-deck': `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="12" height="16" rx="2"/><rect x="8" y="2" width="12" height="16" rx="2"/></svg>`,
+};
+
+const isCustom = name in customIcons;
+---
+
+{isCustom ? (
+  <span
+    class:list={['digi-icon', className]}
+    style={`font-size: ${size}; display: inline-flex; align-items: center; justify-content: center;`}
+    set:html={customIcons[name]}
+  />
+) : (
+  <i
+    class:list={[`bi bi-${name}`, 'digi-icon', className]}
+    style={`font-size: ${size};`}
+  />
+)}
+
+<style>
+  .digi-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1em;
+    height: 1em;
+    vertical-align: -0.125em;
+  }
+
+  .digi-icon :global(svg) {
+    width: 1em;
+    height: 1em;
+  }
+</style>

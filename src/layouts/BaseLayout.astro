@@ -1,16 +1,23 @@
 ---
+import '../styles/tokens.css';
 import '../styles/global.css';
+import CircuitBackground from '../components/CircuitBackground.astro';
+import PixelAgumon from '../components/PixelAgumon.astro';
 
 interface Props {
   title: string;
   description?: string;
   image?: string;
+  showCircuits?: boolean;
+  showAgumon?: boolean;
 }
 
 const {
   title,
   description = "Track local Digimon TCG tournament results, player standings, and deck meta.",
-  image = "/images/og-image.png"
+  image = "/images/og-image.png",
+  showCircuits = true,
+  showAgumon = true,
 } = Astro.props;
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
@@ -48,6 +55,9 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 
+  <!-- Bootstrap Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+
   <!-- Google Analytics -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-NJ3SMG8HGG"></script>
   <script>
@@ -63,6 +73,8 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
   </script>
 </head>
 <body>
+  {showCircuits && <CircuitBackground />}
   <slot />
+  {showAgumon && <PixelAgumon />}
 </body>
 </html>
