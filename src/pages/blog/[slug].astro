@@ -59,7 +59,6 @@ const tocHeadings = headings.filter(h => h.depth === 2 || h.depth === 3);
     <!-- Hero Section -->
     <section class="post-hero">
       <div class="hero-bg"></div>
-      <div class="hero-fade"></div>
       <div class="container hero-content">
         <a href="/blog" class="back-to-blog">
           <i class="bi bi-arrow-left"></i>
@@ -193,17 +192,8 @@ const tocHeadings = headings.filter(h => h.depth === 2 || h.depth === 3);
     position: absolute;
     inset: 0;
     background: linear-gradient(135deg, var(--color-primary-dark, #061a2e) 0%, var(--color-primary) 100%);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
     z-index: -2;
-  }
-
-  .hero-fade {
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: -80px;
-    height: 100px;
-    background: linear-gradient(to bottom, transparent 0%, var(--color-background) 100%);
-    z-index: -1;
   }
 
   .hero-content {
@@ -696,10 +686,6 @@ const tocHeadings = headings.filter(h => h.depth === 2 || h.depth === 3);
   }
 
   /* ===== Dark Mode ===== */
-  :global([data-theme="dark"]) .hero-fade {
-    background: linear-gradient(to bottom, transparent 0%, var(--color-background-dark, #0a0a0a) 100%);
-  }
-
   :global([data-theme="dark"]) .toc {
     background: var(--color-surface-dark);
     border-color: var(--color-border-dark);

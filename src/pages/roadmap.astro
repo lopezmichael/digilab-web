@@ -1,46 +1,106 @@
 ---
+import { parse } from 'yaml';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 
-// Placeholder data - will be replaced with parsed ROADMAP.md content
-const roadmapItems = {
-  inProgress: [
-    {
-      title: "Rating System Redesign",
-      description: "Single-pass chronological Elo calculation for more accurate player ratings.",
-      tags: ["ratings", "methodology"]
-    }
-  ],
-  planned: [
-    {
-      title: "Meta Insights App",
-      description: "Interactive explorer for cross-scene deck and meta analysis.",
-      tags: ["new-app", "analytics"]
-    },
-    {
-      title: "DigiLab Website",
-      description: "Landing page, blog, and public roadmap (you're looking at it!).",
-      tags: ["website", "content"]
-    }
-  ],
-  completed: [
-    {
-      title: "Deep Linking & Shareable URLs",
-      description: "Share links directly to players, decks, stores, and tournaments.",
-      date: "March 2026"
-    },
-    {
-      title: "Discord Integration",
-      description: "Webhook notifications for store requests, error reports, and bug reports.",
-      date: "February 2026"
-    },
-    {
-      title: "Multi-Region Support",
-      description: "Scene hierarchy enabling multiple regions and global views.",
-      date: "February 2026"
-    }
-  ]
+// Read and parse the roadmap YAML using Vite's raw import
+import roadmapYaml from '../data/roadmap.yaml?raw';
+const roadmap = parse(roadmapYaml);
+
+// Type definitions
+interface RoadmapItem {
+  id: string;
+  title: string;
+  description: string;
+  tags: string[];
+  targetVersion?: string;
+  link?: string;
+  date?: string;
+  version?: string;
+}
+
+interface Milestone {
+  version: string;
+  items: Array<RoadmapItem & { status: 'in-progress' | 'planned' }>;
+}
+
+const inProgress: RoadmapItem[] = roadmap.inProgress || [];
+const planned: RoadmapItem[] = roadmap.planned || [];
+const completed: RoadmapItem[] = roadmap.completed || [];
+
+// Group upcoming items by targetVersion
+const upcomingItems = [
+  ...inProgress.map(item => ({ ...item, status: 'in-progress' as const })),
+  ...planned.map(item => ({ ...item, status: 'planned' as const })),
+];
+
+const milestoneOrder: string[] = [];
+const milestoneMap = new Map<string, Milestone>();
+
+upcomingItems.forEach(item => {
+  const version = item.targetVersion || 'Future';
+  if (!milestoneMap.has(version)) {
+    milestoneMap.set(version, { version, items: [] });
+    milestoneOrder.push(version);
+  }
+  milestoneMap.get(version)!.items.push(item);
+});
+
+// Helper to extract minor version (v1.2.3 -> v1.2)
+const getMinorVersion = (v: string): string => {
+  if (v === 'Future' || v === 'Unknown') return v;
+  const match = v.match(/^v?(\d+)\.(\d+)/);
+  return match ? `v${match[1]}.${match[2]}` : v;
+};
+
+// Sort milestones: versioned first (by version), then "Future" last
+const versionSort = (a: string, b: string) => {
+  if (a === 'Future') return 1;
+  if (b === 'Future') return -1;
+  // Extract version numbers for comparison (v1.2 -> [1, 2])
+  const parseVersion = (v: string) => v.replace('v', '').split('.').map(Number);
+  const aVer = parseVersion(a);
+  const bVer = parseVersion(b);
+  for (let i = 0; i < 2; i++) {
+    if ((aVer[i] || 0) !== (bVer[i] || 0)) return (aVer[i] || 0) - (bVer[i] || 0);
+  }
+  return 0;
+};
+
+const sortedMilestones = milestoneOrder.sort(versionSort).map(v => milestoneMap.get(v)!);
+
+// Group completed items by minor version (v1.1.x all together)
+const completedByVersion = new Map<string, RoadmapItem[]>();
+completed.forEach(item => {
+  const minorVersion = getMinorVersion(item.version || 'Unknown');
+  if (!completedByVersion.has(minorVersion)) {
+    completedByVersion.set(minorVersion, []);
+  }
+  completedByVersion.get(minorVersion)!.push(item);
+});
+
+// Sort completed versions (newest first)
+const sortedCompletedVersions = Array.from(completedByVersion.keys()).sort((a, b) => versionSort(b, a));
+
+const tagIcons: Record<string, string> = {
+  ratings: 'graph-up-arrow',
+  methodology: 'clipboard-data',
+  'new-app': 'window-plus',
+  analytics: 'bar-chart-line',
+  feature: 'stars',
+  gamification: 'trophy',
+  mobile: 'phone',
+  ux: 'palette',
+  website: 'globe',
+  content: 'file-text',
+  integration: 'plug',
+  community: 'people',
+  sharing: 'share',
+  scaling: 'diagram-3',
+  security: 'shield-check',
+  admin: 'gear',
+  data: 'database',
 };
 ---
 
@@ -48,81 +108,174 @@ const roadmapItems = {
   <Header />
 
   <main class="roadmap-page">
+    <!-- Hero Section -->
+    <section class="roadmap-hero">
+      <div class="hero-bg"></div>
+      <div class="container hero-content">
+        <div class="hero-text">
+          <h1>Public Roadmap</h1>
+          <p>See what we're building and what's coming next for DigiLab.</p>
+          <div class="version-badge">
+            <i class="bi bi-tag"></i>
+            Current: v{roadmap.currentVersion}
+          </div>
+        </div>
+        <div class="hero-mascot">
+          <div class="digivice-glow">
+            <img src="/brand/digivice.svg" alt="" class="digivice-icon" />
+          </div>
+        </div>
+      </div>
+    </section>
+
     <div class="container">
-      <header class="page-header">
-        <h1>Public Roadmap</h1>
-        <p>See what we're working on and what's coming next.</p>
-      </header>
-
+      <!-- Upcoming Milestones -->
       <section class="roadmap-section">
-        <h2 class="section-header">
-          <span class="status-icon">🚧</span>
-          In Progress
+        <h2 class="section-title">
+          <i class="bi bi-rocket-takeoff"></i>
+          Upcoming
         </h2>
-        <div class="items-list">
-          {roadmapItems.inProgress.map((item) => (
-            <div class="roadmap-item card">
-              <h3>{item.title}</h3>
-              <p>{item.description}</p>
-              {item.tags && (
-                <div class="tags">
-                  {item.tags.map((tag) => (
-                    <span class="tag">#{tag}</span>
-                  ))}
-                </div>
+
+        {sortedMilestones.map((milestone) => (
+          <div class="milestone">
+            <div class="milestone-header">
+              <span class={`milestone-badge ${milestone.version === 'Future' ? 'future' : ''}`}>
+                {milestone.version === 'Future' ? (
+                  <>
+                    <i class="bi bi-hourglass-split"></i>
+                    Future
+                  </>
+                ) : (
+                  <>
+                    <i class="bi bi-flag"></i>
+                    {milestone.version}
+                  </>
+                )}
+              </span>
+              {milestone.version !== 'Future' && (
+                <span class="milestone-count">
+                  {milestone.items.length} item{milestone.items.length !== 1 ? 's' : ''}
+                </span>
               )}
             </div>
-          ))}
-        </div>
-      </section>
 
-      <section class="roadmap-section">
-        <h2 class="section-header">
-          <span class="status-icon">📋</span>
-          Planned
-        </h2>
-        <div class="items-list">
-          {roadmapItems.planned.map((item) => (
-            <div class="roadmap-item card">
-              <h3>{item.title}</h3>
-              <p>{item.description}</p>
-              {item.tags && (
-                <div class="tags">
-                  {item.tags.map((tag) => (
-                    <span class="tag">#{tag}</span>
-                  ))}
+            <div class="items-list">
+              {milestone.items.map((item) => (
+                <div class={`roadmap-item card ${item.status === 'in-progress' ? 'status-progress-card' : 'status-planned-card'}`}>
+                  <div class="item-content">
+                    <div class="item-title-row">
+                      <h3>
+                        {item.link ? (
+                          <a href={item.link}>{item.title}</a>
+                        ) : (
+                          item.title
+                        )}
+                      </h3>
+                      <span class={`status-pill ${item.status}`}>
+                        {item.status === 'in-progress' ? (
+                          <>
+                            <span class="pulse-dot-small"></span>
+                            In Progress
+                          </>
+                        ) : (
+                          'Planned'
+                        )}
+                      </span>
+                    </div>
+                    <p>{item.description}</p>
+                    {item.tags && (
+                      <div class="tags">
+                        {item.tags.map((tag) => (
+                          <span class="tag">
+                            <i class={`bi bi-${tagIcons[tag] || 'tag'}`}></i>
+                            {tag}
+                          </span>
+                        ))}
+                      </div>
+                    )}
+                  </div>
                 </div>
-              )}
+              ))}
             </div>
-          ))}
-        </div>
+          </div>
+        ))}
       </section>
 
-      <section class="roadmap-section">
-        <h2 class="section-header">
-          <span class="status-icon">✅</span>
-          Recently Completed
-        </h2>
-        <div class="items-list">
-          {roadmapItems.completed.map((item) => (
-            <div class="roadmap-item card completed">
-              <div class="item-header">
-                <h3>{item.title}</h3>
-                {item.date && <span class="date">{item.date}</span>}
+      <!-- Completed Section -->
+      {completed.length > 0 && (
+        <section class="roadmap-section">
+          <h2 class="section-title">
+            <i class="bi bi-check-circle"></i>
+            Recently Completed
+          </h2>
+
+          {sortedCompletedVersions.map((minorVersion) => {
+            const items = completedByVersion.get(minorVersion)!;
+            // Get unique dates for this version group
+            const dates = [...new Set(items.map(i => i.date).filter(Boolean))];
+            const dateDisplay = dates.length === 1 ? dates[0] : dates.length > 1 ? `${dates[dates.length - 1]} - ${dates[0]}` : null;
+            return (
+            <div class="milestone completed-milestone">
+              <div class="milestone-header">
+                <span class="milestone-badge completed">
+                  <i class="bi bi-check-lg"></i>
+                  {minorVersion}
+                </span>
+                {dateDisplay && (
+                  <span class="milestone-date">
+                    {dateDisplay}
+                  </span>
+                )}
               </div>
-              <p>{item.description}</p>
-            </div>
-          ))}
-        </div>
-      </section>
 
+              <div class="items-list">
+                {items.map((item) => (
+                  <div class="roadmap-item card status-done-card">
+                    <div class="item-content">
+                      <h3>
+                        {item.link ? (
+                          <a href={item.link} target={item.link.startsWith('http') ? '_blank' : undefined} rel={item.link.startsWith('http') ? 'noopener' : undefined}>
+                            {item.title}
+                          </a>
+                        ) : (
+                          item.title
+                        )}
+                      </h3>
+                      <p>{item.description}</p>
+                      {item.tags && (
+                        <div class="tags">
+                          {item.tags.map((tag) => (
+                            <span class="tag">
+                              <i class={`bi bi-${tagIcons[tag] || 'tag'}`}></i>
+                              {tag}
+                            </span>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                    <div class="item-check">
+                      <i class="bi bi-check-lg"></i>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )})}
+        </section>
+      )}
+
+      <!-- Footer CTA -->
       <section class="roadmap-footer">
-        <p>
-          Have a feature request or feedback? Join our
-          <a href="https://discord.gg/digilab" target="_blank" rel="noopener">Discord</a>
-          or check out the full roadmap on
-          <a href="https://github.com/lopezmichael/digilab-app" target="_blank" rel="noopener">GitHub</a>.
-        </p>
+        <div class="footer-card card">
+          <i class="bi bi-chat-dots"></i>
+          <div class="footer-content">
+            <h3>Have a feature request?</h3>
+            <p>
+              Join our <a href="https://discord.gg/digilab" target="_blank" rel="noopener">Discord</a> to share ideas
+              or check out the full dev roadmap on <a href="https://github.com/lopezmichael/digilab-app" target="_blank" rel="noopener">GitHub</a>.
+            </p>
+          </div>
+        </div>
       </section>
     </div>
   </main>
@@ -131,105 +284,395 @@ const roadmapItems = {
 </BaseLayout>
 
 <style>
-  .roadmap-page {
-    padding: var(--space-12) 0;
+  /* ===== Hero Section ===== */
+  .roadmap-hero {
+    position: relative;
+    padding: var(--space-12) 0 var(--space-16);
   }
 
-  .roadmap-page .container {
-    max-width: 900px;
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, var(--color-primary-dark, #061a2e) 0%, var(--color-primary) 100%);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    z-index: -2;
   }
 
-  .page-header {
-    text-align: center;
-    margin-bottom: var(--space-12);
-  }
-
-  .page-header h1 {
-    margin-bottom: var(--space-4);
-  }
-
-  .page-header p {
-    color: var(--color-text-muted);
-    font-size: var(--font-size-lg);
-  }
-
-  .roadmap-section {
-    margin-bottom: var(--space-10);
-  }
-
-  .section-header {
-    display: flex;
-    align-items: center;
-    gap: var(--space-3);
-    margin-bottom: var(--space-6);
-    font-size: var(--font-size-xl);
-  }
-
-  .status-icon {
-    font-size: 1.5rem;
-  }
-
-  .items-list {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-4);
-  }
-
-  .roadmap-item {
-    padding: var(--space-5);
-  }
-
-  .roadmap-item h3 {
-    font-size: var(--font-size-lg);
-    margin-bottom: var(--space-2);
-  }
-
-  .roadmap-item p {
-    color: var(--color-text-muted);
-    margin: 0;
-  }
-
-  .roadmap-item.completed {
-    opacity: 0.8;
-    background-color: var(--color-background);
-  }
-
-  .item-header {
+  .hero-content {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: var(--space-4);
-    flex-wrap: wrap;
+    gap: var(--space-6);
   }
 
-  .date {
+  .hero-text h1 {
+    color: #ffffff;
+    margin-bottom: var(--space-3);
+  }
+
+  .hero-text p {
+    color: rgba(255, 255, 255, 0.8);
+    font-size: var(--font-size-lg);
+    margin-bottom: var(--space-4);
+  }
+
+  .version-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: var(--space-2) var(--space-4);
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: var(--radius-full);
+    color: rgba(255, 255, 255, 0.9);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
+  }
+
+  .hero-mascot {
+    flex-shrink: 0;
+  }
+
+  .digivice-glow {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .digivice-glow::before {
+    content: '';
+    position: absolute;
+    inset: -20px;
+    background: radial-gradient(circle, rgba(0, 200, 255, 0.4) 0%, transparent 70%);
+    border-radius: 50%;
+    animation: digivice-pulse 3s ease-in-out infinite;
+  }
+
+  .digivice-icon {
+    width: 80px;
+    height: 80px;
+    filter: drop-shadow(0 0 20px rgba(0, 200, 255, 0.5));
+  }
+
+  @keyframes digivice-pulse {
+    0%, 100% {
+      opacity: 0.6;
+      transform: scale(1);
+    }
+    50% {
+      opacity: 1;
+      transform: scale(1.1);
+    }
+  }
+
+  @media (max-width: 768px) {
+    .hero-content {
+      flex-direction: column;
+      text-align: center;
+    }
+
+    .hero-mascot {
+      order: -1;
+    }
+
+    .digivice-icon {
+      width: 60px;
+      height: 60px;
+    }
+  }
+
+  /* ===== Main Content ===== */
+  .roadmap-page .container {
+    max-width: 800px;
+    padding-top: var(--space-8);
+    padding-bottom: var(--space-12);
+  }
+
+  /* ===== Sections ===== */
+  .roadmap-section {
+    margin-bottom: var(--space-12);
+  }
+
+  .section-title {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    font-size: var(--font-size-2xl);
+    margin-bottom: var(--space-6);
+    color: var(--color-text);
+  }
+
+  .section-title i {
+    color: var(--color-primary);
+  }
+
+  /* ===== Milestones ===== */
+  .milestone {
+    margin-bottom: var(--space-8);
+  }
+
+  .milestone-header {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    margin-bottom: var(--space-4);
+  }
+
+  .milestone-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: var(--space-2) var(--space-4);
+    border-radius: var(--radius-full);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-semibold);
+    background: linear-gradient(135deg, var(--color-primary) 0%, rgba(10, 48, 85, 0.8) 100%);
+    color: #ffffff;
+  }
+
+  .milestone-badge.future {
+    background: linear-gradient(135deg, var(--color-text-muted) 0%, rgba(100, 116, 139, 0.8) 100%);
+  }
+
+  .milestone-badge.completed {
+    background: linear-gradient(135deg, #2e7d32 0%, rgba(46, 125, 50, 0.8) 100%);
+  }
+
+  .milestone-count,
+  .milestone-date {
     font-size: var(--font-size-sm);
     color: var(--color-text-muted);
   }
 
+  .completed-milestone {
+    opacity: 0.9;
+  }
+
+  /* ===== Items ===== */
+  .items-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+
+  .roadmap-item {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-4);
+    padding: var(--space-4) var(--space-5);
+    border-left: 4px solid transparent;
+    transition: all var(--transition-fast);
+  }
+
+  .roadmap-item:hover {
+    transform: translateX(4px);
+  }
+
+  .status-progress-card {
+    border-left-color: var(--color-accent);
+  }
+
+  .status-planned-card {
+    border-left-color: var(--color-primary);
+  }
+
+  .status-done-card {
+    border-left-color: #2e7d32;
+  }
+
+  .item-content {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .item-title-row {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: var(--space-3);
+    margin-bottom: var(--space-2);
+    flex-wrap: wrap;
+  }
+
+  .item-content h3 {
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-semibold);
+    margin: 0;
+  }
+
+  .item-content h3 a {
+    color: inherit;
+    text-decoration: none;
+    transition: color var(--transition-fast);
+  }
+
+  .item-content h3 a:hover {
+    color: var(--color-accent);
+  }
+
+  .item-content p {
+    color: var(--color-text-muted);
+    margin: 0;
+    font-size: var(--font-size-sm);
+    line-height: var(--line-height-relaxed);
+  }
+
+  /* ===== Status Pills ===== */
+  .status-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-1);
+    padding: var(--space-1) var(--space-2);
+    border-radius: var(--radius-sm);
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-medium);
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    flex-shrink: 0;
+  }
+
+  .status-pill.in-progress {
+    background: rgba(247, 148, 29, 0.15);
+    color: var(--color-accent);
+  }
+
+  .status-pill.planned {
+    background: rgba(10, 48, 85, 0.1);
+    color: var(--color-primary);
+  }
+
+  .pulse-dot-small {
+    width: 6px;
+    height: 6px;
+    background: var(--color-accent);
+    border-radius: 50%;
+    animation: pulse 2s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.6; transform: scale(1.3); }
+  }
+
+  /* ===== Tags ===== */
   .tags {
     display: flex;
     flex-wrap: wrap;
     gap: var(--space-2);
-    margin-top: var(--space-3);
+    margin-top: var(--space-2);
   }
 
   .tag {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-1);
     font-size: var(--font-size-xs);
     color: var(--color-primary);
-    background-color: rgba(10, 48, 85, 0.1);
-    padding: var(--space-1) var(--space-2);
+    background-color: rgba(10, 48, 85, 0.08);
+    padding: 2px var(--space-2);
     border-radius: var(--radius-sm);
   }
 
-  .roadmap-footer {
-    text-align: center;
-    padding-top: var(--space-8);
-    border-top: 1px solid var(--color-border);
-    color: var(--color-text-muted);
+  .tag i {
+    font-size: 0.7em;
   }
 
-  .roadmap-footer a {
+  /* ===== Check Icon ===== */
+  .item-check {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    background: rgba(46, 125, 50, 0.15);
+    border-radius: 50%;
+    color: #2e7d32;
+    font-size: 0.875rem;
+  }
+
+  /* ===== Footer ===== */
+  .roadmap-footer {
+    margin-top: var(--space-8);
+    padding-top: var(--space-8);
+    border-top: 1px solid var(--color-border);
+  }
+
+  .footer-card {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-4);
+    padding: var(--space-6);
+  }
+
+  .footer-card > i {
+    font-size: 1.5rem;
+    color: var(--color-primary);
+    flex-shrink: 0;
+  }
+
+  .footer-content h3 {
+    font-size: var(--font-size-lg);
+    margin-bottom: var(--space-2);
+  }
+
+  .footer-content p {
+    color: var(--color-text-muted);
+    margin: 0;
+  }
+
+  .footer-content a {
     color: var(--color-accent);
+    font-weight: var(--font-weight-medium);
+  }
+
+  /* ===== Dark Mode ===== */
+  :global([data-theme="dark"]) .section-title i {
+    color: var(--color-digital);
+  }
+
+  :global([data-theme="dark"]) .milestone-badge {
+    background: linear-gradient(135deg, rgba(0, 200, 255, 0.3) 0%, rgba(0, 200, 255, 0.15) 100%);
+  }
+
+  :global([data-theme="dark"]) .milestone-badge.future {
+    background: linear-gradient(135deg, rgba(156, 163, 175, 0.3) 0%, rgba(156, 163, 175, 0.15) 100%);
+  }
+
+  :global([data-theme="dark"]) .milestone-badge.completed {
+    background: linear-gradient(135deg, rgba(46, 125, 50, 0.4) 0%, rgba(46, 125, 50, 0.2) 100%);
+  }
+
+  :global([data-theme="dark"]) .status-pill.in-progress {
+    background: rgba(247, 148, 29, 0.2);
+  }
+
+  :global([data-theme="dark"]) .status-pill.planned {
+    background: rgba(0, 200, 255, 0.15);
+    color: var(--color-digital);
+  }
+
+  :global([data-theme="dark"]) .status-planned-card {
+    border-left-color: var(--color-digital);
+  }
+
+  :global([data-theme="dark"]) .tag {
+    background-color: rgba(0, 200, 255, 0.1);
+    color: var(--color-digital);
+  }
+
+  :global([data-theme="dark"]) .item-check {
+    background: rgba(46, 125, 50, 0.25);
+  }
+
+  /* ===== Reduced Motion ===== */
+  @media (prefers-reduced-motion: reduce) {
+    .pulse-dot-small {
+      animation: none;
+    }
+
+    .roadmap-item:hover {
+      transform: none;
+    }
   }
 </style>
