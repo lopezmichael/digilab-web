@@ -1,7 +1,7 @@
 /* DigiLab Web - Global Styles */
 @import './tokens.css';
 
-/* Reset and base styles */
+/* ===== Reset and Base ===== */
 *,
 *::before,
 *::after {
@@ -17,6 +17,20 @@ html {
   scroll-behavior: smooth;
 }
 
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
 body {
   font-family: var(--font-family);
   line-height: var(--line-height-normal);
@@ -24,6 +38,7 @@ body {
   background-color: var(--color-background);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  min-height: 100vh;
 }
 
 img,
@@ -52,12 +67,12 @@ h6 {
   overflow-wrap: break-word;
 }
 
-/* Typography */
+/* ===== Typography ===== */
 h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-family-display);
-  font-weight: var(--font-weight-bold);
+  font-weight: var(--font-weight-semibold);
   line-height: var(--line-height-tight);
-  letter-spacing: -0.01em;
+  color: var(--color-text);
 }
 
 h1 { font-size: var(--font-size-4xl); }
@@ -71,6 +86,10 @@ p {
   margin-bottom: var(--space-4);
 }
 
+p:last-child {
+  margin-bottom: 0;
+}
+
 a {
   color: var(--color-primary);
   text-decoration: none;
@@ -81,7 +100,7 @@ a:hover {
   color: var(--color-accent);
 }
 
-/* Utility classes */
+/* ===== Layout Utilities ===== */
 .container {
   width: 100%;
   max-width: var(--container-xl);
@@ -110,7 +129,7 @@ a:hover {
   border: 0;
 }
 
-/* Button base */
+/* ===== Buttons ===== */
 .btn {
   display: inline-flex;
   align-items: center;
@@ -118,64 +137,100 @@ a:hover {
   gap: var(--space-2);
   padding: var(--space-3) var(--space-6);
   font-weight: var(--font-weight-semibold);
+  font-size: var(--font-size-sm);
   border-radius: var(--radius-md);
-  border: none;
+  border: 2px solid transparent;
   cursor: pointer;
   transition: all var(--transition-fast);
   text-decoration: none;
+  white-space: nowrap;
 }
 
+.btn:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+/* Primary button - Orange accent */
 .btn-primary {
-  background-color: var(--color-primary);
-  color: white;
+  background: linear-gradient(135deg, var(--color-accent) 0%, var(--color-accent-hover) 100%);
+  color: var(--color-text-on-accent);
+  border-color: transparent;
+  box-shadow: var(--glow-accent);
 }
 
 .btn-primary:hover {
-  background-color: var(--color-primary-light);
-  color: white;
+  transform: translateY(-2px);
+  box-shadow: var(--glow-accent-strong);
+  color: var(--color-text-on-accent);
 }
 
-.btn-accent {
-  background-color: var(--color-accent);
-  color: white;
+.btn-primary:active {
+  transform: translateY(0);
 }
 
-.btn-accent:hover {
-  background-color: var(--color-accent-light);
-  color: white;
-}
-
-.btn-outline {
-  background-color: transparent;
-  border: 2px solid var(--color-primary);
+/* Secondary button - Blue outline */
+.btn-secondary {
+  background: transparent;
+  border-color: var(--color-primary);
   color: var(--color-primary);
 }
 
-.btn-outline:hover {
-  background-color: var(--color-primary);
+.btn-secondary:hover {
+  background: var(--color-primary);
+  color: var(--color-text-on-primary);
+}
+
+/* Ghost button - For dark backgrounds */
+.btn-ghost {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.2);
   color: white;
 }
 
-/* Card base */
+.btn-ghost:hover {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.3);
+  color: white;
+}
+
+/* Button sizes */
+.btn-sm {
+  padding: var(--space-2) var(--space-4);
+  font-size: var(--font-size-xs);
+}
+
+.btn-lg {
+  padding: var(--space-4) var(--space-8);
+  font-size: var(--font-size-base);
+}
+
+/* ===== Cards ===== */
 .card {
   background-color: var(--color-surface);
   border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-md);
+  border: 1px solid var(--color-border);
+  box-shadow: var(--shadow-sm);
   overflow: hidden;
+  transition: all var(--transition-normal);
 }
 
-/* Code blocks */
+.card:hover {
+  box-shadow: var(--shadow-md);
+}
+
+/* ===== Code Blocks ===== */
 code {
   font-family: var(--font-family-mono);
-  font-size: 0.9em;
-  background-color: var(--color-surface);
+  font-size: 0.875em;
+  background-color: var(--color-surface-elevated);
   padding: 0.2em 0.4em;
   border-radius: var(--radius-sm);
 }
 
 pre {
-  background-color: var(--color-surface-dark);
-  color: var(--color-text-dark);
+  background-color: var(--color-primary-dark);
+  color: var(--color-text-on-primary);
   padding: var(--space-4);
   border-radius: var(--radius-md);
   overflow-x: auto;
@@ -184,4 +239,58 @@ pre {
 pre code {
   background: none;
   padding: 0;
+}
+
+/* ===== Links ===== */
+.link-muted {
+  color: var(--color-text-muted);
+}
+
+.link-muted:hover {
+  color: var(--color-text);
+}
+
+/* ===== Icon Buttons ===== */
+.icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  background: transparent;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  color: var(--color-text-muted);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.icon-btn:hover {
+  background: var(--color-surface-elevated);
+  border-color: var(--color-border);
+  color: var(--color-text);
+}
+
+.icon-btn:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+/* Icon button on dark backgrounds */
+.icon-btn-dark {
+  border-color: rgba(255, 255, 255, 0.2);
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.icon-btn-dark:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.3);
+  color: white;
+}
+
+/* ===== Pixel Art Rendering ===== */
+.pixel-art {
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
 }

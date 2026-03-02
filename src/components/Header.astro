@@ -1,5 +1,7 @@
 ---
-// Header component with navigation
+// Header.astro
+// Clean navigation header with dark mode toggle and Discord link
+import ThemeToggle from './ThemeToggle.astro';
 ---
 
 <header class="header">
@@ -9,34 +11,93 @@
       <span class="logo-text">DigiLab</span>
     </a>
 
-    <nav class="nav">
+    <nav class="nav" aria-label="Main navigation">
       <a href="/blog" class="nav-link">Blog</a>
       <a href="/roadmap" class="nav-link">Roadmap</a>
       <a href="/about" class="nav-link">About</a>
     </nav>
 
-    <a href="https://app.digilab.cards" class="cta-button">
-      Launch App
-      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M5 12h14"></path>
-        <path d="m12 5 7 7-7 7"></path>
+    <div class="header-actions">
+      <a
+        href="https://discord.gg/digilab"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="icon-link"
+        aria-label="Join our Discord"
+        title="Join Discord"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/>
+        </svg>
+      </a>
+
+      <ThemeToggle />
+
+      <a href="https://app.digilab.cards" class="btn btn-primary btn-sm">
+        Launch App
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M5 12h14"></path>
+          <path d="m12 5 7 7-7 7"></path>
+        </svg>
+      </a>
+    </div>
+
+    <!-- Mobile menu button -->
+    <button class="mobile-menu-btn" id="mobile-menu-btn" aria-label="Toggle menu" aria-expanded="false">
+      <svg class="icon-menu" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="4" x2="20" y1="12" y2="12"></line>
+        <line x1="4" x2="20" y1="6" y2="6"></line>
+        <line x1="4" x2="20" y1="18" y2="18"></line>
       </svg>
-    </a>
+      <svg class="icon-close" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M18 6 6 18"></path>
+        <path d="m6 6 12 12"></path>
+      </svg>
+    </button>
+  </div>
+
+  <!-- Mobile menu -->
+  <div class="mobile-menu" id="mobile-menu">
+    <nav class="mobile-nav">
+      <a href="/blog" class="mobile-nav-link">Blog</a>
+      <a href="/roadmap" class="mobile-nav-link">Roadmap</a>
+      <a href="/about" class="mobile-nav-link">About</a>
+      <a href="https://discord.gg/digilab" target="_blank" rel="noopener noreferrer" class="mobile-nav-link">Discord</a>
+      <a href="https://app.digilab.cards" class="btn btn-primary" style="width: 100%; justify-content: center;">
+        Launch App
+      </a>
+    </nav>
   </div>
 </header>
 
+<script>
+  const menuBtn = document.getElementById('mobile-menu-btn');
+  const menu = document.getElementById('mobile-menu');
+
+  menuBtn?.addEventListener('click', () => {
+    const isOpen = menu?.classList.toggle('open');
+    menuBtn?.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+    document.body.style.overflow = isOpen ? 'hidden' : '';
+  });
+
+  // Close menu on link click
+  menu?.querySelectorAll('a').forEach(link => {
+    link.addEventListener('click', () => {
+      menu?.classList.remove('open');
+      menuBtn?.setAttribute('aria-expanded', 'false');
+      document.body.style.overflow = '';
+    });
+  });
+</script>
+
 <style>
   .header {
-    position: fixed;
+    position: sticky;
     top: 0;
-    left: 0;
-    right: 0;
     z-index: var(--z-sticky);
-    background: rgba(10, 10, 18, 0.8);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-    padding: var(--space-4) 0;
+    background: var(--color-surface);
+    border-bottom: 1px solid var(--color-border);
+    padding: var(--space-3) 0;
   }
 
   .header-inner {
@@ -49,98 +110,133 @@
   .logo {
     display: flex;
     align-items: center;
-    gap: var(--space-3);
+    gap: var(--space-2);
     text-decoration: none;
+    color: var(--color-text);
     transition: opacity var(--transition-fast);
   }
 
   .logo:hover {
-    opacity: 0.9;
+    opacity: 0.8;
+    color: var(--color-text);
   }
 
   .logo-icon {
-    width: 32px;
-    height: 32px;
-    filter: brightness(0) invert(1);
-    opacity: 0.9;
+    width: 28px;
+    height: 28px;
+    color: var(--color-primary);
   }
 
   .logo-text {
     font-family: var(--font-family-display);
-    font-weight: var(--font-weight-bold);
-    font-size: var(--font-size-xl);
-    color: white;
-    letter-spacing: -0.02em;
+    font-weight: var(--font-weight-semibold);
+    font-size: var(--font-size-lg);
   }
 
   .nav {
     display: flex;
     align-items: center;
-    gap: var(--space-8);
+    gap: var(--space-6);
   }
 
   .nav-link {
-    color: rgba(255, 255, 255, 0.7);
-    font-weight: var(--font-weight-medium);
+    color: var(--color-text-muted);
     font-size: var(--font-size-sm);
-    text-decoration: none;
+    font-weight: var(--font-weight-medium);
     transition: color var(--transition-fast);
-    position: relative;
-  }
-
-  .nav-link::after {
-    content: '';
-    position: absolute;
-    bottom: -4px;
-    left: 0;
-    right: 0;
-    height: 2px;
-    background: var(--color-accent);
-    transform: scaleX(0);
-    transition: transform var(--transition-fast);
   }
 
   .nav-link:hover {
-    color: white;
+    color: var(--color-text);
   }
 
-  .nav-link:hover::after {
-    transform: scaleX(1);
-  }
-
-  .cta-button {
+  .header-actions {
     display: flex;
     align-items: center;
-    gap: var(--space-2);
-    background: rgba(247, 148, 29, 0.15);
-    border: 1px solid rgba(247, 148, 29, 0.3);
-    color: var(--color-accent);
-    padding: var(--space-2) var(--space-4);
+    gap: var(--space-3);
+  }
+
+  .icon-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    color: var(--color-text-muted);
     border-radius: var(--radius-md);
-    font-weight: var(--font-weight-semibold);
-    font-size: var(--font-size-sm);
-    text-decoration: none;
     transition: all var(--transition-fast);
   }
 
-  .cta-button:hover {
-    background: var(--color-accent);
-    border-color: var(--color-accent);
-    color: white;
+  .icon-link:hover {
+    color: var(--color-primary);
+    background: var(--color-surface-elevated);
   }
 
-  .cta-button svg {
-    transition: transform var(--transition-fast);
+  .mobile-menu-btn {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    background: transparent;
+    border: none;
+    color: var(--color-text);
+    cursor: pointer;
   }
 
-  .cta-button:hover svg {
-    transform: translateX(2px);
+  .mobile-menu-btn .icon-close {
+    display: none;
   }
 
-  /* Mobile responsive */
+  .mobile-menu-btn[aria-expanded="true"] .icon-menu {
+    display: none;
+  }
+
+  .mobile-menu-btn[aria-expanded="true"] .icon-close {
+    display: block;
+  }
+
+  .mobile-menu {
+    display: none;
+    position: fixed;
+    top: 57px; /* header height */
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: var(--color-surface);
+    padding: var(--space-6);
+    overflow-y: auto;
+  }
+
+  .mobile-menu.open {
+    display: block;
+  }
+
+  .mobile-nav {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+  }
+
+  .mobile-nav-link {
+    display: block;
+    padding: var(--space-3) 0;
+    color: var(--color-text);
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-medium);
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  /* Responsive */
   @media (max-width: 768px) {
-    .nav {
+    .nav,
+    .header-actions {
       display: none;
+    }
+
+    .mobile-menu-btn {
+      display: flex;
     }
   }
 </style>
