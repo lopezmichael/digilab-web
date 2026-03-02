@@ -35,14 +35,14 @@
   --color-info: #0EA5E9;
 
   /* ===== Dark Mode Colors (values, applied via [data-theme="dark"]) ===== */
-  --color-background-dark: #1A202C;
-  --color-surface-dark: #2D3748;
-  --color-surface-elevated-dark: #374151;
+  --color-background-dark: #0a0a0a;
+  --color-surface-dark: #141414;
+  --color-surface-elevated-dark: #1f1f1f;
   --color-text-dark: #E2E8F0;
-  --color-text-muted-dark: #A0AEC0;
-  --color-border-dark: #4A5568;
-  --color-border-light-dark: #374151;
-  --color-surface-dark-rgb: 45, 55, 72;  /* RGB for rgba() usage */
+  --color-text-muted-dark: #9CA3AF;
+  --color-border-dark: #2a2a2a;
+  --color-border-light-dark: #1f1f1f;
+  --color-surface-dark-rgb: 20, 20, 20;  /* RGB for rgba() usage */
 
   /* ===== Digital Effects ===== */
 
@@ -70,7 +70,7 @@
 
   /* ===== Typography ===== */
   --font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-  --font-family-display: 'Poppins', 'Inter', sans-serif;
+  --font-family-display: 'Righteous', 'Inter', sans-serif;
   --font-family-mono: 'Fira Code', 'Consolas', 'Monaco', monospace;
 
   /* Font sizes */

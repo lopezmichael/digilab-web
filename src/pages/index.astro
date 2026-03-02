@@ -57,7 +57,7 @@ const whatsNew = [
         </div>
 
         <div class="hero-mascot">
-          <AgumonGuide pose="waving" size="120px" />
+          <AgumonGuide pose="idle" size="120px" />
         </div>
       </div>
     </section>
@@ -70,7 +70,7 @@ const whatsNew = [
             <DigiIcon name="lightning-charge" size="24px" />
             What's New
           </h2>
-          <AgumonGuide pose="pointing" size="48px" class="section-mascot" />
+          <AgumonGuide pose="idle" size="48px" class="section-mascot" />
         </div>
       </div>
 
@@ -118,18 +118,26 @@ const whatsNew = [
       </ContentCarousel>
     </section>
 
-    <!-- CTA Section -->
-    <section class="cta-section">
+    <!-- Stats Section -->
+    <section class="stats-section">
       <div class="container">
-        <div class="cta-content">
-          <AgumonGuide pose="excited" size="80px" />
-          <div class="cta-text">
-            <h2>Ready to track your scene?</h2>
-            <p>Join players across 5 regions already using DigiLab.</p>
+        <div class="stats-grid">
+          <div class="stat-item">
+            <div class="stat-value">5</div>
+            <div class="stat-label">Active Scenes</div>
           </div>
-          <a href="https://app.digilab.cards" class="btn btn-primary btn-lg">
-            Get Started
-          </a>
+          <div class="stat-item">
+            <div class="stat-value">20+</div>
+            <div class="stat-label">Stores</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-value">500+</div>
+            <div class="stat-label">Players Tracked</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-value">100+</div>
+            <div class="stat-label">Tournaments</div>
+          </div>
         </div>
       </div>
     </section>
@@ -157,7 +165,7 @@ const whatsNew = [
     left: 0;
     right: 0;
     bottom: 0;
-    height: 120px;
+    height: 60px;
     background: linear-gradient(to bottom, transparent 0%, var(--color-background) 100%);
     z-index: -1;
   }
@@ -261,37 +269,54 @@ const whatsNew = [
     transform: translateX(4px);
   }
 
-  /* ===== CTA Section ===== */
-  .cta-section {
-    padding: var(--space-16) 0;
+  /* ===== Stats Section ===== */
+  .stats-section {
+    padding: var(--space-8) 0 var(--space-12);
   }
 
-  .cta-content {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: var(--space-8);
-    padding: var(--space-10);
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--space-4);
+    padding: var(--space-6);
     background: rgba(var(--color-surface-rgb, 255, 255, 255), 0.8);
     backdrop-filter: blur(12px);
     border: 1px solid var(--color-border);
-    border-radius: var(--radius-xl);
+    border-radius: var(--radius-lg);
+  }
+
+  .stat-item {
     text-align: center;
   }
 
-  .cta-text h2 {
-    margin: 0 0 var(--space-2);
+  .stat-value {
+    font-family: var(--font-family-display);
+    font-size: var(--font-size-3xl);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-primary);
+    line-height: 1;
   }
 
-  .cta-text p {
+  .stat-label {
+    font-size: var(--font-size-sm);
     color: var(--color-text-muted);
-    margin: 0;
+    margin-top: var(--space-1);
   }
 
   @media (max-width: 768px) {
-    .cta-content {
-      flex-direction: column;
+    .stats-grid {
+      grid-template-columns: repeat(2, 1fr);
       gap: var(--space-4);
+    }
+  }
+
+  @media (max-width: 480px) {
+    .stats-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .stat-value {
+      font-size: var(--font-size-2xl);
     }
   }
 
@@ -303,10 +328,14 @@ const whatsNew = [
   }
 
   :global([data-theme="dark"]) .hero-fade {
-    background: linear-gradient(to bottom, transparent 0%, var(--color-background-dark, #1a1a2e) 100%);
+    background: linear-gradient(to bottom, transparent 0%, var(--color-background-dark, #0a0a0a) 100%);
   }
 
-  :global([data-theme="dark"]) .cta-content {
-    background: rgba(45, 55, 72, 0.8);
+  :global([data-theme="dark"]) .stats-grid {
+    background: rgba(20, 20, 20, 0.9);
+  }
+
+  :global([data-theme="dark"]) .stat-value {
+    color: var(--color-digital);
   }
 </style>
