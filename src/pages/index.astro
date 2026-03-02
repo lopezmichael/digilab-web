@@ -2,701 +2,288 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import AgumonGuide from '../components/AgumonGuide.astro';
+import ContentCarousel from '../components/ContentCarousel.astro';
+import PostCard from '../components/PostCard.astro';
+import WhatsNewCard from '../components/WhatsNewCard.astro';
+import DigiIcon from '../components/DigiIcon.astro';
+import { getCollection } from 'astro:content';
+
+// Get recent blog posts
+const allPosts = await getCollection('blog', ({ data }) => !data.draft);
+const recentPosts = allPosts
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+  .slice(0, 8);
+
+// What's new items
+const whatsNew = [
+  { text: '5 regions now tracking', icon: 'globe', isNew: true },
+  { text: 'Rating system v2.0', icon: 'graph-up-arrow', isNew: true },
+  { text: 'Deck meta analysis', icon: 'pie-chart', isNew: false },
+  { text: 'Store directory', icon: 'shop', isNew: false },
+  { text: 'Tournament history', icon: 'trophy', isNew: false },
+  { text: 'Player profiles', icon: 'person-badge', isNew: false },
+];
 ---
 
 <BaseLayout title="Track Your Local Digimon TCG Scene">
-  <div class="page-wrapper">
-    <Header />
+  <Header />
 
-    <main>
-      <!-- Hero Section -->
-      <section class="hero">
-        <div class="hero-grid-bg"></div>
-        <div class="hero-gradient"></div>
-        <div class="container hero-content">
-          <div class="hero-text">
-            <div class="hero-badge">
-              <span class="badge-dot"></span>
-              Live in 5 regions
-            </div>
-            <h1>
-              <span class="hero-title-line">Track Your</span>
-              <span class="hero-title-accent">Local Scene</span>
-            </h1>
-            <p class="hero-subtitle">
-              Player ratings, deck meta, tournament history — everything competitive Digimon TCG players need to level up.
-            </p>
-            <div class="hero-cta">
-              <a href="https://app.digilab.cards" class="btn btn-glow">
-                Launch App
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M5 12h14"></path>
-                  <path d="m12 5 7 7-7 7"></path>
-                </svg>
-              </a>
-              <a href="#features" class="btn btn-ghost">See Features</a>
-            </div>
-          </div>
-          <div class="hero-visual">
-            <div class="mascot-container">
-              <div class="mascot-glow"></div>
-              <img src="/brand/agumon.svg" alt="Agumon mascot" class="mascot" />
-            </div>
-            <div class="stats-float stats-float-1">
-              <span class="stat-label">Active Players</span>
-              <span class="stat-value">1,096</span>
-            </div>
-            <div class="stats-float stats-float-2">
-              <span class="stat-label">Tournaments</span>
-              <span class="stat-value">847</span>
-            </div>
+  <main>
+    <!-- Hero Section -->
+    <section class="hero">
+      <div class="container hero-content">
+        <div class="hero-text">
+          <h1>Track your local<br />Digimon TCG scene</h1>
+          <p class="hero-subtitle">
+            Player ratings, deck meta, and tournament history for competitive players.
+          </p>
+          <div class="hero-actions">
+            <a href="https://app.digilab.cards" class="btn btn-primary btn-lg">
+              <DigiIcon name="digivice" size="20px" />
+              Launch App
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M5 12h14"></path>
+                <path d="m12 5 7 7-7 7"></path>
+              </svg>
+            </a>
+            <a href="https://discord.gg/digilab" target="_blank" rel="noopener" class="btn btn-ghost">
+              <DigiIcon name="discord" size="20px" />
+              Join Discord
+            </a>
           </div>
         </div>
-        <div class="hero-scroll-hint">
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M12 5v14"></path>
-            <path d="m19 12-7 7-7-7"></path>
-          </svg>
-        </div>
-      </section>
 
-      <!-- Features Section -->
-      <section id="features" class="features">
-        <div class="container">
-          <div class="section-header">
-            <span class="section-tag">Features</span>
-            <h2>Everything You Need</h2>
-            <p class="section-description">Built for competitive players who want real insights, not guesswork.</p>
-          </div>
-          <div class="features-grid">
-            <article class="feature-card">
-              <div class="card-shine"></div>
-              <div class="feature-icon">
-                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M3 3v18h18"></path>
-                  <path d="m19 9-5 5-4-4-3 3"></path>
-                </svg>
-              </div>
-              <h3>Player Rankings</h3>
-              <p>Elo-based competitive ratings with regional leaderboards. See where you stand against the best.</p>
-              <div class="card-accent"></div>
-            </article>
-            <article class="feature-card">
-              <div class="card-shine"></div>
-              <div class="feature-icon">
-                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                  <rect x="3" y="3" width="7" height="9"></rect>
-                  <rect x="14" y="3" width="7" height="5"></rect>
-                  <rect x="14" y="12" width="7" height="9"></rect>
-                  <rect x="3" y="16" width="7" height="5"></rect>
-                </svg>
-              </div>
-              <h3>Deck Meta</h3>
-              <p>See what's winning in your area. Detailed archetype breakdowns, matchup data, and trends over time.</p>
-              <div class="card-accent"></div>
-            </article>
-            <article class="feature-card">
-              <div class="card-shine"></div>
-              <div class="feature-icon">
-                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"></path>
-                  <circle cx="12" cy="10" r="3"></circle>
-                </svg>
-              </div>
-              <h3>Store Directory</h3>
-              <p>Find local game stores running Digimon TCG events. Never miss a tournament in your area.</p>
-              <div class="card-accent"></div>
-            </article>
-            <article class="feature-card">
-              <div class="card-shine"></div>
-              <div class="feature-icon">
-                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"></path>
-                  <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"></path>
-                  <path d="M4 22h16"></path>
-                  <path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"></path>
-                  <path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"></path>
-                  <path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"></path>
-                </svg>
-              </div>
-              <h3>Tournament History</h3>
-              <p>Full results archive for every tracked event. Review past performance and spot your rivals.</p>
-              <div class="card-accent"></div>
-            </article>
-          </div>
+        <div class="hero-mascot">
+          <AgumonGuide pose="waving" size="120px" />
         </div>
-      </section>
+      </div>
+    </section>
 
-      <!-- Stats Section -->
-      <section class="stats-section">
-        <div class="container">
-          <div class="stats-grid">
-            <div class="stat-block">
-              <span class="stat-number" data-value="1096">1,096</span>
-              <span class="stat-title">Tracked Players</span>
-            </div>
-            <div class="stat-divider"></div>
-            <div class="stat-block">
-              <span class="stat-number" data-value="847">847</span>
-              <span class="stat-title">Tournaments</span>
-            </div>
-            <div class="stat-divider"></div>
-            <div class="stat-block">
-              <span class="stat-number" data-value="5">5</span>
-              <span class="stat-title">Active Regions</span>
-            </div>
-            <div class="stat-divider"></div>
-            <div class="stat-block">
-              <span class="stat-number" data-value="12345">12,345</span>
-              <span class="stat-title">Matches Recorded</span>
-            </div>
-          </div>
+    <!-- What's New Section -->
+    <section class="whats-new-section">
+      <div class="container">
+        <div class="section-header">
+          <h2>
+            <DigiIcon name="lightning-charge" size="24px" />
+            What's New
+          </h2>
+          <AgumonGuide pose="pointing" size="48px" class="section-mascot" />
         </div>
-      </section>
+      </div>
 
-      <!-- Blog Preview Section -->
-      <section class="blog-preview">
-        <div class="container">
-          <div class="section-header">
-            <span class="section-tag">Updates</span>
-            <h2>From the Lab</h2>
-            <p class="section-description">Announcements, analysis, and insights from the DigiLab team.</p>
-          </div>
-          <div class="blog-cta">
-            <a href="/blog" class="btn btn-outline">Read the Blog</a>
-          </div>
-        </div>
-      </section>
+      <ContentCarousel autoScrollSpeed={25}>
+        {whatsNew.map((item) => (
+          <WhatsNewCard
+            text={item.text}
+            icon={item.icon}
+            isNew={item.isNew}
+          />
+        ))}
+      </ContentCarousel>
+    </section>
 
-      <!-- CTA Section -->
-      <section class="cta-section">
-        <div class="cta-bg"></div>
-        <div class="container cta-content">
-          <h2>Ready to Level Up?</h2>
-          <p>Join the growing community of competitive Digimon TCG players tracking their progress with DigiLab.</p>
-          <a href="https://app.digilab.cards" class="btn btn-glow btn-lg">
-            Get Started
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <!-- Recent Posts Section -->
+    <section class="posts-section">
+      <div class="container">
+        <div class="section-header">
+          <h2>
+            <DigiIcon name="journal-text" size="24px" />
+            Recent Posts
+          </h2>
+          <a href="/blog" class="view-all-link">
+            View all
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <path d="M5 12h14"></path>
               <path d="m12 5 7 7-7 7"></path>
             </svg>
           </a>
         </div>
-      </section>
-    </main>
+      </div>
 
-    <Footer />
-  </div>
+      <ContentCarousel autoScrollSpeed={20}>
+        {recentPosts.map((post) => (
+          <PostCard
+            title={post.data.title}
+            description={post.data.description}
+            date={post.data.date}
+            category={post.data.category}
+            slug={post.slug}
+            image={post.data.image}
+            chartEmbed={post.data.chartEmbed}
+          />
+        ))}
+      </ContentCarousel>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+      <div class="container">
+        <div class="cta-content">
+          <AgumonGuide pose="excited" size="80px" />
+          <div class="cta-text">
+            <h2>Ready to track your scene?</h2>
+            <p>Join players across 5 regions already using DigiLab.</p>
+          </div>
+          <a href="https://app.digilab.cards" class="btn btn-primary btn-lg">
+            Get Started
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <Footer />
 </BaseLayout>
 
 <style>
-  /* Page wrapper for dark theme */
-  .page-wrapper {
-    background-color: #0a0a12;
-    min-height: 100vh;
-  }
-
-  /* ===== HERO SECTION ===== */
+  /* ===== Hero Section ===== */
   .hero {
     position: relative;
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    overflow: hidden;
-    padding: var(--space-20) 0;
-  }
-
-  .hero-grid-bg {
-    position: absolute;
-    inset: 0;
-    background-image:
-      linear-gradient(rgba(247, 148, 29, 0.03) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(247, 148, 29, 0.03) 1px, transparent 1px);
-    background-size: 60px 60px;
-    mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 20%, transparent 70%);
-    -webkit-mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 20%, transparent 70%);
-  }
-
-  .hero-gradient {
-    position: absolute;
-    inset: 0;
-    background:
-      radial-gradient(ellipse 60% 50% at 50% 0%, rgba(10, 48, 85, 0.4) 0%, transparent 60%),
-      radial-gradient(ellipse 40% 40% at 80% 60%, rgba(247, 148, 29, 0.1) 0%, transparent 50%);
+    padding: var(--space-16) 0 var(--space-20);
   }
 
   .hero-content {
-    position: relative;
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: var(--space-12);
+    display: flex;
     align-items: center;
-    z-index: 1;
+    justify-content: space-between;
+    gap: var(--space-8);
   }
 
-  @media (min-width: 1024px) {
-    .hero-content {
-      grid-template-columns: 1fr 1fr;
-      gap: var(--space-16);
-    }
+  .hero-text {
+    max-width: 550px;
   }
 
-  .hero-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: var(--space-2);
-    background: rgba(247, 148, 29, 0.1);
-    border: 1px solid rgba(247, 148, 29, 0.3);
-    padding: var(--space-2) var(--space-4);
-    border-radius: var(--radius-full);
-    font-size: var(--font-size-sm);
-    color: var(--color-accent);
-    font-weight: var(--font-weight-medium);
-    margin-bottom: var(--space-6);
-    animation: fadeInUp 0.6s ease-out;
-  }
-
-  .badge-dot {
-    width: 8px;
-    height: 8px;
-    background: var(--color-accent);
-    border-radius: 50%;
-    animation: pulse 2s ease-in-out infinite;
-  }
-
-  @keyframes pulse {
-    0%, 100% { opacity: 1; transform: scale(1); }
-    50% { opacity: 0.5; transform: scale(1.2); }
-  }
-
-  .hero-text h1 {
-    font-size: clamp(2.5rem, 8vw, 4.5rem);
-    line-height: 1.05;
-    margin-bottom: var(--space-6);
-    color: white;
-  }
-
-  .hero-title-line {
-    display: block;
-    animation: fadeInUp 0.6s ease-out 0.1s both;
-  }
-
-  .hero-title-accent {
-    display: block;
-    background: linear-gradient(135deg, var(--color-accent) 0%, #ffb347 100%);
+  .hero h1 {
+    font-size: clamp(2.5rem, 6vw, 3.5rem);
+    margin-bottom: var(--space-4);
+    line-height: 1.1;
+    background: linear-gradient(135deg, var(--color-text) 0%, var(--color-primary) 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
-    animation: fadeInUp 0.6s ease-out 0.2s both;
   }
 
   .hero-subtitle {
     font-size: var(--font-size-xl);
-    color: rgba(255, 255, 255, 0.7);
-    max-width: 480px;
+    color: var(--color-text-muted);
     margin-bottom: var(--space-8);
-    line-height: var(--line-height-relaxed);
-    animation: fadeInUp 0.6s ease-out 0.3s both;
   }
 
-  .hero-cta {
+  .hero-actions {
     display: flex;
     flex-wrap: wrap;
     gap: var(--space-4);
-    animation: fadeInUp 0.6s ease-out 0.4s both;
   }
 
-  @keyframes fadeInUp {
-    from {
-      opacity: 0;
-      transform: translateY(20px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-
-  /* Hero Visual */
-  .hero-visual {
-    position: relative;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 350px;
-  }
-
-  .mascot-container {
-    position: relative;
-    animation: float 6s ease-in-out infinite;
-  }
-
-  @keyframes float {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-15px); }
-  }
-
-  .mascot-glow {
-    position: absolute;
-    inset: -40px;
-    background: radial-gradient(circle, rgba(247, 148, 29, 0.3) 0%, transparent 70%);
-    filter: blur(20px);
-    animation: glowPulse 4s ease-in-out infinite;
-  }
-
-  @keyframes glowPulse {
-    0%, 100% { opacity: 0.6; transform: scale(1); }
-    50% { opacity: 1; transform: scale(1.1); }
-  }
-
-  .mascot {
-    width: 280px;
-    height: 280px;
-    filter: drop-shadow(0 0 30px rgba(247, 148, 29, 0.4));
-    position: relative;
-    z-index: 1;
-  }
-
-  @media (min-width: 1024px) {
-    .mascot {
-      width: 360px;
-      height: 360px;
-    }
-  }
-
-  /* Floating Stats */
-  .stats-float {
-    position: absolute;
-    background: rgba(255, 255, 255, 0.05);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: var(--radius-lg);
-    padding: var(--space-3) var(--space-4);
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-1);
-    animation: fadeInUp 0.6s ease-out 0.5s both;
-  }
-
-  .stats-float-1 {
-    top: 10%;
-    right: 5%;
-    animation-delay: 0.6s;
-  }
-
-  .stats-float-2 {
-    bottom: 15%;
-    left: 5%;
-    animation-delay: 0.7s;
-  }
-
-  .stat-label {
-    font-size: var(--font-size-xs);
-    color: rgba(255, 255, 255, 0.5);
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-  }
-
-  .stat-value {
-    font-family: var(--font-family-display);
-    font-size: var(--font-size-2xl);
-    font-weight: var(--font-weight-bold);
-    color: var(--color-accent);
-  }
-
-  /* Scroll Hint */
-  .hero-scroll-hint {
-    position: absolute;
-    bottom: var(--space-8);
-    left: 50%;
-    transform: translateX(-50%);
-    color: rgba(255, 255, 255, 0.3);
-    animation: bounce 2s ease-in-out infinite;
-  }
-
-  @keyframes bounce {
-    0%, 100% { transform: translateX(-50%) translateY(0); }
-    50% { transform: translateX(-50%) translateY(8px); }
-  }
-
-  /* ===== BUTTONS ===== */
-  .btn-glow {
-    background: linear-gradient(135deg, var(--color-accent) 0%, #e8850f 100%);
-    color: white;
-    padding: var(--space-4) var(--space-8);
-    font-weight: var(--font-weight-semibold);
-    border-radius: var(--radius-md);
-    box-shadow: var(--glow-accent);
-    transition: all 0.3s ease;
-    display: inline-flex;
-    align-items: center;
-    gap: var(--space-2);
-    text-decoration: none;
-    border: none;
-    cursor: pointer;
-  }
-
-  .btn-glow:hover {
-    box-shadow: var(--glow-accent-strong);
-    transform: translateY(-2px);
-    color: white;
-  }
-
-  .btn-ghost {
-    background: transparent;
-    color: rgba(255, 255, 255, 0.8);
-    padding: var(--space-4) var(--space-8);
-    font-weight: var(--font-weight-medium);
-    border-radius: var(--radius-md);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    transition: all 0.3s ease;
-    text-decoration: none;
-  }
-
-  .btn-ghost:hover {
-    background: rgba(255, 255, 255, 0.05);
-    border-color: rgba(255, 255, 255, 0.3);
-    color: white;
-  }
-
-  .btn-outline {
-    background: transparent;
-    color: var(--color-accent);
-    padding: var(--space-4) var(--space-8);
-    font-weight: var(--font-weight-semibold);
-    border-radius: var(--radius-md);
-    border: 2px solid var(--color-accent);
-    transition: all 0.3s ease;
-    text-decoration: none;
-    display: inline-flex;
-    align-items: center;
-    gap: var(--space-2);
-  }
-
-  .btn-outline:hover {
-    background: var(--color-accent);
-    color: white;
-  }
-
-  .btn-lg {
-    padding: var(--space-5) var(--space-10);
-    font-size: var(--font-size-lg);
-  }
-
-  /* ===== FEATURES SECTION ===== */
-  .features {
-    padding: var(--space-24) 0;
-    position: relative;
-  }
-
-  .section-header {
-    text-align: center;
-    margin-bottom: var(--space-12);
-  }
-
-  .section-tag {
-    display: inline-block;
-    font-family: var(--font-family-display);
-    font-size: var(--font-size-sm);
-    font-weight: var(--font-weight-semibold);
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    color: var(--color-accent);
-    margin-bottom: var(--space-4);
-  }
-
-  .section-header h2 {
-    font-size: clamp(2rem, 5vw, 3rem);
-    color: white;
-    margin-bottom: var(--space-4);
-  }
-
-  .section-description {
-    font-size: var(--font-size-lg);
-    color: rgba(255, 255, 255, 0.6);
-    max-width: 500px;
-    margin: 0 auto;
-  }
-
-  .features-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: var(--space-6);
-  }
-
-  .feature-card {
-    position: relative;
-    background: linear-gradient(180deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.02) 100%);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: var(--radius-xl);
-    padding: var(--space-8);
-    overflow: hidden;
-    transition: all 0.4s ease;
-  }
-
-  .feature-card:hover {
-    border-color: rgba(247, 148, 29, 0.3);
-    transform: translateY(-4px);
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
-  }
-
-  .card-shine {
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, transparent 40%, transparent 60%, rgba(255,255,255,0.05) 100%);
-    opacity: 0;
-    transition: opacity 0.4s ease;
-  }
-
-  .feature-card:hover .card-shine {
-    opacity: 1;
-  }
-
-  .card-accent {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    height: 3px;
-    background: linear-gradient(90deg, var(--color-accent) 0%, transparent 100%);
-    opacity: 0;
-    transition: opacity 0.4s ease;
-  }
-
-  .feature-card:hover .card-accent {
-    opacity: 1;
-  }
-
-  .feature-icon {
-    width: 56px;
-    height: 56px;
-    background: rgba(247, 148, 29, 0.1);
-    border-radius: var(--radius-lg);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: var(--space-6);
-    color: var(--color-accent);
-    transition: all 0.3s ease;
-  }
-
-  .feature-card:hover .feature-icon {
-    background: rgba(247, 148, 29, 0.2);
-    box-shadow: 0 0 20px rgba(247, 148, 29, 0.2);
-  }
-
-  .feature-card h3 {
-    font-size: var(--font-size-xl);
-    color: white;
-    margin-bottom: var(--space-3);
-  }
-
-  .feature-card p {
-    color: rgba(255, 255, 255, 0.6);
-    line-height: var(--line-height-relaxed);
-    margin: 0;
-  }
-
-  /* ===== STATS SECTION ===== */
-  .stats-section {
-    padding: var(--space-16) 0;
-    background: linear-gradient(180deg, transparent 0%, rgba(10, 48, 85, 0.2) 50%, transparent 100%);
-    border-top: 1px solid rgba(255, 255, 255, 0.05);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-  }
-
-  .stats-grid {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    align-items: center;
-    gap: var(--space-8);
-  }
-
-  .stat-block {
-    text-align: center;
-    padding: var(--space-4) var(--space-8);
-  }
-
-  .stat-number {
-    display: block;
-    font-family: var(--font-family-display);
-    font-size: clamp(2.5rem, 6vw, 4rem);
-    font-weight: var(--font-weight-bold);
-    color: white;
-    line-height: 1;
-    margin-bottom: var(--space-2);
-  }
-
-  .stat-title {
-    font-size: var(--font-size-sm);
-    color: rgba(255, 255, 255, 0.5);
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-  }
-
-  .stat-divider {
-    width: 1px;
-    height: 60px;
-    background: linear-gradient(180deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  .hero-mascot {
+    flex-shrink: 0;
   }
 
   @media (max-width: 768px) {
-    .stat-divider {
-      display: none;
+    .hero-content {
+      flex-direction: column;
+      text-align: center;
     }
 
-    .stats-grid {
-      gap: var(--space-4);
+    .hero-actions {
+      justify-content: center;
     }
 
-    .stat-block {
-      flex: 1 1 45%;
+    .hero-mascot {
+      order: -1;
     }
   }
 
-  /* ===== BLOG PREVIEW ===== */
-  .blog-preview {
-    padding: var(--space-24) 0;
-    text-align: center;
+  /* ===== Section Styles ===== */
+  .whats-new-section,
+  .posts-section {
+    padding: var(--space-12) 0;
   }
 
-  .blog-cta {
-    margin-top: var(--space-8);
+  .section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: var(--space-6);
+    gap: var(--space-4);
   }
 
-  /* ===== CTA SECTION ===== */
+  .section-header h2 {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    font-size: var(--font-size-2xl);
+    margin: 0;
+  }
+
+  .section-mascot {
+    opacity: 0.8;
+  }
+
+  .view-all-link {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    color: var(--color-primary);
+    font-weight: var(--font-weight-medium);
+    font-size: var(--font-size-sm);
+  }
+
+  .view-all-link:hover {
+    color: var(--color-accent);
+  }
+
+  .view-all-link svg {
+    transition: transform var(--transition-fast);
+  }
+
+  .view-all-link:hover svg {
+    transform: translateX(4px);
+  }
+
+  /* ===== CTA Section ===== */
   .cta-section {
-    position: relative;
-    padding: var(--space-24) 0;
-    text-align: center;
-    overflow: hidden;
-  }
-
-  .cta-bg {
-    position: absolute;
-    inset: 0;
-    background:
-      radial-gradient(ellipse 80% 60% at 50% 100%, rgba(247, 148, 29, 0.15) 0%, transparent 60%),
-      radial-gradient(ellipse 60% 40% at 50% 0%, rgba(10, 48, 85, 0.3) 0%, transparent 50%);
+    padding: var(--space-16) 0;
   }
 
   .cta-content {
-    position: relative;
-    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-8);
+    padding: var(--space-10);
+    background: rgba(var(--color-surface-rgb, 255, 255, 255), 0.8);
+    backdrop-filter: blur(12px);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-xl);
+    text-align: center;
   }
 
-  .cta-section h2 {
-    font-size: clamp(2rem, 5vw, 3rem);
-    color: white;
-    margin-bottom: var(--space-4);
+  .cta-text h2 {
+    margin: 0 0 var(--space-2);
   }
 
-  .cta-section p {
-    font-size: var(--font-size-lg);
-    color: rgba(255, 255, 255, 0.6);
-    max-width: 500px;
-    margin: 0 auto var(--space-8);
+  .cta-text p {
+    color: var(--color-text-muted);
+    margin: 0;
+  }
+
+  @media (max-width: 768px) {
+    .cta-content {
+      flex-direction: column;
+      gap: var(--space-4);
+    }
+  }
+
+  /* ===== Dark Mode ===== */
+  :global([data-theme="dark"]) .hero h1 {
+    background: linear-gradient(135deg, var(--color-text) 0%, var(--color-digital) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+  }
+
+  :global([data-theme="dark"]) .cta-content {
+    background: rgba(45, 55, 72, 0.8);
   }
 </style>
