@@ -15,14 +15,14 @@ const recentPosts = allPosts
   .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
   .slice(0, 8);
 
-// What's new items
+// What's new items - link to blog posts or relevant pages
 const whatsNew = [
-  { text: '5 regions now tracking', icon: 'globe', isNew: true },
-  { text: 'Rating system v2.0', icon: 'graph-up-arrow', isNew: true },
-  { text: 'Deck meta analysis', icon: 'pie-chart', isNew: false },
-  { text: 'Store directory', icon: 'shop', isNew: false },
-  { text: 'Tournament history', icon: 'trophy', isNew: false },
-  { text: 'Player profiles', icon: 'person-badge', isNew: false },
+  { text: '5 regions now tracking', icon: 'globe', isNew: true, link: '/about' },
+  { text: 'Rating system v2.0', icon: 'graph-up-arrow', isNew: true, link: '/blog/rating-redesign' },
+  { text: 'Deck meta analysis', icon: 'pie-chart', isNew: false, link: '/blog' },
+  { text: 'Store directory', icon: 'shop', isNew: false, link: '/about' },
+  { text: 'Tournament history', icon: 'trophy', isNew: false, link: '/blog' },
+  { text: 'Player profiles', icon: 'person-badge', isNew: false, link: '/blog' },
 ];
 ---
 
@@ -57,7 +57,7 @@ const whatsNew = [
         </div>
 
         <div class="hero-mascot">
-          <AgumonGuide pose="idle" size="120px" />
+          <AgumonGuide pose="jumping" size="120px" />
         </div>
       </div>
     </section>
@@ -70,7 +70,6 @@ const whatsNew = [
             <DigiIcon name="lightning-charge" size="24px" />
             What's New
           </h2>
-          <AgumonGuide pose="idle" size="48px" class="section-mascot" />
         </div>
       </div>
 
@@ -80,6 +79,7 @@ const whatsNew = [
             text={item.text}
             icon={item.icon}
             isNew={item.isNew}
+            link={item.link}
           />
         ))}
       </ContentCarousel>
@@ -118,23 +118,42 @@ const whatsNew = [
       </ContentCarousel>
     </section>
 
-    <!-- Stats Section -->
+    <!-- Stats & CTA Section -->
     <section class="stats-section">
       <div class="container">
-        <div class="stats-grid">
-          <div class="stat-item">
+        <!-- CTA Row -->
+        <div class="cta-row">
+          <div class="cta-mascot-wrapper">
+            <AgumonGuide pose="excited" size="32px" />
+          </div>
+          <div class="cta-text">
+            <span class="cta-heading">Want to track your scene?</span>
+            <span class="cta-description">Learn how to add your local store and start tracking tournaments.</span>
+          </div>
+          <a href="/about" class="btn btn-accent">
+            Get Started
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M5 12h14"></path>
+              <path d="m12 5 7 7-7 7"></path>
+            </svg>
+          </a>
+        </div>
+
+        <!-- Stats Row -->
+        <div class="stats-row">
+          <div class="stat-box">
             <div class="stat-value">5</div>
             <div class="stat-label">Active Scenes</div>
           </div>
-          <div class="stat-item">
+          <div class="stat-box">
             <div class="stat-value">20+</div>
             <div class="stat-label">Stores</div>
           </div>
-          <div class="stat-item">
+          <div class="stat-box">
             <div class="stat-value">500+</div>
             <div class="stat-label">Players Tracked</div>
           </div>
-          <div class="stat-item">
+          <div class="stat-box">
             <div class="stat-value">100+</div>
             <div class="stat-label">Tournaments</div>
           </div>
@@ -269,24 +288,88 @@ const whatsNew = [
     transform: translateX(4px);
   }
 
-  /* ===== Stats Section ===== */
+  /* ===== Stats & CTA Section ===== */
   .stats-section {
-    padding: var(--space-8) 0 var(--space-12);
+    padding: var(--space-8) 0 var(--space-16);
   }
 
-  .stats-grid {
+  /* CTA Row */
+  .cta-row {
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+    padding: var(--space-3) var(--space-5);
+    background: linear-gradient(135deg, var(--color-primary-dark) 0%, var(--color-primary) 100%);
+    border-radius: var(--radius-lg);
+    margin-bottom: var(--space-4);
+  }
+
+  .cta-mascot-wrapper {
+    flex-shrink: 0;
+    filter: drop-shadow(0 0 6px rgba(247, 148, 29, 0.4));
+    transform: translate(16px, 16px);
+  }
+
+  .cta-text {
+    flex: 1;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: var(--space-2);
+  }
+
+  .cta-heading {
+    color: #ffffff;
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-semibold);
+  }
+
+  .cta-description {
+    color: rgba(255, 255, 255, 0.75);
+    font-size: var(--font-size-sm);
+  }
+
+  .btn-accent {
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: var(--space-3) var(--space-5);
+    background: var(--color-accent);
+    color: #ffffff;
+    font-weight: var(--font-weight-semibold);
+    font-size: var(--font-size-sm);
+    border-radius: var(--radius-md);
+    text-decoration: none;
+    transition: all var(--transition-fast);
+  }
+
+  .btn-accent:hover {
+    background: var(--color-accent-hover);
+    transform: translateY(-1px);
+    box-shadow: var(--glow-accent);
+  }
+
+  /* Stats Row */
+  .stats-row {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: var(--space-4);
-    padding: var(--space-6);
-    background: rgba(var(--color-surface-rgb, 255, 255, 255), 0.8);
+  }
+
+  .stat-box {
+    background: rgba(var(--color-surface-rgb, 255, 255, 255), 0.9);
     backdrop-filter: blur(12px);
     border: 1px solid var(--color-border);
     border-radius: var(--radius-lg);
+    padding: var(--space-5);
+    text-align: center;
+    transition: all var(--transition-fast);
   }
 
-  .stat-item {
-    text-align: center;
+  .stat-box:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
   }
 
   .stat-value {
@@ -300,19 +383,27 @@ const whatsNew = [
   .stat-label {
     font-size: var(--font-size-sm);
     color: var(--color-text-muted);
-    margin-top: var(--space-1);
+    margin-top: var(--space-2);
   }
 
   @media (max-width: 768px) {
-    .stats-grid {
+    .cta-row {
+      flex-wrap: wrap;
+    }
+
+    .cta-text {
+      flex-direction: column;
+      gap: var(--space-1);
+    }
+
+    .stats-row {
       grid-template-columns: repeat(2, 1fr);
-      gap: var(--space-4);
     }
   }
 
   @media (max-width: 480px) {
-    .stats-grid {
-      grid-template-columns: 1fr 1fr;
+    .cta-row {
+      padding: var(--space-4);
     }
 
     .stat-value {
@@ -331,11 +422,17 @@ const whatsNew = [
     background: linear-gradient(to bottom, transparent 0%, var(--color-background-dark, #0a0a0a) 100%);
   }
 
-  :global([data-theme="dark"]) .stats-grid {
+  :global([data-theme="dark"]) .stat-box {
     background: rgba(20, 20, 20, 0.9);
+    border-color: var(--color-border-dark, #2a2a2a);
   }
 
   :global([data-theme="dark"]) .stat-value {
     color: var(--color-digital);
+  }
+
+  :global([data-theme="dark"]) .cta-row {
+    background: linear-gradient(135deg, #0a0a0a 0%, var(--color-primary-dark) 100%);
+    border: 1px solid rgba(0, 200, 255, 0.2);
   }
 </style>

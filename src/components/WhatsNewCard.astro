@@ -20,6 +20,11 @@ const Tag = link ? 'a' : 'div';
   </span>
   <span class="whats-new-text">{text}</span>
   {isNew && <span class="whats-new-badge">New</span>}
+  {link && (
+    <span class="whats-new-arrow">
+      <i class="bi bi-chevron-right"></i>
+    </span>
+  )}
 </Tag>
 
 <style>
@@ -38,9 +43,35 @@ const Tag = link ? 'a' : 'div';
     transition: transform var(--transition-fast), box-shadow var(--transition-fast);
   }
 
+  .whats-new-card.has-link {
+    cursor: pointer;
+    padding-right: var(--space-3);
+  }
+
   .whats-new-card.has-link:hover {
     transform: translateY(-2px);
-    box-shadow: var(--shadow-md), var(--glow-digital);
+    box-shadow: var(--shadow-md);
+    border-color: var(--color-primary);
+  }
+
+  .whats-new-card.has-link:hover .whats-new-icon {
+    background: var(--color-accent);
+  }
+
+  .whats-new-arrow {
+    display: flex;
+    align-items: center;
+    color: var(--color-text-muted);
+    font-size: var(--font-size-xs);
+    margin-left: auto;
+    opacity: 0.5;
+    transition: all var(--transition-fast);
+  }
+
+  .whats-new-card.has-link:hover .whats-new-arrow {
+    opacity: 1;
+    color: var(--color-primary);
+    transform: translateX(2px);
   }
 
   .whats-new-icon {

@@ -3,7 +3,7 @@
 // Animated Agumon SVG mascot with different poses for different contexts
 
 interface Props {
-  pose?: 'idle' | 'waving' | 'pointing' | 'curious' | 'sleeping' | 'excited';
+  pose?: 'idle' | 'waving' | 'pointing' | 'curious' | 'sleeping' | 'excited' | 'jumping' | 'walking';
   size?: string;
   class?: string;
   flipX?: boolean;
@@ -71,6 +71,13 @@ const {
       </g>
     </g>
   </svg>
+
+  <!-- Dust particles for jumping pose -->
+  <div class="agumon-dust">
+    <span class="dust-particle dust-1"></span>
+    <span class="dust-particle dust-2"></span>
+    <span class="dust-particle dust-3"></span>
+  </div>
 
   <!-- Speech bubble (optional, controlled by JS) -->
   <div class="agumon-speech" id="agumon-speech"></div>
@@ -181,17 +188,20 @@ const {
 
   /* ===== EXCITED POSE ===== */
   .agumon-excited .agumon-body {
-    animation: agumon-excited-bounce 0.4s ease-in-out infinite;
+    animation: agumon-excited-bounce 1.5s ease-in-out infinite;
+  }
+
+  .agumon-excited .agumon-eye {
+    animation: none;
   }
 
   .agumon-excited .agumon-arm-left {
-    animation: agumon-wave 0.3s ease-in-out infinite;
-    transform-origin: right center;
+    animation: none;
   }
 
   @keyframes agumon-excited-bounce {
     0%, 100% { transform: translateY(0) scale(1); }
-    50% { transform: translateY(-5px) scale(1.05); }
+    50% { transform: translateY(-3px) scale(1.01); }
   }
 
   /* ===== Speech Bubble ===== */
@@ -229,12 +239,135 @@ const {
     transform: translateX(-50%) translateY(-4px);
   }
 
+  /* ===== JUMPING POSE ===== */
+  .agumon-jumping .agumon-body {
+    animation: agumon-jump 2s ease-in-out infinite;
+    transform-origin: center bottom;
+  }
+
+  .agumon-jumping .agumon-eye {
+    animation: none;
+  }
+
+  .agumon-jumping .agumon-arm-left {
+    animation: none;
+  }
+
+  @keyframes agumon-jump {
+    0%, 100% { transform: translateY(0) scaleY(1) rotate(0deg); }
+    10% { transform: translateY(2px) scaleY(0.92) rotate(0deg); }
+    30% { transform: translateY(-10px) scaleY(1.04) rotate(-2deg); }
+    50% { transform: translateY(-10px) scaleY(1.04) rotate(2deg); }
+    70% { transform: translateY(0) scaleY(0.94) rotate(-1deg); }
+    85% { transform: translateY(0) scaleY(1.02) rotate(0.5deg); }
+    95% { transform: translateY(0) scaleY(1) rotate(0deg); }
+  }
+
+  /* Dust particles */
+  .agumon-dust {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    height: 20%;
+    pointer-events: none;
+    opacity: 0;
+  }
+
+  .agumon-jumping .agumon-dust {
+    opacity: 1;
+  }
+
+  .dust-particle {
+    position: absolute;
+    bottom: 0;
+    width: 6px;
+    height: 6px;
+    background: var(--color-accent, #F7941D);
+    border-radius: 50%;
+    opacity: 0;
+  }
+
+  .dust-1 { left: 30%; }
+  .dust-2 { left: 50%; }
+  .dust-3 { left: 70%; }
+
+  .agumon-jumping .dust-1 {
+    animation: dust-puff 1.2s ease-out infinite;
+    animation-delay: 0.72s;
+  }
+
+  .agumon-jumping .dust-2 {
+    animation: dust-puff 1.2s ease-out infinite;
+    animation-delay: 0.75s;
+  }
+
+  .agumon-jumping .dust-3 {
+    animation: dust-puff 1.2s ease-out infinite;
+    animation-delay: 0.78s;
+  }
+
+  @keyframes dust-puff {
+    0% {
+      opacity: 0;
+      transform: translateY(0) scale(0.5);
+    }
+    10% {
+      opacity: 0.8;
+      transform: translateY(-4px) scale(1);
+    }
+    50% {
+      opacity: 0;
+      transform: translateY(-12px) scale(0.3);
+    }
+    100% {
+      opacity: 0;
+      transform: translateY(-12px) scale(0);
+    }
+  }
+
+  /* ===== WALKING POSE ===== */
+  .agumon-walking {
+    overflow: visible;
+  }
+
+  .agumon-walking .agumon-svg {
+    animation: agumon-walk-cycle 6s linear infinite;
+  }
+
+  .agumon-walking .agumon-body {
+    animation: none;
+  }
+
+  .agumon-walking .agumon-eye {
+    animation: none;
+  }
+
+  .agumon-walking .agumon-arm-left {
+    animation: none;
+  }
+
+  @keyframes agumon-walk-cycle {
+    0% { transform: translateX(0); }
+    25% { transform: translateX(150%); }
+    26% { transform: translateX(150%) scaleX(-1); }
+    50% { transform: translateX(0) scaleX(-1); }
+    51% { transform: translateX(0) scaleX(-1); }
+    75% { transform: translateX(-150%) scaleX(-1); }
+    76% { transform: translateX(-150%) scaleX(1); }
+    100% { transform: translateX(0) scaleX(1); }
+  }
+
   /* ===== Reduced Motion ===== */
   @media (prefers-reduced-motion: reduce) {
     .agumon-body,
     .agumon-eye,
     .agumon-arm-left,
-    .agumon-head {
+    .agumon-head,
+    .agumon-svg,
+    .agumon-dust,
+    .dust-particle {
       animation: none !important;
     }
   }
