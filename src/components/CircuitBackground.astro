@@ -1,0 +1,531 @@
+---
+// CircuitBackground.astro
+// Dense, reactive circuit background with mouse interaction and glitch effects
+// Full-bleed across entire page, more intense in hero and footer regions
+
+interface Props {
+  class?: string;
+}
+
+const { class: className } = Astro.props;
+---
+
+<div class:list={['circuit-background', className]} aria-hidden="true">
+  <canvas id="circuit-canvas"></canvas>
+  <button class="circuit-pause-btn" id="circuit-pause" aria-label="Pause animation" title="Pause circuits">
+    <span class="pause-icon">&#10074;&#10074;</span>
+    <span class="play-icon">&#9654;</span>
+  </button>
+</div>
+
+<script>
+  const canvas = document.getElementById('circuit-canvas') as HTMLCanvasElement;
+  const pauseBtn = document.getElementById('circuit-pause');
+  const ctx = canvas.getContext('2d');
+
+  if (ctx && canvas) {
+    // ===== CONFIGURATION =====
+    const CONFIG = {
+      // Density - 3-4x more than before
+      maxCircuits: 60,
+      spawnRate: 150, // ms between spawns
+
+      // Appearance
+      baseColor: { r: 0, g: 200, b: 255 },
+      glitchColor: { r: 247, g: 148, b: 29 }, // Orange accent
+      lineWidth: 1,
+      nodeRadius: 3,
+
+      // Movement
+      baseSpeed: 1.5,
+      speedVariation: 0.8,
+
+      // Line properties
+      minLength: 50,
+      maxLength: 400,
+
+      // Branching
+      branchProbability: 0.15,
+      maxBranchDepth: 2,
+
+      // Mouse reactivity
+      mouseInfluenceRadius: 150,
+      mouseInfluenceStrength: 0.5,
+      wakeSpawnRate: 50, // ms between wake spawns when mouse moving
+
+      // Glitch effects
+      glitchFrequency: 0.02, // per frame per circuit
+      screenGlitchInterval: 3000, // ms between screen glitches
+      screenGlitchDuration: 100,
+
+      // Fade
+      fadeSpeed: 0.008,
+
+      // Intensity zones (0-1 normalized Y position)
+      heroZone: 0.3, // Top 30% is hero
+      footerZone: 0.85, // Bottom 15% is footer
+      intensityMultiplier: 1.5,
+    };
+
+    // ===== STATE =====
+    interface Point { x: number; y: number; }
+    interface Circuit {
+      points: Point[];
+      direction: Point;
+      speed: number;
+      length: number;
+      maxLength: number;
+      opacity: number;
+      fading: boolean;
+      glitching: boolean;
+      glitchFrames: number;
+      hasNode: boolean;
+      nodeIndex: number;
+      depth: number;
+    }
+
+    let circuits: Circuit[] = [];
+    let mousePos: Point = { x: -1000, y: -1000 };
+    let lastMousePos: Point = { x: -1000, y: -1000 };
+    let mouseMoving = false;
+    let lastSpawnTime = 0;
+    let lastWakeSpawn = 0;
+    let lastScreenGlitch = 0;
+    let screenGlitching = false;
+    let isPaused = false;
+    let animationId: number;
+    let isVisible = true;
+
+    // ===== HELPERS =====
+    const isDarkMode = () => {
+      return document.documentElement.getAttribute('data-theme') === 'dark' ||
+        (window.matchMedia('(prefers-color-scheme: dark)').matches &&
+         document.documentElement.getAttribute('data-theme') !== 'light');
+    };
+
+    const getBaseOpacity = () => isDarkMode() ? 0.25 : 0.18;
+    const getNodeOpacity = () => isDarkMode() ? 0.5 : 0.4;
+
+    const getIntensity = (y: number): number => {
+      const normalizedY = y / canvas.height;
+      if (normalizedY < CONFIG.heroZone || normalizedY > CONFIG.footerZone) {
+        return CONFIG.intensityMultiplier;
+      }
+      return 1;
+    };
+
+    const getRandomEdge = (): { point: Point; direction: Point } => {
+      const edge = Math.floor(Math.random() * 4);
+      const margin = 50;
+
+      switch (edge) {
+        case 0: // Top
+          return {
+            point: { x: Math.random() * canvas.width, y: -margin },
+            direction: { x: (Math.random() - 0.5) * 0.3, y: 1 }
+          };
+        case 1: // Right
+          return {
+            point: { x: canvas.width + margin, y: Math.random() * canvas.height },
+            direction: { x: -1, y: (Math.random() - 0.5) * 0.3 }
+          };
+        case 2: // Bottom
+          return {
+            point: { x: Math.random() * canvas.width, y: canvas.height + margin },
+            direction: { x: (Math.random() - 0.5) * 0.3, y: -1 }
+          };
+        default: // Left
+          return {
+            point: { x: -margin, y: Math.random() * canvas.height },
+            direction: { x: 1, y: (Math.random() - 0.5) * 0.3 }
+          };
+      }
+    };
+
+    const normalizeDirection = (dir: Point): Point => {
+      const mag = Math.sqrt(dir.x * dir.x + dir.y * dir.y);
+      return mag > 0 ? { x: dir.x / mag, y: dir.y / mag } : { x: 1, y: 0 };
+    };
+
+    const createCircuit = (
+      start: Point,
+      direction: Point,
+      depth: number = 0
+    ): Circuit => {
+      const normalizedDir = normalizeDirection(direction);
+      return {
+        points: [{ ...start }],
+        direction: normalizedDir,
+        speed: CONFIG.baseSpeed + (Math.random() - 0.5) * CONFIG.speedVariation,
+        length: 0,
+        maxLength: CONFIG.minLength + Math.random() * (CONFIG.maxLength - CONFIG.minLength),
+        opacity: 1,
+        fading: false,
+        glitching: false,
+        glitchFrames: 0,
+        hasNode: false,
+        nodeIndex: -1,
+        depth,
+      };
+    };
+
+    const spawnCircuit = () => {
+      if (circuits.length >= CONFIG.maxCircuits) return;
+      const { point, direction } = getRandomEdge();
+      circuits.push(createCircuit(point, direction, 0));
+    };
+
+    const spawnWakeCircuit = () => {
+      if (circuits.length >= CONFIG.maxCircuits) return;
+
+      // Spawn near mouse with random direction
+      const angle = Math.random() * Math.PI * 2;
+      const offset = 20 + Math.random() * 30;
+      const start = {
+        x: mousePos.x + Math.cos(angle) * offset,
+        y: mousePos.y + Math.sin(angle) * offset
+      };
+      const direction = {
+        x: Math.cos(angle),
+        y: Math.sin(angle)
+      };
+
+      const circuit = createCircuit(start, direction, 0);
+      circuit.maxLength = CONFIG.minLength * 0.5; // Shorter wake circuits
+      circuit.opacity = 0.7;
+      circuits.push(circuit);
+    };
+
+    // ===== UPDATE =====
+    const updateCircuit = (circuit: Circuit): Circuit[] => {
+      const newCircuits: Circuit[] = [];
+
+      if (circuit.fading) {
+        circuit.opacity -= CONFIG.fadeSpeed;
+        return newCircuits;
+      }
+
+      // Glitch check
+      if (!circuit.glitching && Math.random() < CONFIG.glitchFrequency) {
+        circuit.glitching = true;
+        circuit.glitchFrames = 5 + Math.floor(Math.random() * 10);
+      }
+
+      if (circuit.glitching) {
+        circuit.glitchFrames--;
+        if (circuit.glitchFrames <= 0) {
+          circuit.glitching = false;
+        }
+      }
+
+      // Get last point
+      const last = circuit.points[circuit.points.length - 1];
+
+      // Apply mouse influence
+      let dir = { ...circuit.direction };
+      const dx = mousePos.x - last.x;
+      const dy = mousePos.y - last.y;
+      const dist = Math.sqrt(dx * dx + dy * dy);
+
+      if (dist < CONFIG.mouseInfluenceRadius && dist > 0) {
+        const influence = (1 - dist / CONFIG.mouseInfluenceRadius) * CONFIG.mouseInfluenceStrength;
+        // Bend toward mouse
+        dir.x += (dx / dist) * influence;
+        dir.y += (dy / dist) * influence;
+        dir = normalizeDirection(dir);
+      }
+
+      // Move
+      const intensity = getIntensity(last.y);
+      const newPoint = {
+        x: last.x + dir.x * circuit.speed * intensity,
+        y: last.y + dir.y * circuit.speed * intensity,
+      };
+
+      // Bounds check
+      const margin = 100;
+      if (newPoint.x < -margin || newPoint.x > canvas.width + margin ||
+          newPoint.y < -margin || newPoint.y > canvas.height + margin) {
+        circuit.fading = true;
+        return newCircuits;
+      }
+
+      circuit.points.push(newPoint);
+      circuit.length += circuit.speed;
+      circuit.direction = dir;
+
+      // Branch check
+      if (!circuit.hasNode &&
+          circuit.depth < CONFIG.maxBranchDepth &&
+          circuit.length > circuit.maxLength * 0.3 &&
+          Math.random() < CONFIG.branchProbability) {
+        circuit.hasNode = true;
+        circuit.nodeIndex = circuit.points.length - 1;
+
+        // Create branch perpendicular
+        const perpendicular = Math.random() > 0.5
+          ? { x: -dir.y, y: dir.x }
+          : { x: dir.y, y: -dir.x };
+
+        if (circuits.length < CONFIG.maxCircuits) {
+          newCircuits.push(createCircuit(newPoint, perpendicular, circuit.depth + 1));
+        }
+      }
+
+      // Max length reached
+      if (circuit.length >= circuit.maxLength) {
+        circuit.fading = true;
+      }
+
+      return newCircuits;
+    };
+
+    // ===== DRAW =====
+    const drawCircuit = (circuit: Circuit) => {
+      if (circuit.points.length < 2) return;
+
+      const baseOpacity = getBaseOpacity();
+      const color = circuit.glitching ? CONFIG.glitchColor : CONFIG.baseColor;
+      const opacity = circuit.opacity * baseOpacity * (circuit.glitching ? 2 : 1);
+
+      ctx.beginPath();
+      ctx.strokeStyle = `rgba(${color.r}, ${color.g}, ${color.b}, ${opacity})`;
+      ctx.lineWidth = CONFIG.lineWidth;
+      ctx.lineCap = 'round';
+      ctx.lineJoin = 'round';
+
+      // Glitch effect: offset some segments
+      if (circuit.glitching) {
+        for (let i = 0; i < circuit.points.length - 1; i++) {
+          const glitchOffset = (Math.random() - 0.5) * 4;
+          ctx.moveTo(circuit.points[i].x + glitchOffset, circuit.points[i].y);
+          ctx.lineTo(circuit.points[i + 1].x + glitchOffset, circuit.points[i + 1].y);
+        }
+      } else {
+        ctx.moveTo(circuit.points[0].x, circuit.points[0].y);
+        for (let i = 1; i < circuit.points.length; i++) {
+          ctx.lineTo(circuit.points[i].x, circuit.points[i].y);
+        }
+      }
+      ctx.stroke();
+
+      // Draw node
+      if (circuit.hasNode && circuit.nodeIndex >= 0 && circuit.nodeIndex < circuit.points.length) {
+        const node = circuit.points[circuit.nodeIndex];
+        const nodeOpacity = circuit.opacity * getNodeOpacity();
+
+        ctx.beginPath();
+        ctx.fillStyle = `rgba(${color.r}, ${color.g}, ${color.b}, ${nodeOpacity})`;
+        ctx.arc(node.x, node.y, CONFIG.nodeRadius, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Glow
+        ctx.beginPath();
+        ctx.fillStyle = `rgba(${color.r}, ${color.g}, ${color.b}, ${nodeOpacity * 0.3})`;
+        ctx.arc(node.x, node.y, CONFIG.nodeRadius * 2.5, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    };
+
+    const drawScreenGlitch = () => {
+      if (!screenGlitching) return;
+
+      // Random horizontal slices
+      const sliceCount = 3 + Math.floor(Math.random() * 5);
+      for (let i = 0; i < sliceCount; i++) {
+        const y = Math.random() * canvas.height;
+        const h = 2 + Math.random() * 10;
+        const offset = (Math.random() - 0.5) * 20;
+
+        const imageData = ctx.getImageData(0, y, canvas.width, h);
+        ctx.putImageData(imageData, offset, y);
+      }
+
+      // Color aberration overlay
+      ctx.fillStyle = `rgba(${CONFIG.glitchColor.r}, ${CONFIG.glitchColor.g}, ${CONFIG.glitchColor.b}, 0.03)`;
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+    };
+
+    // ===== ANIMATION LOOP =====
+    const animate = (timestamp: number) => {
+      if (!isVisible || isPaused) {
+        animationId = requestAnimationFrame(animate);
+        return;
+      }
+
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      // Spawn new circuits
+      if (timestamp - lastSpawnTime > CONFIG.spawnRate) {
+        spawnCircuit();
+        lastSpawnTime = timestamp;
+      }
+
+      // Spawn wake circuits when mouse moving
+      if (mouseMoving && timestamp - lastWakeSpawn > CONFIG.wakeSpawnRate) {
+        spawnWakeCircuit();
+        lastWakeSpawn = timestamp;
+      }
+
+      // Screen glitch check
+      if (timestamp - lastScreenGlitch > CONFIG.screenGlitchInterval) {
+        if (Math.random() < 0.3) {
+          screenGlitching = true;
+          setTimeout(() => { screenGlitching = false; }, CONFIG.screenGlitchDuration);
+        }
+        lastScreenGlitch = timestamp;
+      }
+
+      // Update and draw circuits
+      const newCircuits: Circuit[] = [];
+      circuits = circuits.filter(circuit => {
+        const spawned = updateCircuit(circuit);
+        newCircuits.push(...spawned);
+        drawCircuit(circuit);
+        return circuit.opacity > 0;
+      });
+      circuits.push(...newCircuits);
+
+      // Screen glitch overlay
+      drawScreenGlitch();
+
+      animationId = requestAnimationFrame(animate);
+    };
+
+    // ===== RESIZE =====
+    const resize = () => {
+      const dpr = window.devicePixelRatio || 1;
+      const rect = canvas.getBoundingClientRect();
+      canvas.width = rect.width * dpr;
+      canvas.height = rect.height * dpr;
+      ctx.scale(dpr, dpr);
+    };
+
+    // ===== EVENT HANDLERS =====
+    let mouseTimeout: ReturnType<typeof setTimeout>;
+
+    const handleMouseMove = (e: MouseEvent) => {
+      if (isPaused) return;
+
+      lastMousePos = { ...mousePos };
+      mousePos = { x: e.clientX, y: e.clientY };
+      mouseMoving = true;
+
+      clearTimeout(mouseTimeout);
+      mouseTimeout = setTimeout(() => {
+        mouseMoving = false;
+      }, 100);
+    };
+
+    const handleVisibilityChange = () => {
+      isVisible = !document.hidden;
+    };
+
+    const togglePause = () => {
+      isPaused = !isPaused;
+      pauseBtn?.classList.toggle('paused', isPaused);
+    };
+
+    // ===== INIT =====
+    const init = () => {
+      resize();
+
+      // Spawn initial circuits
+      for (let i = 0; i < 15; i++) {
+        spawnCircuit();
+      }
+
+      window.addEventListener('resize', resize);
+      window.addEventListener('mousemove', handleMouseMove);
+      document.addEventListener('visibilitychange', handleVisibilityChange);
+      pauseBtn?.addEventListener('click', togglePause);
+
+      // Theme observer
+      const observer = new MutationObserver(() => {});
+      observer.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+
+      // Reduced motion check
+      const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+      if (!prefersReducedMotion.matches) {
+        animationId = requestAnimationFrame(animate);
+      } else {
+        // Static version: just draw some circuits once
+        for (let i = 0; i < 30; i++) {
+          const { point, direction } = getRandomEdge();
+          const circuit = createCircuit(point, direction, 0);
+          for (let j = 0; j < 50; j++) updateCircuit(circuit);
+          drawCircuit(circuit);
+        }
+      }
+
+      // Cleanup
+      document.addEventListener('astro:before-swap', () => {
+        cancelAnimationFrame(animationId);
+        window.removeEventListener('resize', resize);
+        window.removeEventListener('mousemove', handleMouseMove);
+        document.removeEventListener('visibilitychange', handleVisibilityChange);
+        observer.disconnect();
+      });
+    };
+
+    init();
+  }
+</script>
+
+<style>
+  .circuit-background {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    overflow: hidden;
+  }
+
+  #circuit-canvas {
+    width: 100%;
+    height: 100%;
+  }
+
+  .circuit-pause-btn {
+    position: fixed;
+    bottom: var(--space-4);
+    left: var(--space-4);
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    color: var(--color-text-muted);
+    cursor: pointer;
+    pointer-events: auto;
+    opacity: 0.5;
+    transition: opacity var(--transition-fast);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+  }
+
+  .circuit-pause-btn:hover {
+    opacity: 1;
+  }
+
+  .circuit-pause-btn .play-icon {
+    display: none;
+  }
+
+  .circuit-pause-btn.paused .pause-icon {
+    display: none;
+  }
+
+  .circuit-pause-btn.paused .play-icon {
+    display: block;
+  }
+
+  @media (max-width: 640px) {
+    .circuit-pause-btn {
+      display: none;
+    }
+  }
+</style>
