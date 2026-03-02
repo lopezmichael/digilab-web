@@ -1,0 +1,1 @@
+# Design References\n\nDrop reference images here for the landing page redesign.\n\nCategories to consider:\n- Overall vibe/mood\n- Color usage examples\n- Typography you like\n- Card/UI element styles\n- Digimon aesthetic references\n- TCG site examples
