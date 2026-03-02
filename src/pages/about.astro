@@ -8,12 +8,23 @@ import Footer from '../components/Footer.astro';
   <Header />
 
   <main class="about-page">
+    <!-- Hero Section -->
+    <section class="about-hero">
+      <div class="hero-bg"></div>
+      <div class="container hero-content">
+        <div class="hero-text">
+          <h1>About DigiLab</h1>
+          <p>Tracking the Digimon TCG competitive scene, one local at a time.</p>
+        </div>
+        <div class="hero-mascot">
+          <div class="digivice-glow">
+            <img src="/brand/digivice.svg" alt="" class="digivice-icon" />
+          </div>
+        </div>
+      </div>
+    </section>
+
     <div class="container">
-      <header class="page-header">
-        <img src="/brand/agumon.svg" alt="Agumon" class="mascot" />
-        <h1>About DigiLab</h1>
-        <p>Tracking the Digimon TCG competitive scene, one local at a time.</p>
-      </header>
 
       <section class="content-section">
         <h2>What is DigiLab?</h2>
@@ -72,33 +83,89 @@ import Footer from '../components/Footer.astro';
 </BaseLayout>
 
 <style>
-  .about-page {
-    padding: var(--space-12) 0;
+  /* ===== Hero Section ===== */
+  .about-hero {
+    position: relative;
+    padding: var(--space-12) 0 var(--space-16);
   }
 
-  .about-page .container {
-    max-width: 800px;
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, var(--color-primary-dark, #061a2e) 0%, var(--color-primary) 100%);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    z-index: -2;
   }
 
-  .page-header {
-    text-align: center;
-    margin-bottom: var(--space-12);
+  .hero-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-6);
   }
 
-  .mascot {
-    width: 120px;
-    height: 120px;
-    margin-bottom: var(--space-4);
-    filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.1));
+  .hero-text h1 {
+    color: #ffffff;
+    margin-bottom: var(--space-2);
   }
 
-  .page-header h1 {
-    margin-bottom: var(--space-4);
-  }
-
-  .page-header p {
-    color: var(--color-text-muted);
+  .hero-text p {
+    color: rgba(255, 255, 255, 0.8);
     font-size: var(--font-size-lg);
+    margin: 0;
+  }
+
+  .hero-mascot {
+    flex-shrink: 0;
+  }
+
+  .digivice-glow {
+    position: relative;
+    width: 72px;
+    height: 72px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .digivice-glow::before {
+    content: '';
+    position: absolute;
+    inset: -8px;
+    background: radial-gradient(circle, rgba(0, 200, 255, 0.4) 0%, rgba(0, 200, 255, 0) 70%);
+    border-radius: 50%;
+    animation: digivice-pulse 3s ease-in-out infinite;
+  }
+
+  .digivice-icon {
+    width: 56px;
+    height: 56px;
+    filter: brightness(0) invert(1);
+    position: relative;
+    z-index: 1;
+  }
+
+  @keyframes digivice-pulse {
+    0%, 100% { opacity: 0.6; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.1); }
+  }
+
+  @media (max-width: 640px) {
+    .hero-content {
+      flex-direction: column;
+      text-align: center;
+    }
+
+    .hero-mascot {
+      order: -1;
+    }
+  }
+
+  /* ===== Main Content ===== */
+  .about-page .container:not(.hero-content) {
+    max-width: 800px;
+    padding-top: var(--space-8);
+    padding-bottom: var(--space-12);
   }
 
   .content-section {
@@ -134,5 +201,10 @@ import Footer from '../components/Footer.astro';
     flex-wrap: wrap;
     gap: var(--space-3);
     margin-top: var(--space-4);
+  }
+
+  /* ===== Dark Mode ===== */
+  :global([data-theme="dark"]) .content-section h2 {
+    color: var(--color-digital);
   }
 </style>

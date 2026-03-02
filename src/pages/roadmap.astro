@@ -334,6 +334,8 @@ const tagIcons: Record<string, string> = {
 
   .digivice-glow {
     position: relative;
+    width: 72px;
+    height: 72px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -342,30 +344,26 @@ const tagIcons: Record<string, string> = {
   .digivice-glow::before {
     content: '';
     position: absolute;
-    inset: -20px;
-    background: radial-gradient(circle, rgba(0, 200, 255, 0.4) 0%, transparent 70%);
+    inset: -8px;
+    background: radial-gradient(circle, rgba(0, 200, 255, 0.4) 0%, rgba(0, 200, 255, 0) 70%);
     border-radius: 50%;
     animation: digivice-pulse 3s ease-in-out infinite;
   }
 
   .digivice-icon {
-    width: 80px;
-    height: 80px;
-    filter: drop-shadow(0 0 20px rgba(0, 200, 255, 0.5));
+    width: 56px;
+    height: 56px;
+    filter: brightness(0) invert(1);
+    position: relative;
+    z-index: 1;
   }
 
   @keyframes digivice-pulse {
-    0%, 100% {
-      opacity: 0.6;
-      transform: scale(1);
-    }
-    50% {
-      opacity: 1;
-      transform: scale(1.1);
-    }
+    0%, 100% { opacity: 0.6; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.1); }
   }
 
-  @media (max-width: 768px) {
+  @media (max-width: 640px) {
     .hero-content {
       flex-direction: column;
       text-align: center;
@@ -374,15 +372,10 @@ const tagIcons: Record<string, string> = {
     .hero-mascot {
       order: -1;
     }
-
-    .digivice-icon {
-      width: 60px;
-      height: 60px;
-    }
   }
 
   /* ===== Main Content ===== */
-  .roadmap-page .container {
+  .roadmap-page .container:not(.hero-content) {
     max-width: 800px;
     padding-top: var(--space-8);
     padding-bottom: var(--space-12);
