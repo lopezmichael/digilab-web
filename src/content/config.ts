@@ -10,6 +10,8 @@ const blog = defineCollection({
     tags: z.array(z.string()).optional(),
     author: z.string().default('Michael Lopez'),
     image: z.string().optional(),
+    chartEmbed: z.string().optional(), // Path to embedded chart HTML
+    featured: z.boolean().default(false), // Featured in carousel
     draft: z.boolean().default(false),
   }),
 });
