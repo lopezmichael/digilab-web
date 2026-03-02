@@ -1,0 +1,149 @@
+---
+// ContentCarousel.astro
+// Fluid horizontal scroll carousel with auto-scroll that pauses on interaction
+
+interface Props {
+  class?: string;
+  autoScroll?: boolean;
+  autoScrollSpeed?: number; // pixels per second
+}
+
+const {
+  class: className,
+  autoScroll = true,
+  autoScrollSpeed = 30
+} = Astro.props;
+
+const carouselId = `carousel-${Math.random().toString(36).substr(2, 9)}`;
+---
+
+<div class:list={['content-carousel', className]} data-carousel-id={carouselId}>
+  <div class="carousel-track" id={carouselId}>
+    <slot />
+  </div>
+</div>
+
+<script define:vars={{ carouselId, autoScroll, autoScrollSpeed }}>
+  const track = document.getElementById(carouselId);
+  if (!track) throw new Error('Carousel track not found');
+
+  let isAutoScrolling = autoScroll;
+  let isPaused = false;
+  let lastTime = 0;
+  let animationId;
+
+  // Auto-scroll animation
+  const animate = (timestamp) => {
+    if (!lastTime) lastTime = timestamp;
+    const delta = timestamp - lastTime;
+    lastTime = timestamp;
+
+    if (isAutoScrolling && !isPaused) {
+      const scrollAmount = (autoScrollSpeed * delta) / 1000;
+      track.scrollLeft += scrollAmount;
+
+      // Loop back when reaching end
+      if (track.scrollLeft >= track.scrollWidth - track.clientWidth - 10) {
+        track.scrollLeft = 0;
+      }
+    }
+
+    animationId = requestAnimationFrame(animate);
+  };
+
+  // Pause on any interaction
+  const pauseAutoScroll = () => {
+    isPaused = true;
+  };
+
+  const resumeAutoScroll = () => {
+    // Resume after 3 seconds of no interaction
+    setTimeout(() => {
+      isPaused = false;
+    }, 3000);
+  };
+
+  // Event listeners
+  track.addEventListener('mouseenter', pauseAutoScroll);
+  track.addEventListener('mouseleave', resumeAutoScroll);
+  track.addEventListener('touchstart', pauseAutoScroll, { passive: true });
+  track.addEventListener('touchend', resumeAutoScroll);
+  track.addEventListener('wheel', () => {
+    pauseAutoScroll();
+    resumeAutoScroll();
+  }, { passive: true });
+
+  // Drag scrolling
+  let isDragging = false;
+  let startX = 0;
+  let scrollStart = 0;
+
+  track.addEventListener('mousedown', (e) => {
+    isDragging = true;
+    startX = e.pageX;
+    scrollStart = track.scrollLeft;
+    track.style.cursor = 'grabbing';
+    pauseAutoScroll();
+  });
+
+  window.addEventListener('mousemove', (e) => {
+    if (!isDragging) return;
+    e.preventDefault();
+    const dx = e.pageX - startX;
+    track.scrollLeft = scrollStart - dx;
+  });
+
+  window.addEventListener('mouseup', () => {
+    if (isDragging) {
+      isDragging = false;
+      track.style.cursor = '';
+      resumeAutoScroll();
+    }
+  });
+
+  // Start animation if auto-scroll enabled
+  if (autoScroll) {
+    // Check reduced motion preference
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    if (!prefersReducedMotion.matches) {
+      animationId = requestAnimationFrame(animate);
+    }
+  }
+
+  // Cleanup
+  document.addEventListener('astro:before-swap', () => {
+    cancelAnimationFrame(animationId);
+  });
+</script>
+
+<style>
+  .content-carousel {
+    width: 100%;
+    position: relative;
+  }
+
+  .carousel-track {
+    display: flex;
+    gap: var(--space-4, 16px);
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+    padding: var(--space-4, 16px) var(--space-4, 16px);
+    margin: 0 calc(-1 * var(--space-4, 16px));
+    cursor: grab;
+
+    /* Hide scrollbar but keep functionality */
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .carousel-track::-webkit-scrollbar {
+    display: none;
+  }
+
+  .carousel-track > :global(*) {
+    scroll-snap-align: start;
+    flex-shrink: 0;
+  }
+</style>
