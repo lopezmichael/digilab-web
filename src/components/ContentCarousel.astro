@@ -129,13 +129,19 @@ const carouselId = `carousel-${Math.random().toString(36).substr(2, 9)}`;
     scroll-snap-type: x mandatory;
     scroll-behavior: smooth;
     -webkit-overflow-scrolling: touch;
-    padding: var(--space-4, 16px) var(--space-4, 16px);
-    margin: 0 calc(-1 * var(--space-4, 16px));
+    padding: var(--space-4, 16px) var(--space-6, 24px);
     cursor: grab;
 
     /* Hide scrollbar but keep functionality */
     scrollbar-width: none;
     -ms-overflow-style: none;
+  }
+
+  @media (min-width: 768px) {
+    .carousel-track {
+      padding-left: max(var(--space-8, 32px), calc((100vw - 1200px) / 2 + var(--space-4, 16px)));
+      padding-right: max(var(--space-8, 32px), calc((100vw - 1200px) / 2 + var(--space-4, 16px)));
+    }
   }
 
   .carousel-track::-webkit-scrollbar {
