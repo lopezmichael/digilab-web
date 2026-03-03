@@ -1,0 +1,6 @@
+# DigiLab Web - robots.txt
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://digilab.cards/sitemap-index.xml

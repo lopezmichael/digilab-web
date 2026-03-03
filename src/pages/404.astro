@@ -1,0 +1,108 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import AgumonGuide from '../components/AgumonGuide.astro';
+---
+
+<BaseLayout title="Page Not Found">
+  <Header />
+
+  <main class="error-page">
+    <div class="container">
+      <div class="error-content">
+        <div class="error-hero">
+          <h1>404</h1>
+          <div class="error-mascot">
+            <AgumonGuide pose="curious" size="140px" />
+          </div>
+        </div>
+        <p class="error-message">Looks like this page digivolved into something else!</p>
+        <p class="error-hint">The page you're looking for doesn't exist or has been moved.</p>
+        <div class="error-actions">
+          <a href="/" class="btn btn-primary">
+            Go Home
+          </a>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <Footer />
+</BaseLayout>
+
+<style>
+  .error-page {
+    min-height: 60vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-16) 0;
+    width: 100%;
+  }
+
+  .error-page .container {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+  }
+
+  .error-content {
+    text-align: center;
+    width: 100%;
+  }
+
+  .error-hero {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-4);
+    margin-bottom: var(--space-4);
+  }
+
+  .error-mascot {
+    flex-shrink: 0;
+  }
+
+  h1 {
+    font-family: var(--font-family-display);
+    font-size: clamp(5rem, 20vw, 10rem);
+    color: var(--color-primary);
+    margin: 0;
+    line-height: 1;
+  }
+
+  .error-message {
+    font-size: var(--font-size-xl);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-text);
+    margin: var(--space-4) 0 var(--space-2);
+  }
+
+  .error-hint {
+    color: var(--color-text-muted);
+    margin-bottom: var(--space-8);
+  }
+
+  .error-actions {
+    display: flex;
+    justify-content: center;
+    gap: var(--space-4);
+    flex-wrap: wrap;
+  }
+
+  /* Mobile: stack and center */
+  @media (max-width: 600px) {
+    .error-hero {
+      flex-direction: column-reverse;
+    }
+
+    .error-mascot {
+      transform: translateX(-15px);
+    }
+  }
+
+  :global([data-theme="dark"]) h1 {
+    color: var(--color-digital);
+  }
+</style>
