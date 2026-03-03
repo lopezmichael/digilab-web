@@ -2,6 +2,8 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import AgumonGuide from '../components/AgumonGuide.astro';
+import DigiIcon from '../components/DigiIcon.astro';
 ---
 
 <BaseLayout title="About" description="Learn about DigiLab and how we're tracking the Digimon TCG competitive scene.">
@@ -17,15 +19,30 @@ import Footer from '../components/Footer.astro';
           <p>Tracking the Digimon TCG competitive scene, one local at a time.</p>
         </div>
         <div class="hero-mascot">
-          <div class="digivice-glow">
-            <img src="/brand/digivice.svg" alt="" class="digivice-icon" />
-          </div>
+          <AgumonGuide pose="jumping" size="64px" />
         </div>
       </div>
     </section>
 
     <div class="container">
 
+      <!-- Origin Story -->
+      <section class="content-section origin-story">
+        <h2>Why DigiLab Exists</h2>
+        <p>
+          The Digimon TCG has incredible local communities, but no easy way to track what's happening
+          in them. Global meta sites tell you what's winning at Regionals, but not at your Saturday locals.
+          Player skill is discussed but never measured. Tournament history lives in Discord messages and
+          fading memories.
+        </p>
+        <p>
+          DigiLab was built to change that — to give local scenes the same data-driven insights that
+          larger competitive games take for granted. Every tournament matters. Every player's journey
+          deserves to be tracked.
+        </p>
+      </section>
+
+      <!-- What is DigiLab -->
       <section class="content-section">
         <h2>What is DigiLab?</h2>
         <p>
@@ -33,33 +50,115 @@ import Footer from '../components/Footer.astro';
           DigiLab is scene-based — it helps you understand how you stack up against the players
           you actually compete with, whether that's at your local game store or in online webcam tournaments.
         </p>
-        <ul>
-          <li>Track your tournament history and rating progression</li>
-          <li>See what decks are performing in your scene's meta</li>
-          <li>Compare performance across stores and online events</li>
-          <li>Discover active tournament locations and communities</li>
-        </ul>
       </section>
 
+      <!-- How It Works -->
+      <section class="content-section how-it-works">
+        <h2>How It Works</h2>
+        <div class="flow-steps">
+          <div class="flow-step">
+            <div class="flow-icon">
+              <DigiIcon name="camera" size="32px" />
+            </div>
+            <h3>1. Capture</h3>
+            <p>Organizers screenshot results from Bandai TCG+ or submit via contributor tools</p>
+          </div>
+          <div class="flow-arrow">
+            <DigiIcon name="arrow-right" size="24px" />
+          </div>
+          <div class="flow-step">
+            <div class="flow-icon">
+              <DigiIcon name="gear" size="32px" />
+            </div>
+            <h3>2. Process</h3>
+            <p>Data is extracted, validated, and matched to player profiles</p>
+          </div>
+          <div class="flow-arrow">
+            <DigiIcon name="arrow-right" size="24px" />
+          </div>
+          <div class="flow-step">
+            <div class="flow-icon">
+              <DigiIcon name="graph-up-arrow" size="32px" />
+            </div>
+            <h3>3. Analyze</h3>
+            <p>Ratings update, meta shifts are tracked, and your history grows</p>
+          </div>
+        </div>
+        <p class="flow-note">
+          Online events from Limitless and webcam tournaments sync automatically.
+        </p>
+      </section>
+
+      <!-- Who Is It For - Cards -->
       <section class="content-section">
         <h2>Who is it For?</h2>
-        <div class="audience-list">
-          <p><strong>Players</strong> — Track your results, see your rating, and follow your local meta</p>
-          <p><strong>Tournament Organizers</strong> — Upload results via Bandai TCG+ screenshots or get contributor access</p>
-          <p><strong>Online Competitors</strong> — Limitless and webcam tournament data syncs automatically</p>
-          <p><strong>Community Builders</strong> — Share community links, build store pages, and grow your scene</p>
+        <div class="audience-cards">
+          <div class="audience-card">
+            <div class="audience-icon">
+              <DigiIcon name="person" size="28px" />
+            </div>
+            <h3>Players</h3>
+            <p>Track your results, see your rating, and follow your local meta</p>
+          </div>
+          <div class="audience-card">
+            <div class="audience-icon">
+              <DigiIcon name="clipboard-check" size="28px" />
+            </div>
+            <h3>Tournament Organizers</h3>
+            <p>Upload results via Bandai TCG+ screenshots or get contributor access</p>
+          </div>
+          <div class="audience-card">
+            <div class="audience-icon">
+              <DigiIcon name="wifi" size="28px" />
+            </div>
+            <h3>Online Competitors</h3>
+            <p>Limitless and webcam tournament data syncs automatically</p>
+          </div>
+          <div class="audience-card">
+            <div class="audience-icon">
+              <DigiIcon name="people" size="28px" />
+            </div>
+            <h3>Community Builders</h3>
+            <p>Share community links, build store pages, and grow your scene</p>
+          </div>
         </div>
       </section>
 
+      <!-- Features - Cards -->
       <section class="content-section">
         <h2>Features</h2>
-        <ul>
-          <li><strong>Player Ratings</strong> — Elo-based competitive ratings that reflect actual skill</li>
-          <li><strong>Deck Meta Analysis</strong> — See what's winning in your area</li>
-          <li><strong>Tournament History</strong> — Full results archive for all tracked events</li>
-          <li><strong>Store Directory</strong> — Find local game stores running events</li>
-          <li><strong>Scene Filtering</strong> — Focus on your local community or view globally</li>
-        </ul>
+        <div class="feature-cards">
+          <div class="feature-card">
+            <DigiIcon name="graph-up-arrow" size="24px" />
+            <h3>Player Ratings</h3>
+            <p>Elo-based competitive ratings that reflect actual skill</p>
+          </div>
+          <div class="feature-card">
+            <DigiIcon name="pie-chart" size="24px" />
+            <h3>Deck Meta Analysis</h3>
+            <p>See what's winning in your area</p>
+          </div>
+          <div class="feature-card">
+            <DigiIcon name="trophy" size="24px" />
+            <h3>Tournament History</h3>
+            <p>Full results archive for all tracked events</p>
+          </div>
+          <div class="feature-card">
+            <DigiIcon name="shop" size="24px" />
+            <h3>Store Directory</h3>
+            <p>Find local game stores running events</p>
+          </div>
+          <div class="feature-card">
+            <DigiIcon name="globe" size="24px" />
+            <h3>Scene Filtering</h3>
+            <p>Focus on your local community or view globally</p>
+          </div>
+          <div class="feature-card">
+            <DigiIcon name="link-45deg" size="24px" />
+            <h3>Community Links</h3>
+            <p>Share your scene's data with a single URL</p>
+          </div>
+        </div>
       </section>
 
       <section class="content-section">
@@ -71,24 +170,45 @@ import Footer from '../components/Footer.astro';
         </p>
         <div class="stats-grid">
           <div class="stat-item">
-            <div class="stat-value">8+</div>
+            <div class="stat-value" data-count="8" data-suffix="+">0</div>
             <div class="stat-label">Active Scenes</div>
           </div>
           <div class="stat-item">
-            <div class="stat-value">30+</div>
+            <div class="stat-value" data-count="30" data-suffix="+">0</div>
             <div class="stat-label">Active Stores</div>
           </div>
           <div class="stat-item">
-            <div class="stat-value">1,500+</div>
+            <div class="stat-value" data-count="1500" data-suffix="+" data-format="comma">0</div>
             <div class="stat-label">Players Tracked</div>
           </div>
           <div class="stat-item">
-            <div class="stat-value">400+</div>
+            <div class="stat-value" data-count="400" data-suffix="+">0</div>
             <div class="stat-label">Tournaments</div>
           </div>
         </div>
         <div class="section-cta">
           <a href="https://app.digilab.cards" class="btn btn-primary">Explore the App</a>
+        </div>
+      </section>
+
+      <!-- Built By -->
+      <section class="content-section built-by">
+        <h2>Built By</h2>
+        <div class="creator-card">
+          <div class="creator-avatar">
+            <div class="digivice-glow">
+              <img src="/brand/digivice.svg" alt="" class="digivice-icon" />
+            </div>
+          </div>
+          <div class="creator-info">
+            <h3>atomshell</h3>
+            <p class="creator-title">Creator & Developer</p>
+            <p>
+              A data scientist from North Texas who wanted to bring the same competitive tracking
+              tools that other card games enjoy to the Digimon TCG community. DigiLab started as
+              a passion project to help local scenes understand their meta and celebrate their players.
+            </p>
+          </div>
         </div>
       </section>
 
@@ -171,35 +291,13 @@ import Footer from '../components/Footer.astro';
     flex-shrink: 0;
   }
 
-  .digivice-glow {
-    position: relative;
-    width: 72px;
-    height: 72px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  .hero-mascot {
+    filter: drop-shadow(0 0 20px rgba(247, 148, 29, 0.4));
+    transform: translate(-150px, 20px);
   }
 
-  .digivice-glow::before {
-    content: '';
-    position: absolute;
-    inset: -8px;
-    background: radial-gradient(circle, rgba(0, 200, 255, 0.4) 0%, rgba(0, 200, 255, 0) 70%);
-    border-radius: 50%;
-    animation: digivice-pulse 3s ease-in-out infinite;
-  }
-
-  .digivice-icon {
-    width: 56px;
-    height: 56px;
-    filter: brightness(0) invert(1);
-    position: relative;
-    z-index: 1;
-  }
-
-  @keyframes digivice-pulse {
-    0%, 100% { opacity: 0.6; transform: scale(1); }
-    50% { opacity: 1; transform: scale(1.1); }
+  .hero-mascot :global(.agumon-dust) {
+    left: 0%;
   }
 
   @media (max-width: 640px) {
@@ -210,6 +308,7 @@ import Footer from '../components/Footer.astro';
 
     .hero-mascot {
       order: -1;
+      transform: translate(40px, 0);
     }
   }
 
@@ -316,13 +415,257 @@ import Footer from '../components/Footer.astro';
     box-shadow: 0 4px 12px rgba(255, 94, 91, 0.4);
   }
 
-  /* ===== Audience List ===== */
-  .audience-list p {
+  /* ===== Origin Story ===== */
+  .origin-story p {
+    font-size: var(--font-size-lg);
+  }
+
+  /* ===== How It Works Flow ===== */
+  .flow-steps {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    gap: var(--space-4);
+    margin: var(--space-8) 0;
+  }
+
+  .flow-step {
+    flex: 1;
+    max-width: 200px;
+    text-align: center;
+  }
+
+  .flow-icon {
+    width: 64px;
+    height: 64px;
+    margin: 0 auto var(--space-3);
+    background: var(--color-primary);
+    border-radius: var(--radius-full);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #ffffff;
+  }
+
+  .flow-step h3 {
+    font-size: var(--font-size-lg);
+    margin-bottom: var(--space-2);
+    color: var(--color-text);
+  }
+
+  .flow-step p {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-muted);
+    margin: 0;
+  }
+
+  .flow-arrow {
+    display: flex;
+    align-items: center;
+    padding-top: var(--space-6);
+    color: var(--color-primary);
+    opacity: 0.5;
+  }
+
+  .flow-note {
+    text-align: center;
+    font-size: var(--font-size-sm);
+    color: var(--color-text-muted);
+    font-style: italic;
+  }
+
+  @media (max-width: 640px) {
+    .flow-steps {
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .flow-arrow {
+      transform: rotate(90deg);
+      padding: var(--space-2) 0;
+    }
+  }
+
+  /* ===== Audience Cards ===== */
+  .audience-cards {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-4);
+    margin-top: var(--space-4);
+  }
+
+  .audience-card {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-5);
+    transition: all var(--transition-fast);
+  }
+
+  .audience-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+    border-color: var(--color-primary);
+  }
+
+  .audience-icon {
+    width: 48px;
+    height: 48px;
+    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #ffffff;
+    margin-bottom: var(--space-3);
+  }
+
+  .audience-card h3 {
+    font-size: var(--font-size-lg);
+    margin-bottom: var(--space-2);
+    color: var(--color-text);
+  }
+
+  .audience-card p {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-muted);
+    margin: 0;
+    line-height: 1.5;
+  }
+
+  @media (max-width: 640px) {
+    .audience-cards {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  /* ===== Feature Cards ===== */
+  .feature-cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-4);
+    margin-top: var(--space-4);
+  }
+
+  .feature-card {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-4);
+    transition: all var(--transition-fast);
+  }
+
+  .feature-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+  }
+
+  .feature-card :global(.digi-icon) {
+    color: var(--color-primary);
     margin-bottom: var(--space-2);
   }
 
-  .audience-list p:last-child {
-    margin-bottom: 0;
+  .feature-card h3 {
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-semibold);
+    margin-bottom: var(--space-1);
+    color: var(--color-text);
+  }
+
+  .feature-card p {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-muted);
+    margin: 0;
+    line-height: 1.4;
+  }
+
+  @media (max-width: 768px) {
+    .feature-cards {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 480px) {
+    .feature-cards {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  /* ===== Creator Card ===== */
+  .creator-card {
+    display: flex;
+    gap: var(--space-5);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-6);
+    margin-top: var(--space-4);
+  }
+
+  .creator-avatar {
+    flex-shrink: 0;
+    align-self: center;
+  }
+
+  .digivice-glow {
+    position: relative;
+    width: 96px;
+    height: 96px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .digivice-glow::before {
+    content: '';
+    position: absolute;
+    inset: -12px;
+    background: radial-gradient(circle, rgba(0, 200, 255, 0.4) 0%, rgba(0, 200, 255, 0) 70%);
+    border-radius: 50%;
+    animation: digivice-pulse 3s ease-in-out infinite;
+  }
+
+  .digivice-icon {
+    width: 80px;
+    height: 80px;
+    position: relative;
+    z-index: 1;
+  }
+
+  @keyframes digivice-pulse {
+    0%, 100% { opacity: 0.6; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.1); }
+  }
+
+  .creator-info h3 {
+    font-family: var(--font-family-display);
+    font-size: var(--font-size-xl);
+    color: var(--color-primary);
+    margin-bottom: var(--space-1);
+  }
+
+  .creator-title {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-muted);
+    margin-bottom: var(--space-3);
+  }
+
+  .creator-info p {
+    margin-bottom: var(--space-3);
+  }
+
+  .creator-note {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-muted);
+    font-style: italic;
+  }
+
+  @media (max-width: 640px) {
+    .creator-card {
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
   }
 
   /* ===== Stats Grid ===== */
@@ -400,4 +743,77 @@ import Footer from '../components/Footer.astro';
     background: var(--color-surface);
     border-color: var(--color-border);
   }
+
+  :global([data-theme="dark"]) .flow-icon {
+    background: var(--color-digital);
+  }
+
+  :global([data-theme="dark"]) .flow-arrow {
+    color: var(--color-digital);
+  }
+
+  :global([data-theme="dark"]) .audience-card:hover {
+    border-color: var(--color-digital);
+  }
+
+  :global([data-theme="dark"]) .audience-icon {
+    background: linear-gradient(135deg, var(--color-digital) 0%, var(--color-primary) 100%);
+  }
+
+  :global([data-theme="dark"]) .feature-card :global(.digi-icon) {
+    color: var(--color-digital);
+  }
+
+  :global([data-theme="dark"]) .creator-info h3 {
+    color: var(--color-digital);
+  }
 </style>
+
+<script>
+  // Animated count-up for stats
+  const observerOptions = {
+    threshold: 0.5,
+    rootMargin: '0px'
+  };
+
+  const animateCount = (element: HTMLElement) => {
+    const target = parseInt(element.dataset.count || '0', 10);
+    const suffix = element.dataset.suffix || '';
+    const useComma = element.dataset.format === 'comma';
+    const duration = 1500;
+    const startTime = performance.now();
+
+    const updateCount = (currentTime: number) => {
+      const elapsed = currentTime - startTime;
+      const progress = Math.min(elapsed / duration, 1);
+
+      // Ease out cubic
+      const easeOut = 1 - Math.pow(1 - progress, 3);
+      const current = Math.floor(easeOut * target);
+
+      const formatted = useComma ? current.toLocaleString() : current.toString();
+      element.textContent = formatted + suffix;
+
+      if (progress < 1) {
+        requestAnimationFrame(updateCount);
+      }
+    };
+
+    requestAnimationFrame(updateCount);
+  };
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        const statValues = entry.target.querySelectorAll('.stat-value[data-count]');
+        statValues.forEach((el) => animateCount(el as HTMLElement));
+        observer.unobserve(entry.target);
+      }
+    });
+  }, observerOptions);
+
+  const statsGrid = document.querySelector('.stats-grid');
+  if (statsGrid) {
+    observer.observe(statsGrid);
+  }
+</script>
