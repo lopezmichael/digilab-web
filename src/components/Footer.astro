@@ -52,7 +52,7 @@ const currentYear = new Date().getFullYear();
     </div>
 
     <div class="footer-bottom">
-      <p>&copy; {currentYear} DigiLab. Built with data and Digimon.</p>
+      <p>&copy; {currentYear} DigiLab. Built with data and Digimon. <a href="/privacy">Privacy Policy</a></p>
     </div>
   </div>
 </footer>
@@ -168,6 +168,16 @@ const currentYear = new Date().getFullYear();
     font-size: var(--font-size-sm);
     margin: 0;
     text-align: center;
+  }
+
+  .footer-bottom a {
+    color: rgba(255, 255, 255, 0.5);
+    text-decoration: none;
+    margin-left: var(--space-2);
+  }
+
+  .footer-bottom a:hover {
+    color: rgba(255, 255, 255, 0.8);
   }
 
   @media (min-width: 768px) {

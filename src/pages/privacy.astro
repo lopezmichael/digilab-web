@@ -1,0 +1,204 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+---
+
+<BaseLayout title="Privacy Policy">
+  <Header />
+
+  <main class="privacy-page">
+    <div class="container">
+      <div class="privacy-content">
+        <h1>Privacy Policy</h1>
+        <p class="last-updated">Last updated: March 2, 2026</p>
+
+        <section>
+          <h2>Overview</h2>
+          <p>
+            DigiLab ("we", "us", or "our") operates the digilab.cards website and app.digilab.cards application.
+            This page informs you of our policies regarding the collection, use, and disclosure of personal information
+            when you use our services.
+          </p>
+        </section>
+
+        <section>
+          <h2>Information We Collect</h2>
+
+          <h3>Analytics Data</h3>
+          <p>
+            We use Google Analytics to understand how visitors use our site. This service collects:
+          </p>
+          <ul>
+            <li>Pages visited and time spent on each page</li>
+            <li>Referring website or source</li>
+            <li>Browser type and device information</li>
+            <li>General geographic location (country/city level)</li>
+            <li>Anonymous usage patterns</li>
+          </ul>
+          <p>
+            Google Analytics uses cookies to collect this information. The data is aggregated and does not
+            personally identify you.
+          </p>
+
+          <h3>Tournament Data</h3>
+          <p>
+            When tournament organizers submit results to DigiLab, we collect:
+          </p>
+          <ul>
+            <li>Player names (as displayed on tournament standings)</li>
+            <li>Match results and placement</li>
+            <li>Tournament date and location</li>
+          </ul>
+          <p>
+            This data is publicly displayed to provide player ratings and tournament history. If you'd like
+            your information removed, please contact us on Discord.
+          </p>
+        </section>
+
+        <section>
+          <h2>Cookies</h2>
+          <p>
+            We use cookies for:
+          </p>
+          <ul>
+            <li><strong>Analytics:</strong> Google Analytics cookies to understand site usage</li>
+            <li><strong>Preferences:</strong> Remembering your theme preference (light/dark mode)</li>
+          </ul>
+          <p>
+            You can instruct your browser to refuse all cookies or indicate when a cookie is being sent.
+            However, some features may not function properly without cookies.
+          </p>
+        </section>
+
+        <section>
+          <h2>Third-Party Services</h2>
+          <p>We use the following third-party services:</p>
+          <ul>
+            <li><strong>Google Analytics:</strong> Website analytics (<a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Google Privacy Policy</a>)</li>
+            <li><strong>Vercel:</strong> Website hosting (<a href="https://vercel.com/legal/privacy-policy" target="_blank" rel="noopener">Vercel Privacy Policy</a>)</li>
+            <li><strong>Discord:</strong> Community communication (<a href="https://discord.com/privacy" target="_blank" rel="noopener">Discord Privacy Policy</a>)</li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>Data Retention</h2>
+          <p>
+            Analytics data is retained according to Google Analytics' default retention settings.
+            Tournament data is retained indefinitely to maintain historical records and player ratings.
+          </p>
+        </section>
+
+        <section>
+          <h2>Your Rights</h2>
+          <p>You have the right to:</p>
+          <ul>
+            <li>Request access to your personal data</li>
+            <li>Request correction or deletion of your data</li>
+            <li>Opt out of analytics tracking (using browser settings or extensions)</li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>Contact Us</h2>
+          <p>
+            If you have questions about this Privacy Policy or want to request data removal,
+            please reach out on our <a href="https://discord.gg/digilab" target="_blank" rel="noopener">Discord server</a>.
+          </p>
+        </section>
+
+        <section>
+          <h2>Changes to This Policy</h2>
+          <p>
+            We may update this Privacy Policy from time to time. We will notify you of any changes by
+            posting the new Privacy Policy on this page and updating the "Last updated" date.
+          </p>
+        </section>
+      </div>
+    </div>
+  </main>
+
+  <Footer />
+</BaseLayout>
+
+<style>
+  .privacy-page {
+    padding: var(--space-12) 0 var(--space-16);
+  }
+
+  .privacy-content {
+    max-width: 720px;
+    margin: 0 auto;
+  }
+
+  h1 {
+    font-family: var(--font-family-display);
+    font-size: var(--font-size-4xl);
+    color: var(--color-primary);
+    margin-bottom: var(--space-2);
+  }
+
+  .last-updated {
+    color: var(--color-text-muted);
+    font-size: var(--font-size-sm);
+    margin-bottom: var(--space-8);
+  }
+
+  section {
+    margin-bottom: var(--space-8);
+  }
+
+  h2 {
+    font-family: var(--font-family-display);
+    font-size: var(--font-size-xl);
+    color: var(--color-text);
+    margin-bottom: var(--space-3);
+    padding-top: var(--space-4);
+    border-top: 1px solid var(--color-border);
+  }
+
+  section:first-of-type h2 {
+    border-top: none;
+    padding-top: 0;
+  }
+
+  h3 {
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-text);
+    margin: var(--space-4) 0 var(--space-2);
+  }
+
+  p {
+    color: var(--color-text);
+    line-height: 1.7;
+    margin-bottom: var(--space-4);
+  }
+
+  ul {
+    margin: var(--space-3) 0 var(--space-4);
+    padding-left: var(--space-6);
+  }
+
+  li {
+    color: var(--color-text);
+    line-height: 1.6;
+    margin-bottom: var(--space-2);
+  }
+
+  a {
+    color: var(--color-primary);
+  }
+
+  a:hover {
+    color: var(--color-accent);
+  }
+
+  :global([data-theme="dark"]) h1 {
+    color: var(--color-digital);
+  }
+
+  :global([data-theme="dark"]) h2 {
+    border-color: var(--color-border-dark, #2a2a2a);
+  }
+</style>
