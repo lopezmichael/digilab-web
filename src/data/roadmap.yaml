@@ -29,7 +29,7 @@ inProgress:
     description: "Single-pass chronological Elo calculation for more accurate and fair player ratings. No more penalty for taking breaks."
     tags: [ratings, methodology]
     targetVersion: "v1.2.0"
-    link: /blog/rating-redesign
+    link: /blog/new-rating-system
 
 planned:
   - id: meta-insights-app
