@@ -75,12 +75,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
-    gtag('config', 'G-NJ3SMG8HGG', {
-      cookie_domain: '.digilab.cards',
-      linker: {
-        domains: ['digilab.cards', 'app.digilab.cards', 'insights.digilab.cards']
-      }
-    });
+    gtag('config', 'G-NJ3SMG8HGG', { cookie_domain: '.digilab.cards' });
   </script>
 </head>
 <body>
