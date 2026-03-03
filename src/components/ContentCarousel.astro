@@ -1,6 +1,6 @@
 ---
 // ContentCarousel.astro
-// Fluid horizontal scroll carousel with auto-scroll that pauses on interaction
+// Contained carousel with centering, scroll arrows, and auto-scroll
 
 interface Props {
   class?: string;
@@ -18,19 +18,86 @@ const carouselId = `carousel-${Math.random().toString(36).substr(2, 9)}`;
 ---
 
 <div class:list={['content-carousel', className]} data-carousel-id={carouselId}>
-  <div class="carousel-track" id={carouselId}>
-    <slot />
+  <button class="carousel-arrow carousel-arrow-left" aria-label="Scroll left">
+    <i class="bi bi-chevron-left"></i>
+  </button>
+
+  <div class="carousel-viewport">
+    <div class="carousel-track" id={carouselId}>
+      <slot />
+    </div>
+    <div class="carousel-fade carousel-fade-left"></div>
+    <div class="carousel-fade carousel-fade-right"></div>
   </div>
+
+  <button class="carousel-arrow carousel-arrow-right" aria-label="Scroll right">
+    <i class="bi bi-chevron-right"></i>
+  </button>
 </div>
 
 <script define:vars={{ carouselId, autoScroll, autoScrollSpeed }}>
   const track = document.getElementById(carouselId);
   if (!track) throw new Error('Carousel track not found');
 
+  const wrapper = track.closest('.content-carousel');
+  const arrowLeft = wrapper.querySelector('.carousel-arrow-left');
+  const arrowRight = wrapper.querySelector('.carousel-arrow-right');
+  const fadeLeft = wrapper.querySelector('.carousel-fade-left');
+  const fadeRight = wrapper.querySelector('.carousel-fade-right');
+
   let isAutoScrolling = autoScroll;
   let isPaused = false;
   let lastTime = 0;
   let animationId;
+
+  // Check if content overflows the track
+  const hasOverflow = () => track.scrollWidth > track.clientWidth + 1;
+
+  // Update centering, arrows, and edge fades
+  const update = () => {
+    const overflows = hasOverflow();
+
+    // Center items when they fit
+    if (overflows) {
+      track.classList.remove('carousel-centered');
+    } else {
+      track.classList.add('carousel-centered');
+    }
+
+    // Show/hide arrows + fades
+    if (!overflows) {
+      arrowLeft.classList.remove('visible');
+      arrowRight.classList.remove('visible');
+      fadeLeft.classList.remove('visible');
+      fadeRight.classList.remove('visible');
+      return;
+    }
+
+    const atStart = track.scrollLeft <= 2;
+    const atEnd = track.scrollLeft >= track.scrollWidth - track.clientWidth - 2;
+
+    arrowLeft.classList.toggle('visible', !atStart);
+    arrowRight.classList.toggle('visible', !atEnd);
+    fadeLeft.classList.toggle('visible', !atStart);
+    fadeRight.classList.toggle('visible', !atEnd);
+  };
+
+  // Arrow click handlers
+  const scrollStep = () => Math.min(track.clientWidth * 0.75, 600);
+
+  arrowLeft.addEventListener('click', () => {
+    isPaused = true;
+    track.scrollBy({ left: -scrollStep(), behavior: 'smooth' });
+    setTimeout(() => { isPaused = false; }, 3000);
+  });
+
+  arrowRight.addEventListener('click', () => {
+    isPaused = true;
+    track.scrollBy({ left: scrollStep(), behavior: 'smooth' });
+    setTimeout(() => { isPaused = false; }, 3000);
+  });
+
+  track.addEventListener('scroll', update, { passive: true });
 
   // Auto-scroll animation
   const animate = (timestamp) => {
@@ -39,10 +106,9 @@ const carouselId = `carousel-${Math.random().toString(36).substr(2, 9)}`;
     lastTime = timestamp;
 
     if (isAutoScrolling && !isPaused) {
-      const scrollAmount = (autoScrollSpeed * delta) / 1000;
-      track.scrollLeft += scrollAmount;
+      const pixels = (autoScrollSpeed * delta) / 1000;
+      track.scrollLeft += pixels;
 
-      // Loop back when reaching end
       if (track.scrollLeft >= track.scrollWidth - track.clientWidth - 10) {
         track.scrollLeft = 0;
       }
@@ -51,19 +117,12 @@ const carouselId = `carousel-${Math.random().toString(36).substr(2, 9)}`;
     animationId = requestAnimationFrame(animate);
   };
 
-  // Pause on any interaction
-  const pauseAutoScroll = () => {
-    isPaused = true;
-  };
-
+  // Pause on interaction
+  const pauseAutoScroll = () => { isPaused = true; };
   const resumeAutoScroll = () => {
-    // Resume after 3 seconds of no interaction
-    setTimeout(() => {
-      isPaused = false;
-    }, 3000);
+    setTimeout(() => { isPaused = false; }, 3000);
   };
 
-  // Event listeners
   track.addEventListener('mouseenter', pauseAutoScroll);
   track.addEventListener('mouseleave', resumeAutoScroll);
   track.addEventListener('touchstart', pauseAutoScroll, { passive: true });
@@ -79,6 +138,7 @@ const carouselId = `carousel-${Math.random().toString(36).substr(2, 9)}`;
   let scrollStart = 0;
 
   track.addEventListener('mousedown', (e) => {
+    if (!hasOverflow()) return;
     isDragging = true;
     startX = e.pageX;
     scrollStart = track.scrollLeft;
@@ -101,11 +161,13 @@ const carouselId = `carousel-${Math.random().toString(36).substr(2, 9)}`;
     }
   });
 
-  // Start animation if auto-scroll enabled
+  // Initialize
+  update();
+  window.addEventListener('resize', update);
+
   if (autoScroll) {
-    // Check reduced motion preference
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
-    if (!prefersReducedMotion.matches) {
+    if (!prefersReducedMotion.matches && hasOverflow()) {
       animationId = requestAnimationFrame(animate);
     }
   }
@@ -118,7 +180,18 @@ const carouselId = `carousel-${Math.random().toString(36).substr(2, 9)}`;
 
 <style>
   .content-carousel {
-    width: 100%;
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: var(--space-2, 8px);
+    max-width: var(--container-xl, 1280px);
+    margin: 0 auto;
+    padding: 0 var(--space-4, 16px);
+  }
+
+  .carousel-viewport {
+    flex: 1;
+    min-width: 0;
     position: relative;
   }
 
@@ -126,22 +199,13 @@ const carouselId = `carousel-${Math.random().toString(36).substr(2, 9)}`;
     display: flex;
     gap: var(--space-4, 16px);
     overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    scroll-behavior: smooth;
     -webkit-overflow-scrolling: touch;
-    padding: var(--space-4, 16px) var(--space-6, 24px);
+    padding: var(--space-4, 16px) var(--space-1, 4px);
     cursor: grab;
 
-    /* Hide scrollbar but keep functionality */
+    /* Hide scrollbar */
     scrollbar-width: none;
     -ms-overflow-style: none;
-  }
-
-  @media (min-width: 768px) {
-    .carousel-track {
-      padding-left: max(var(--space-8, 32px), calc((100vw - 1200px) / 2 + var(--space-4, 16px)));
-      padding-right: max(var(--space-8, 32px), calc((100vw - 1200px) / 2 + var(--space-4, 16px)));
-    }
   }
 
   .carousel-track::-webkit-scrollbar {
@@ -149,7 +213,99 @@ const carouselId = `carousel-${Math.random().toString(36).substr(2, 9)}`;
   }
 
   .carousel-track > :global(*) {
-    scroll-snap-align: start;
     flex-shrink: 0;
+  }
+
+  .carousel-track.carousel-centered {
+    justify-content: center;
+    cursor: default;
+  }
+
+  /* ===== Edge Fade Overlays ===== */
+  .carousel-fade {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 40px;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.3s;
+    z-index: 2;
+  }
+
+  .carousel-fade.visible {
+    opacity: 1;
+  }
+
+  .carousel-fade-left {
+    left: 0;
+    background: linear-gradient(to right, var(--color-background, #f8f9fa), transparent);
+  }
+
+  .carousel-fade-right {
+    right: 0;
+    background: linear-gradient(to left, var(--color-background, #f8f9fa), transparent);
+  }
+
+  /* ===== Navigation Arrows ===== */
+  .carousel-arrow {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 1px solid var(--color-border, #dee2e6);
+    background: var(--color-surface, #ffffff);
+    color: var(--color-primary, #0A3055);
+    font-size: var(--font-size-lg, 18px);
+    cursor: pointer;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s, color 0.2s, border-color 0.2s, box-shadow 0.2s;
+  }
+
+  .carousel-arrow.visible {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .carousel-arrow:hover {
+    color: var(--color-accent, #F7941D);
+    border-color: var(--color-accent, #F7941D);
+    box-shadow: 0 0 0 3px rgba(247, 148, 29, 0.15);
+  }
+
+  /* Mobile: hide arrows, swipe is intuitive */
+  @media (max-width: 768px) {
+    .content-carousel {
+      padding: 0;
+    }
+
+    .carousel-arrow {
+      display: none;
+    }
+  }
+
+  /* ===== Dark Mode ===== */
+  :global([data-theme="dark"]) .carousel-fade-left {
+    background: linear-gradient(to right, var(--color-background-dark, #1a1a2e), transparent);
+  }
+
+  :global([data-theme="dark"]) .carousel-fade-right {
+    background: linear-gradient(to left, var(--color-background-dark, #1a1a2e), transparent);
+  }
+
+  :global([data-theme="dark"]) .carousel-arrow {
+    background: var(--color-surface-dark, #1e1e2e);
+    border-color: var(--color-border-dark, #2a2a2a);
+    color: var(--color-digital, #00c8ff);
+  }
+
+  :global([data-theme="dark"]) .carousel-arrow:hover {
+    color: var(--color-accent, #F7941D);
+    border-color: var(--color-accent, #F7941D);
+    box-shadow: 0 0 0 3px rgba(247, 148, 29, 0.2);
   }
 </style>
