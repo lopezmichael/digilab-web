@@ -1,0 +1,104 @@
+---
+title: "New Rating System: What Changed and Why"
+description: "We found bugs in how ratings were calculated. Here's what we fixed, how it affects your rating, and the data to prove it."
+date: 2026-03-02
+category: analysis
+tags: [ratings, elo, methodology]
+author: Michael Lopez
+chartEmbed: /charts/rating-distribution-comparison.html
+featured: true
+draft: true
+---
+
+import ChartEmbed from '../../components/ChartEmbed.astro';
+
+Your rating is changing. Don't panic -- it's changing for the better.
+
+We dug into the rating algorithm and found real problems with how player ratings were being calculated. Not small rounding-error stuff. Actual bugs that made ratings less accurate and less fair. We rewrote the system, ran the numbers on all 1,128 rated players, and this post walks through everything: what was broken, what we fixed, and the data that proves it works.
+
+## What Was Wrong
+
+Five things were wrong with the old rating system, and they all affected you as a player.
+
+**1. The butterfly effect.** Every time we added a new tournament, the algorithm recalculated every single player's rating from scratch -- five full passes over the entire history. Your rating could shift even if you weren't in that tournament. That's not how ratings should work.
+
+**2. Time travel.** Tournaments that happened in the future (from the perspective of the algorithm during its recalculation) could influence the calculation of older tournaments. A result from last Saturday could retroactively change how a tournament from three months ago was scored. That makes no sense.
+
+**3. Decay punishment.** The old system applied a 4-month decay window. Your older tournament results counted less and less over time. If you took a break and came back, your past wins had faded to nearly nothing. Your skill didn't go away, but your rating said it did.
+
+**4. Ties counted as losses.** If you and another player tied, the system scored it as a loss for both of you. Two players draw, and they both get penalized. That's just wrong.
+
+**5. No incremental updates.** Because everything was recalculated from scratch every time, adding even one tournament was expensive and could shift everyone's rating unpredictably. There was no way to just process the new results and move on.
+
+## What We Fixed
+
+The new system processes tournaments in chronological order, exactly once. Each tournament uses the ratings as they exist at that moment in time. No decay, no multi-pass recalculation, no time travel.
+
+| | Old System | New System |
+|---|---|---|
+| Processing | Recalculates everything 5 times | Processes each tournament once, in order |
+| Decay | Recent events count more, old ones fade | No decay -- your results are permanent |
+| Ties | Counted as a loss for both players | Properly scored as a draw (0.5) |
+| Adding a tournament | Shifts every player's rating | Only affects players from that date forward |
+| Consistency | Changes depending on when you check | Deterministic -- same data always gives same result |
+
+The short version: if you played well six months ago, those results now count at full value. If you tied someone, you get credit for the draw instead of being punished. And your rating won't randomly shift because someone ran a tournament in another state.
+
+## The Numbers
+
+We ran both algorithms on all 1,128 rated players and compared the results side by side.
+
+<ChartEmbed src="/charts/rating-distribution-comparison.html" height="450px" title="Rating Distribution: Before vs After" />
+
+The old system (orange) spread ratings across a wide, flat range -- from 1246 to 1760, a 514-point spread. The new system (blue) compresses ratings into a proper bell curve, ranging from 1364 to 1645 -- a 281-point spread. That tighter distribution is what a healthy rating system looks like. It means the differences between players are real, not noise from a broken algorithm.
+
+<ChartEmbed src="/charts/rank-change-distribution.html" height="400px" title="How Much Did Rankings Change?" />
+
+Here's the breakdown of how rankings shifted:
+
+- **47.5%** of players improved their rank
+- **41.1%** dropped
+- **11.4%** stayed within 10 spots of where they were
+- The average rating change was just **+1.3 points** -- basically flat overall
+
+So the total amount of rating in the system barely changed. What changed is how it's distributed. Players who were unfairly boosted came down, and players who were unfairly penalized came up.
+
+## Who Moved and Why
+
+<ChartEmbed src="/charts/rank-bump-chart.html" height="600px" title="Rank Changes: Old vs New System" />
+
+The bump chart tells the story. You can trace individual players from their old rank to their new rank and see who moved where.
+
+A few patterns stand out:
+
+**Players who dropped** typically had few events overall and benefited heavily from the old decay weighting. Under the old system, just showing up recently was worth more than a strong historical record. That artificial boost is gone now. If your rating dropped, it's most likely because the old system was giving you too much credit for recency rather than performance.
+
+**Players who climbed** had consistent results over a longer period. The old system was punishing them for having older tournaments in their history -- those results were decaying toward zero. Now those results count at full value, and their ratings reflect the strength of their entire body of work.
+
+**The number one player stayed number one.** If you're genuinely the best, the algorithm reflects that regardless of methodology. The cream rises to the top either way.
+
+## Does Playing More Help?
+
+<ChartEmbed src="/charts/rating-vs-events.html" height="400px" title="Number of Events vs Rank Change" />
+
+Short answer: no.
+
+The old system rewarded frequency because of decay. The more recently and often you played, the more your rating benefited -- not because you were better, but because your results hadn't faded yet. That created an incentive to grind events rather than play well at the ones you attend.
+
+The new system doesn't care how often you play. It cares how well you play when you do. You can see in the chart that there's no meaningful correlation between number of events attended and rank change. Whether you've played in 5 tournaments or 50, the system evaluates your results the same way.
+
+## What Your Rating Means Now
+
+Here's a rough guide to what the numbers mean under the new system:
+
+| Rating | What It Means |
+|--------|---------------|
+| 1600+ | Top tier -- consistently beating strong competition |
+| 1550-1600 | Strong player -- regularly finishing near the top |
+| 1500-1550 | Above average -- winning more than you lose |
+| 1450-1500 | Average -- competitive but still developing |
+| Below 1450 | Getting started -- every tournament helps you improve |
+
+The range is tighter now (281 points vs 514), which means every point matters more. A 50-point gap between two players is more meaningful than it used to be. Small differences in rating now reflect real differences in competitive performance.
+
+This is the foundation we're building on. As we add more features -- head-to-head records, rating history graphs, confidence intervals -- they'll all be built on a system we trust. If you have questions or feedback, come find us on [Discord](https://discord.gg/ABcjha7bHk). We want to hear what you think.
