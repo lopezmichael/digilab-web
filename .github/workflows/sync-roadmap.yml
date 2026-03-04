@@ -19,7 +19,7 @@ jobs:
       - name: Fetch ROADMAP.md and extract frontmatter
         run: |
           curl -sL "https://raw.githubusercontent.com/lopezmichael/digilab-app/main/ROADMAP.md" -o /tmp/ROADMAP.md
-          sed -n '/^---$/,/^---$/p' /tmp/ROADMAP.md | sed '1d;$d' > src/data/roadmap.yaml
+          awk 'BEGIN{n=0} /^---$/{n++; next} n==1{print} n>=2{exit}' /tmp/ROADMAP.md > src/data/roadmap.yaml
 
       - name: Check for changes
         id: diff
