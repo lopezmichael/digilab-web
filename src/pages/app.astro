@@ -135,6 +135,51 @@ const IFRAME_ORIGIN = 'https://019bfe6c-c032-7134-a060-84ceec5e089d.share.connec
               }
             }
             break;
+
+          // Storage bridge — relay localStorage for cross-origin iframe
+          // Mobile Safari/Chrome block third-party localStorage in iframes
+          case 'digilab-storage-get':
+            try {
+              var val = localStorage.getItem(event.data.key);
+              iframe.contentWindow.postMessage({
+                type: 'digilab-storage-result',
+                requestId: event.data.requestId,
+                value: val
+              }, IFRAME_ORIGIN);
+            } catch (e) {
+              iframe.contentWindow.postMessage({
+                type: 'digilab-storage-result',
+                requestId: event.data.requestId,
+                value: null
+              }, IFRAME_ORIGIN);
+            }
+            break;
+
+          case 'digilab-storage-set':
+            try {
+              localStorage.setItem(event.data.key, event.data.value);
+            } catch (e) {
+              // localStorage may be full or unavailable
+            }
+            iframe.contentWindow.postMessage({
+              type: 'digilab-storage-result',
+              requestId: event.data.requestId,
+              value: null
+            }, IFRAME_ORIGIN);
+            break;
+
+          case 'digilab-storage-remove':
+            try {
+              localStorage.removeItem(event.data.key);
+            } catch (e) {
+              // Ignore
+            }
+            iframe.contentWindow.postMessage({
+              type: 'digilab-storage-result',
+              requestId: event.data.requestId,
+              value: null
+            }, IFRAME_ORIGIN);
+            break;
         }
       });
 
