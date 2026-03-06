@@ -42,14 +42,9 @@ const IFRAME_ORIGIN = 'https://019bfe6c-c032-7134-a060-84ceec5e089d.share.connec
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 
-  <!-- Google Analytics -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-NJ3SMG8HGG"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-NJ3SMG8HGG', { cookie_domain: '.digilab.cards' });
-  </script>
+  <!-- GA removed from parent page — triggers Safari ITP tracker classification
+       for digilab.cards, causing all storage (cookies, localStorage) to be evicted
+       on browser close. The Shiny app inside the iframe has its own GA (app.R). -->
 
   <style>
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
