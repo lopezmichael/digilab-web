@@ -28,17 +28,5 @@
         }
       ]
     }
-  ],
-  "rewrites": [
-    {
-      "source": "/",
-      "has": [{ "type": "host", "value": "app.digilab.cards" }],
-      "destination": "/app"
-    },
-    {
-      "source": "/:path*",
-      "has": [{ "type": "host", "value": "app.digilab.cards" }],
-      "destination": "/app"
-    }
   ]
 }
