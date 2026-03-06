@@ -98,6 +98,11 @@ const IFRAME_ORIGIN = 'https://019bfe6c-c032-7134-a060-84ceec5e089d.share.connec
       var iframe = document.getElementById('digilab-iframe');
       var iframeReady = false;
 
+      // Request persistent storage — prevents Safari ITP from evicting on browser close
+      if (navigator.storage && navigator.storage.persist) {
+        navigator.storage.persist();
+      }
+
       // Cookie helpers — storage on .digilab.cards domain (persists across subdomains)
       var COOKIE_DOMAIN = '.digilab.cards';
       var COOKIE_MAX_AGE = 31536000; // 1 year
