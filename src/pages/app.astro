@@ -138,21 +138,20 @@ const IFRAME_ORIGIN = 'https://019bfe6c-c032-7134-a060-84ceec5e089d.share.connec
 
           // Storage bridge — relay localStorage for cross-origin iframe
           // Mobile Safari/Chrome block third-party localStorage in iframes
+          // Uses event.source (not iframe.contentWindow) for reliable replies
+          // after Safari tab restore from cold start
           case 'digilab-storage-get':
+            var getVal = null;
             try {
-              var val = localStorage.getItem(event.data.key);
-              iframe.contentWindow.postMessage({
-                type: 'digilab-storage-result',
-                requestId: event.data.requestId,
-                value: val
-              }, IFRAME_ORIGIN);
+              getVal = localStorage.getItem(event.data.key);
             } catch (e) {
-              iframe.contentWindow.postMessage({
-                type: 'digilab-storage-result',
-                requestId: event.data.requestId,
-                value: null
-              }, IFRAME_ORIGIN);
+              // localStorage unavailable
             }
+            event.source.postMessage({
+              type: 'digilab-storage-result',
+              requestId: event.data.requestId,
+              value: getVal
+            }, event.origin);
             break;
 
           case 'digilab-storage-set':
@@ -161,11 +160,11 @@ const IFRAME_ORIGIN = 'https://019bfe6c-c032-7134-a060-84ceec5e089d.share.connec
             } catch (e) {
               // localStorage may be full or unavailable
             }
-            iframe.contentWindow.postMessage({
+            event.source.postMessage({
               type: 'digilab-storage-result',
               requestId: event.data.requestId,
               value: null
-            }, IFRAME_ORIGIN);
+            }, event.origin);
             break;
 
           case 'digilab-storage-remove':
@@ -174,11 +173,11 @@ const IFRAME_ORIGIN = 'https://019bfe6c-c032-7134-a060-84ceec5e089d.share.connec
             } catch (e) {
               // Ignore
             }
-            iframe.contentWindow.postMessage({
+            event.source.postMessage({
               type: 'digilab-storage-result',
               requestId: event.data.requestId,
               value: null
-            }, IFRAME_ORIGIN);
+            }, event.origin);
             break;
         }
       });
