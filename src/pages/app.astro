@@ -103,6 +103,27 @@ const IFRAME_ORIGIN = 'https://019bfe6c-c032-7134-a060-84ceec5e089d.share.connec
       var iframe = document.getElementById('digilab-iframe');
       var iframeReady = false;
 
+      // Cookie helpers — storage on .digilab.cards domain (persists across subdomains)
+      var COOKIE_DOMAIN = '.digilab.cards';
+      var COOKIE_MAX_AGE = 31536000; // 1 year
+
+      function getCookie(name) {
+        var match = document.cookie.match(new RegExp('(?:^|; )' + name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '=([^;]*)'));
+        return match ? decodeURIComponent(match[1]) : null;
+      }
+
+      function setCookie(name, value) {
+        document.cookie = name + '=' + encodeURIComponent(value)
+          + '; domain=' + COOKIE_DOMAIN
+          + '; path=/; max-age=' + COOKIE_MAX_AGE
+          + '; SameSite=Lax; Secure';
+      }
+
+      function removeCookie(name) {
+        document.cookie = name + '=; domain=' + COOKIE_DOMAIN
+          + '; path=/; max-age=0; SameSite=Lax; Secure';
+      }
+
       // Listen for messages from iframe
       window.addEventListener('message', function(event) {
         if (event.origin !== IFRAME_ORIGIN) return;
@@ -136,30 +157,21 @@ const IFRAME_ORIGIN = 'https://019bfe6c-c032-7134-a060-84ceec5e089d.share.connec
             }
             break;
 
-          // Storage bridge — relay localStorage for cross-origin iframe
-          // Mobile Safari/Chrome block third-party localStorage in iframes
-          // Uses event.source (not iframe.contentWindow) for reliable replies
-          // after Safari tab restore from cold start
+          // Storage bridge — uses cookies on .digilab.cards domain
+          // Safari ITP evicts localStorage for app.digilab.cards because all
+          // user interaction goes to the cross-origin iframe. Cookies on the
+          // parent domain (.digilab.cards) persist reliably — Safari already
+          // preserves 671 KB of data for digilab.cards.
           case 'digilab-storage-get':
-            var getVal = null;
-            try {
-              getVal = localStorage.getItem(event.data.key);
-            } catch (e) {
-              // localStorage unavailable
-            }
             event.source.postMessage({
               type: 'digilab-storage-result',
               requestId: event.data.requestId,
-              value: getVal
+              value: getCookie(event.data.key)
             }, event.origin);
             break;
 
           case 'digilab-storage-set':
-            try {
-              localStorage.setItem(event.data.key, event.data.value);
-            } catch (e) {
-              // localStorage may be full or unavailable
-            }
+            setCookie(event.data.key, event.data.value);
             event.source.postMessage({
               type: 'digilab-storage-result',
               requestId: event.data.requestId,
@@ -168,11 +180,7 @@ const IFRAME_ORIGIN = 'https://019bfe6c-c032-7134-a060-84ceec5e089d.share.connec
             break;
 
           case 'digilab-storage-remove':
-            try {
-              localStorage.removeItem(event.data.key);
-            } catch (e) {
-              // Ignore
-            }
+            removeCookie(event.data.key);
             event.source.postMessage({
               type: 'digilab-storage-result',
               requestId: event.data.requestId,
