@@ -26,6 +26,7 @@ digilab-web/
 ├── src/
 │   ├── pages/
 │   │   ├── index.astro              → Landing page
+│   │   ├── app.astro                → Shiny app iframe wrapper (app.digilab.cards)
 │   │   ├── blog/
 │   │   │   ├── index.astro          → Blog listing
 │   │   │   └── [slug].astro         → Individual posts
@@ -43,15 +44,29 @@ digilab-web/
 │       └── tokens.css               → Design tokens from brand
 ├── public/
 │   ├── charts/                      → Exported highcharter widgets
+│   ├── icons/                       → PWA icons (must have solid backgrounds)
 │   ├── images/
 │   ├── brand/
 │   │   ├── agumon.svg
 │   │   └── digivice.svg
+│   ├── apple-touch-icon.png         → iOS home screen icon
+│   ├── manifest.json                → PWA manifest
 │   └── favicon.svg
+├── middleware.js                     → Edge Middleware for subdomain routing
 ├── astro.config.mjs
 ├── package.json
 └── vercel.json
 ```
+
+## Subdomain Routing (app.digilab.cards)
+
+`app.digilab.cards` serves the Shiny app iframe wrapper (`app.astro`). This is handled by **Edge Middleware** (`middleware.js`), not `vercel.json` rewrites.
+
+Why middleware: Static rewrites with `has: host` conditions can't override `index.html` for the root path — the static file always wins. Edge Middleware runs before static file resolution.
+
+The middleware rewrites `app.digilab.cards/` → `/app` and passes all other paths through (so static assets like `/manifest.json`, `/icons/*`, `/apple-touch-icon.png` are served normally).
+
+**PWA icons**: Must have solid `#0A3055` backgrounds, not transparent. Transparent icons render as invisible on phones.
 
 ## Related Repositories
 
