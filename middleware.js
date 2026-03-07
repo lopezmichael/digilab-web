@@ -1,6 +1,12 @@
 export default function middleware(request) {
   const url = new URL(request.url);
 
+  // Server-side cookie storage endpoint — sets cookies via Set-Cookie header
+  // so Safari ITP treats them as server-set (immune to JS cookie eviction)
+  if (url.hostname === 'app.digilab.cards' && url.pathname === '/__storage') {
+    return handleStorageRequest(request);
+  }
+
   // Subdomain routing: app.digilab.cards → /app page
   if (url.hostname === 'app.digilab.cards' && (url.pathname === '/' || url.pathname === '')) {
     url.pathname = '/app';
@@ -57,6 +63,49 @@ function refreshDigilabCookies(request, response) {
   return newResponse;
 }
 
+/**
+ * Handle POST /__storage requests to set/remove cookies server-side.
+ *
+ * Safari ITP caps JavaScript-set cookies (document.cookie) to 7 days and
+ * may evict them on browser close for "non-interactive" domains. Cookies
+ * set via Set-Cookie response headers are exempt from this restriction.
+ *
+ * Body: { action: 'set'|'remove', key: string, value?: string }
+ */
+function handleStorageRequest(request) {
+  if (request.method !== 'POST') {
+    return new Response('Method not allowed', { status: 405 });
+  }
+
+  return request.json().then(function(body) {
+    var key = body.key;
+    if (!key || !key.startsWith('digilab_')) {
+      return new Response('Invalid key', { status: 400 });
+    }
+
+    var headers = new Headers({ 'Content-Type': 'application/json' });
+
+    if (body.action === 'set' && body.value !== undefined) {
+      headers.append(
+        'Set-Cookie',
+        key + '=' + encodeURIComponent(body.value)
+          + '; Domain=.digilab.cards; Path=/; Max-Age=31536000; SameSite=Lax; Secure'
+      );
+    } else if (body.action === 'remove') {
+      headers.append(
+        'Set-Cookie',
+        key + '=; Domain=.digilab.cards; Path=/; Max-Age=0; SameSite=Lax; Secure'
+      );
+    } else {
+      return new Response('Invalid action', { status: 400 });
+    }
+
+    return new Response(JSON.stringify({ ok: true }), { status: 200, headers: headers });
+  }).catch(function() {
+    return new Response('Bad request', { status: 400 });
+  });
+}
+
 export const config = {
-  matcher: '/',
+  matcher: ['/', '/__storage'],
 };
