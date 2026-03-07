@@ -211,7 +211,6 @@ const IFRAME_ORIGIN = 'https://019bfe6c-c032-7134-a060-84ceec5e089d.share.connec
       // Set cookie via server-side Set-Cookie header (immune to Safari ITP JS cookie eviction).
       // Falls back to document.cookie on localhost or if fetch fails.
       function setCookie(name, value) {
-        console.log('[storage-bridge] setCookie', name, value);
         if (window.location.hostname === 'localhost') {
           document.cookie = name + '=' + encodeURIComponent(value)
             + '; path=/; max-age=' + COOKIE_MAX_AGE;
@@ -249,11 +248,6 @@ const IFRAME_ORIGIN = 'https://019bfe6c-c032-7134-a060-84ceec5e089d.share.connec
 
       // Listen for messages from iframe
       window.addEventListener('message', function(event) {
-        // Debug: log ALL messages before filtering (remove after ITP fix confirmed)
-        if (event.data && event.data.type && event.data.type.indexOf('digilab') === 0) {
-          console.log('[bridge-raw]', event.data.type, 'origin:', event.origin, 'expected:', IFRAME_ORIGIN);
-        }
-
         if (event.origin !== IFRAME_ORIGIN) return;
         if (!event.data || !event.data.type) return;
 
