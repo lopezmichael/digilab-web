@@ -249,13 +249,13 @@ const IFRAME_ORIGIN = 'https://019bfe6c-c032-7134-a060-84ceec5e089d.share.connec
 
       // Listen for messages from iframe
       window.addEventListener('message', function(event) {
+        // Debug: log ALL messages before filtering (remove after ITP fix confirmed)
+        if (event.data && event.data.type && event.data.type.indexOf('digilab') === 0) {
+          console.log('[bridge-raw]', event.data.type, 'origin:', event.origin, 'expected:', IFRAME_ORIGIN);
+        }
+
         if (event.origin !== IFRAME_ORIGIN) return;
         if (!event.data || !event.data.type) return;
-
-        // Debug: log all digilab messages (remove after ITP fix is confirmed)
-        if (event.data.type.indexOf('digilab-storage') === 0) {
-          console.log('[storage-bridge]', event.data.type, event.data.key);
-        }
 
         switch (event.data.type) {
           case 'digilab-iframe-ready':
